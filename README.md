@@ -29,6 +29,11 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Docker:
 
- docker build -t InventoryFront .
+ docker build -t inventoryfront .
 
  docker run -d -it -p 88:80 inventoryfront
+
+ docker tag inventoryfront aparra000/innovafront:latest
+
+ docker push aparra000/innovafront:latest
+
