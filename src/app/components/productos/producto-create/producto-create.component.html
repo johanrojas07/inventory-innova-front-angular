@@ -97,6 +97,18 @@
                                                 <input type="number" required class="form-control"  #puntos="ngModel" name="puntos" [(ngModel)]="producto.puntos">
                                             </div>
                                         </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Codigo</label>
+                                                <input type="text" required class="form-control"  #codigo="ngModel" name="codigo" [(ngModel)]="producto.codigo" placeholder="Cod. Barras">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Identificador</label>
+                                                <input type="text" required class="form-control"  #identificador="ngModel" name="identificador" [(ngModel)]="producto.identificador"  placeholder="#001">
+                                            </div>
+                                        </div>
                                     </div>
                                     
 
@@ -114,7 +126,7 @@
                                 <div class="text-center">
                                     <img alt="Chris Wood" [src]="imgSelect || '../../../../assets/img/default.jpg'" class="rounded-circle img-responsive mt-2" width="128" height="128">
                                     <div class="mt-2">
-                                        <input class="btn btn-primary" required (change)="imgSelected($event)" type="file" style="width: 100% !important;">
+                                        <input class="btn btn-primary" required (change)="imgSelected($event)" type="file" multiple style="width: 100% !important;">
                                     </div>
                                     <small>For best results, use an image at least 128px by 128px in .jpg
                                     format</small>

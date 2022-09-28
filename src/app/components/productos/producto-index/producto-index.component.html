@@ -16,7 +16,7 @@
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']" >Dashboard</a></li>
+                            <!-- <li class="breadcrumb-item"><a [routerLink]="['/dashboard']" >Dashboard</a></li> -->
                             <li class="breadcrumb-item"><a>Productos</a></li>
                         </ol>
                     </nav>
@@ -78,7 +78,7 @@
                                 </thead>
                                 <tbody *ngFor="let item of productos | paginate: { itemsPerPage: 15, currentPage: p }; let idx = index">                                 
                                         <td>
-                                            <img [src]="url + 'producto/img/'+ item.imagen" width="48" height="48" class="rounded-circle mr-2" alt="Avatar">{{item.titulo}}
+                                            <img [src]="(item.imagenes) ? item.imagenes[0] : ''" width="48" height="48" class="rounded-circle mr-2" alt="Avatar">{{item.titulo}}
                                         </td>
                                         <td>{{item.stock}}</td>
                                         <td><b>$</b>{{item.precio_venta}}</td>

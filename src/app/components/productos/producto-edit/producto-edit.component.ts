@@ -16,11 +16,12 @@ export class ProductoEditComponent implements OnInit {
   public producto;
   public id;
   public categorias;
-  public file :File;
+  // public file :File;
   public imgSelect : String | ArrayBuffer;
   public success_message;
   public error_message;
   public stock;
+  public imagenesData = [];
 
   constructor(
     private _route : ActivatedRoute,
@@ -66,28 +67,49 @@ export class ProductoEditComponent implements OnInit {
     }
 
   imgSelected(event: HtmlInputEvent){
-    if(event.target.files  && event.target.files[0]){
-        this.file = <File>event.target.files[0];
-
-        const reader = new FileReader();
-        reader.onload = e => this.imgSelect= reader.result;
-        reader.readAsDataURL(this.file);
+    this.imagenesData = [];
+    var imagenes = [];
+    var selectedFiles = event.target.files;
+    for (let i = 0; i < selectedFiles.length; i++) {
+      console.log(selectedFiles[i]);
+      imagenes.push(selectedFiles[i]);
     }
+
+    for (let i = 0; i < imagenes.length; i++) {
+      let reader = new FileReader();
+      reader.readAsDataURL(imagenes[i]);
+      reader.onload = (e) => {
+        this.imgSelect = reader.result;
+        console.log("reader.result;", reader.result);
+        this.imagenesData.push(reader.result);
+      };
+    }
+
+
+    // if(event.target.files && event.target.files[0]){
+    //     this.file = <File>event.target.files[0];
+
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(this.file);
+    //     reader.onload = (e) => {
+    //       this.imgSelect = reader.result;
+    //     }
+    // }
   }
 
   onSubmit(productoForm){
     if(productoForm.valid){
-
       this._productoService.update_producto({
         _id: this.id,
+        codigo: productoForm.value.codigo,
+        identificador: productoForm.value.identificador,
         titulo: productoForm.value.titulo,
         descripcion: productoForm.value.descripcion,
-        imagen: this.file,
+        imagenes: this.imagenesData,
         precio_compra: productoForm.value.precio_compra,
         precio_venta: productoForm.value.precio_venta,
         idcategoria: productoForm.value.idcategoria,
-        puntos: productoForm.value.puntos,
-        img_name : this.producto.imagen,
+        puntos: productoForm.value.puntos
       }).subscribe(
         response=>{
           console.log(response);

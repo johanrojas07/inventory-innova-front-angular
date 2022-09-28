@@ -38,7 +38,7 @@
                                         <div class="col-lg-4 form-group">
                                             <label><b>Clientes</b></label>
                                             <select name="" class="form-control" #idcliente="ngModel" name="idcliente" [(ngModel)]="venta.idcliente">
-                                                <option value="">SELECCIONAR</option>
+                                                <!-- <option value="">SELECCIONAR</option> -->
                                                 <option value="{{item._id}}" *ngFor="let item of clientes">{{item.nombres}}</option>
                                             </select>
                                         </div>
