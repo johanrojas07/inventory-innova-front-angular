@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Producto } from 'src/app/models/Producto';
 import { ProductoService } from 'src/app/services/producto.service';
 
 interface HtmlInputEvent extends Event {
@@ -13,7 +14,7 @@ interface HtmlInputEvent extends Event {
 })
 export class ProductoEditComponent implements OnInit {
 
-  public producto;
+  public producto: Producto;
   public id;
   public categorias;
   // public file :File;
@@ -27,6 +28,7 @@ export class ProductoEditComponent implements OnInit {
     private _route: ActivatedRoute,
     private _productoService: ProductoService
   ) {
+    this.producto = new Producto('', '', '', 1, 1, 1, '', 1,'','',[]);
   }
 
   ngOnInit() {
@@ -36,6 +38,7 @@ export class ProductoEditComponent implements OnInit {
       this._productoService.get_producto(this.id).subscribe(
         response => {
           this.producto = response.producto;
+          console.log("producto", this.producto);
 
           this._productoService.get_categorias().subscribe(
             response => {

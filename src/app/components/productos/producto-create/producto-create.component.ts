@@ -23,7 +23,7 @@ export class ProductoCreateComponent implements OnInit {
   constructor(
     private _productoService: ProductoService,
   ) {
-    this.producto = new Producto('', '', '', '', 1, 1, 1, '', 1);
+    this.producto =  new Producto('', '', '', 1, 1, 1, '', 1,'','',[]);
   }
 
   ngOnInit() {
@@ -65,7 +65,6 @@ export class ProductoCreateComponent implements OnInit {
       }).subscribe(
         response => {
           this.success_message = 'Se registro el producto correctamente';
-          // this.producto = new Producto('', '', '', '', 1, 1, 1, productoForm.value.idcategoria, 1);
           this.imagenesData = [];
           this.imgSelect = '../../../../assets/img/default.jpg';
         },
