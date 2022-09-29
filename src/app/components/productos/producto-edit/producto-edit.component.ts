@@ -38,8 +38,7 @@ export class ProductoEditComponent implements OnInit {
       this._productoService.get_producto(this.id).subscribe(
         response => {
           this.producto = response.producto;
-          console.log("producto", this.producto);
-
+          this.imagenesData = (this.producto && this.producto.imagenes) ? this.producto.imagenes.map(s => s.imagen) :null;
           this._productoService.get_categorias().subscribe(
             response => {
               this.categorias = response.categorias;

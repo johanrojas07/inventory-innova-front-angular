@@ -27,18 +27,6 @@ export class ProductoService {
   }
 
   insert_producto(data) {
-    // const fd = new FormData();
-    // fd.append('titulo', data.titulo);
-    // fd.append('descripcion', data.descripcion);
-    // fd.append('imagen', data.imagen);
-    // fd.append('precio_compra', data.precio_compra);
-    // fd.append('precio_venta', data.precio_venta);
-    // fd.append('stock', data.stock);
-    // fd.append('idcategoria', data.idcategoria);
-    // fd.append('puntos', data.puntos);
-
-    // return this._http.post(this.url + , fd);
-
     return this._http.post(this.url + 'producto/registrar', data);
   }
 
@@ -49,16 +37,10 @@ export class ProductoService {
   }
 
   update_producto(data) {
-    // const fd = new FormData();
-    // fd.append('titulo', data.titulo);
-    // fd.append('descripcion', data.descripcion);
-    // fd.append('imagen', data.imagen);
-    // fd.append('precio_compra', data.precio_compra);
-    // fd.append('precio_venta', data.precio_venta);
-    // fd.append('idcategoria', data.idcategoria);
-    // fd.append('puntos', data.puntos);
 
-    return this._http.put(this.url + 'producto/editar/' + data._id + '/' + data.img_name, data);
+    console.log("EDITARRR", data);
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.put(this.url + 'producto/editar/' + data._id, data, { headers: headers });
   }
 
   insert_categoria(data): Observable<any> {
