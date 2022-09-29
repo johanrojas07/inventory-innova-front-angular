@@ -1,4 +1,3 @@
-
 <div class="wrapper">
     <app-sidebar style="background: white;"></app-sidebar>
     <div class="main">
@@ -16,7 +15,7 @@
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="dashboard-default.html">Dashboard</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="dashboard-default.html">Dashboard</a></li> -->
                             <li class="breadcrumb-item"><a>Ventas</a></li>
                         </ol>
                     </nav>
@@ -33,21 +32,25 @@
                                     <div class="row">
                                         <div class="col-lg-4 form-group">
                                             <label><b>Trabajador</b></label>
-                                            <input type="text" class="form-control" readonly value="{{identity.nombres}} {{identity.apellidos}}">
+                                            <input type="text" class="form-control" readonly
+                                                value="{{identity.nombres}} {{identity.apellidos}}">
                                         </div>
                                         <div class="col-lg-4 form-group">
                                             <label><b>Clientes</b></label>
-                                            <select name="" class="form-control" #idcliente="ngModel" name="idcliente" [(ngModel)]="venta.idcliente">
+                                            <select name="" class="form-control" #idcliente="ngModel" name="idcliente"
+                                                [(ngModel)]="venta.idcliente">
                                                 <!-- <option value="">SELECCIONAR</option> -->
-                                                <option value="{{item._id}}" *ngFor="let item of clientes">{{item.nombres}}</option>
+                                                <option value="{{item._id}}" *ngFor="let item of clientes">
+                                                    {{item.nombres}}</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-2 form-group">
-                 
-                                            <a [routerLink]="['/cliente/registrar']"  class="btn btn-primary">Nuevo cliente</a>
+
+                                            <a [routerLink]="['/cliente/registrar']" class="btn btn-primary">Nuevo
+                                                cliente</a>
                                         </div>
                                         <div class="col-lg-2 form-group">
-                 
+
                                             <button type="submit" class="btn btn-primary">Registrar venta</button>
                                         </div>
                                     </div>
@@ -59,11 +62,12 @@
                     <div class="col-12 col-lg-12" *ngIf="error_message">
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <div class="alert-message">
-                               {{error_message}} 
+                                {{error_message}}
                             </div>
 
-                            <button type="button" (click)="close_alert()" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <button type="button" (click)="close_alert()" class="close" data-dismiss="alert"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
                             </button>
                         </div>
                     </div>
@@ -78,18 +82,35 @@
                                     <div class="row">
                                         <div class="col-lg-4 form-group">
                                             <label for=""><b>Productos</b></label>
-                                            <select class="form-control" #idproducto="ngModel" name="idproducto" [(ngModel)]="detalle.idproducto" (change)="get_data_producto($event.target.value)">
-                                                <option value="" disabled>SELECCIONAR</option>
-                                                <option value="{{item._id}}" *ngFor="let item of productos">{{item.titulo}}</option>
-                                            </select>
+
+                                            <input aria-label="State" [matAutocomplete]="open" class="form-control"
+                                                [formControl]="controlFind">
+
+                                            <mat-autocomplete #open="matAutocomplete"
+                                                [displayWith]="compareObjectSelect"
+                                                (optionSelected)="setDataProduct($event)">
+                                                <mat-option *ngFor="let option of filteredProducts | async"
+                                                    [value]="option"
+                                                    [disabled]="option.stock == 0"
+                                                    
+                                                    >
+                                                    <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
+                                                    <span>{{option.identificador}} | {{option.titulo}} {{option.stock == 0 ? 'Sin Stock :(' : ''}}</span>
+                                                    <!-- <small>Population: {{state.population}}</small> -->
+
+                                                </mat-option>
+                                            </mat-autocomplete>
+
                                         </div>
+
                                         <div class="col-lg-3 form-group">
                                             <label for=""><b>Stock actual</b></label>
-                                            <input type="text" readonly class="form-control" value="{{producto.stock}}">
+                                            <input type="text" readonly class="form-control" value="{{(producto) ? producto.stock : '--|--'}}">
                                         </div>
                                         <div class="col-lg-3 form-group">
                                             <label for=""><b>Cantidad</b></label>
-                                            <input type="text" #cantidad="ngModel" name="cantidad" [(ngModel)]="detalle.cantidad" class="form-control" >
+                                            <input type="text" #cantidad="ngModel" name="cantidad"
+                                                [(ngModel)]="detalle.cantidad" class="form-control">
                                         </div>
                                         <div class="col-lg-2 form-group">
                                             <label><b>*</b></label>
@@ -106,24 +127,33 @@
                             <div class="card-header">
                                 <h5 class="card-title">Productos</h5>
                             </div>
-                            <table  class="table table-striped table-hover table-sm">
+                            <table class="table table-striped table-hover table-sm">
                                 <thead>
-                                    <th>Eliminar</th>
+                                    <th style="width: 11%;">Eliminar</th>
+                                    <th style="width: 12%;">Identificador</th>
                                     <th>Producto</th>
                                     <th>Precio</th>
                                     <th>Cantidad</th>
                                     <th>Subtotal</th>
-                                    
+
                                 </thead>
                                 <tbody *ngFor="let item of data_detalle; let idx = index">
-                                    <td><button class="btn btn-danger btn-sm" (click)="eliminar(idx,item.precio_venta,item.cantidad)"><i class="fas fa-trash"></i></button></td>
-                                    <td>{{item.producto}}</td>
+                                    <td><button class="btn btn-danger btn-sm"
+                                            (click)="eliminar(idx,item.precio_venta,item.cantidad)"><i
+                                                class="fas fa-trash"></i></button></td>
+                                    <td>{{item.identificador}}</td>
+                                    <td>
+                                        <img [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('"
+                                            width="48" height="48" class="rounded-circle mr-2"
+                                            alt="Avatar">{{item.producto}}
+                                    </td>
                                     <td>{{item.precio_venta}}</td>
                                     <td>{{item.cantidad}}</td>
                                     <td>{{(item.precio_venta) * (item.cantidad)}}</td>
                                 </tbody>
                                 <tfoot>
                                     <td><b>Total</b></td>
+                                    <td>-</td>
                                     <td>-</td>
                                     <td>-</td>
                                     <td>-</td>
@@ -139,6 +169,6 @@
 
             </div>
         </main>
-       
+
     </div>
 </div>

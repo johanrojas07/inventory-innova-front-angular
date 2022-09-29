@@ -39,9 +39,10 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <h5 class="card-title">Filtro de productos</h5>
-                                        <form #searchForm="ngForm" (ngSubmit)="search(searchForm)">
+                                        <form #searchForm="ngForm">
                                             <div class="input-group date" id="datetimepicker-minimum" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" #filtro="ngModel" name="filtro" [(ngModel)]="filtroText">
+                                                <input type="text" class="form-control datetimepicker-input" #filtro="ngModel" name="filtro" 
+                                                (input)="filterData($event.target.value)" [(ngModel)]="filtroText">
                                                 <div class="input-group-append">
                                        
                                                     <button type="submit" class="input-group-text"><i class="fa fa-search"></i></button>
@@ -70,15 +71,17 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Producto</th>
-                                        <th>Stock</th>
-                                        <th>Precio venta</th>
+                                        <th style="width: 12%;" (click)="orderBy('identificador')">Identificador</th>
+                                        <th (click)="orderBy('titulo')">Producto</th>
+                                        <th (click)="orderBy('stock')">Stock</th>
+                                        <th (click)="orderBy('precio_venta')">Precio venta</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let item of productos | paginate: { itemsPerPage: 15, currentPage: p }; let idx = index">                                 
+                                <tbody *ngFor="let item of filtroProductos | paginate: { itemsPerPage: 15, currentPage: p }; let idx = index">             
+                                        <td style="text-align: center;">{{item.identificador}}</td>                    
                                         <td>
-                                            <img [src]="(item.imagenes) ? item.imagenes[0] : ''" width="48" height="48" class="rounded-circle mr-2" alt="Avatar">{{item.titulo}}
+                                            <img [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('" width="48" height="48" class="rounded-circle mr-2" alt="Avatar">{{item.titulo}}
                                         </td>
                                         <td>{{item.stock}}</td>
                                         <td><b>$</b>{{item.precio_venta}}</td>
@@ -108,7 +111,7 @@
                                                         </div>
                                                         <div class="modal-body m-3">
                                                         <div class="form-group">
-                                                            <input type="number" class="form-control" placeholder="Titulo de la categoria" #producto_stock="ngModel" name="producto_stock" [(ngModel)]="producto_stockText" required>
+                                                            <input type="number" class="form-control" placeholder="¿Cuantos?" #producto_stock="ngModel" name="producto_stock" [(ngModel)]="producto_stockText" required>
                                                         </div>
                                                             
                                                         </div>

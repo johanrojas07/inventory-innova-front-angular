@@ -35,8 +35,11 @@ export class VentaDetalleComponent implements OnInit {
   
         this._ventaService.data_venta(this.id).subscribe(
           response=>{
+            
             this.venta = response.data.venta;
             this.detalle_venta = response.data.detalles;
+            console.log("Venta", this.venta);
+            console.log("Detalle Venta", this.detalle_venta);
           },
           error=>{
   

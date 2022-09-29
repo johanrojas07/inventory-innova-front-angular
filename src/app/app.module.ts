@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { routing } from "./app.routing";
 
@@ -13,7 +13,7 @@ import { ProductoIndexComponent } from './components/productos/producto-index/pr
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProductoCreateComponent } from './components/productos/producto-create/producto-create.component';
 import { ProductoEditComponent } from './components/productos/producto-edit/producto-edit.component';
-import {NgxPaginationModule} from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ClienteIndexComponent } from './components/clientes/cliente-index/cliente-index.component';
 import { ClienteCreateComponent } from './components/clientes/cliente-create/cliente-create.component';
 import { ClienteEditComponent } from './components/clientes/cliente-edit/cliente-edit.component';
@@ -23,6 +23,10 @@ import { UserEditComponent } from './components/users/user-edit/user-edit.compon
 import { VentaIndexComponent } from './components/ventas/venta-index/venta-index.component';
 import { VentaCreateComponent } from './components/ventas/venta-create/venta-create.component';
 import { VentaDetalleComponent } from './components/ventas/venta-detalle/venta-detalle.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
+import { MaterialAllModules } from '../material.module';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -44,15 +48,19 @@ import { VentaDetalleComponent } from './components/ventas/venta-detalle/venta-d
     VentaCreateComponent,
     VentaDetalleComponent,
 
-
   ],
   imports: [
+    MaterialAllModules,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     routing,
-    NgxPaginationModule
+    NgxPaginationModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    ReactiveFormsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

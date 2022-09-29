@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductoService } from 'src/app/services/producto.service';
 import Swal from 'sweetalert2';
 
-declare var jQuery:any;
-declare var $:any;
+declare var jQuery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-producto-index',
@@ -13,79 +13,85 @@ declare var $:any;
 export class ProductoIndexComponent implements OnInit {
 
   public productos;
-  public filtro;
+  public filtroProductos = [];
   public categorias;
   public titulo_cat;
   public descripcion_cat;
   public producto_stock;
   public producto_id;
   public success_message;
+  public booleanValue = false;
 
   constructor(
-    private _productoService : ProductoService,
-  ) { 
+    private _productoService: ProductoService,
+  ) {
   }
 
   ngOnInit() {
     this._productoService.get_productos('').subscribe(
-      response =>{
+      response => {
         this.productos = response.productos;
+        this.filtroProductos = this.productos;
         console.log(this.productos);
-        
+
       },
-      error=>{
+      error => {
 
       }
     );
 
     this._productoService.get_categorias().subscribe(
-      response=>{
+      response => {
         this.categorias = response.categorias;
       },
-      error=>{
+      error => {
 
       }
     );
   }
 
-  search(searchForm){
-    this._productoService.get_productos(searchForm.value.filtro).subscribe(
-      response =>{
-        this.productos = response.productos;
-      },
-      error=>{
-
-      }
-    );
-    
+  orderBy(property) {
+    if (this.booleanValue) {
+      this.filtroProductos.sort((a, b) => a[property] < b[property] ? 1 : a[property] > b[property] ? -1 : 0)
+      this.booleanValue = !this.booleanValue
+    } else {
+      this.filtroProductos.sort((a, b) => a[property] > b[property] ? 1 : a[property] < b[property] ? -1 : 0)
+      this.booleanValue = !this.booleanValue
+    }
   }
 
-  save_cat(categoriaForm){
-    if(categoriaForm.valid){
+  filterData(searchValue) {
+    this.filtroProductos = this.productos.filter((item) => {
+      return item.titulo.toLowerCase().includes(searchValue.toLowerCase()) || item.identificador.toLowerCase().includes(searchValue.toLowerCase()) || item.descripcion.toLowerCase().includes(searchValue.toLowerCase());
+    });
+  }
+
+  save_cat(categoriaForm) {
+    if (categoriaForm.valid) {
       this._productoService.insert_categoria({
         titulo: categoriaForm.value.titulo_cat,
         descripcion: categoriaForm.value.descripcion_cat,
       }).subscribe(
-        response=>{
+        response => {
           this._productoService.get_categorias().subscribe(
-            response =>{
+            response => {
               this.categorias = response.categorias;
               $('#modal-save-categoria').modal('hide');
             },
-            error=>{
+            error => {
 
             }
           );
         },
-        error=>{
+        error => {
 
         }
       );
-      
+
     }
   }
 
-  eliminar(id){
+  eliminar(id) {
     Swal.fire({
       title: 'Estas seguro de eliminarlo?',
       text: "Eliminación!",
@@ -103,17 +109,18 @@ export class ProductoIndexComponent implements OnInit {
         )
 
         this._productoService.delete_producto(id).subscribe(
-          response=>{
+          response => {
             this._productoService.get_productos('').subscribe(
-              response=>{
+              response => {
                 this.productos = response.productos;
+                this.filtroProductos = this.productos;
               }
-              ,erro=>{
+              , erro => {
 
               }
             );
           }
-          ,error=>{
+          , error => {
 
           }
         );
@@ -131,40 +138,42 @@ export class ProductoIndexComponent implements OnInit {
     })
   }
 
-  get_id(id){
+  get_id(id) {
     this.producto_id = id;
   }
 
-  close_alert(){
+  close_alert() {
     this.success_message = '';
   }
 
-  aumentar_stock(stockForm){
-    if(stockForm.valid){
-      if(this.producto_id){
+  aumentar_stock(stockForm) {
+    if (stockForm.valid) {
+      if (this.producto_id) {
         this._productoService.stock_producto({
           _id: this.producto_id,
           stock: stockForm.value.producto_stock,
         }).subscribe(
-          response=>{
+          response => {
             this.success_message = 'Se aumento el stock correctamente';
             this._productoService.get_productos('').subscribe(
-              response =>{
+              response => {
+                console.log("SIIIIII", response);
                 this.productos = response.productos;
+                this.filtroProductos = this.productos;
                 $('.modal').modal('hide');
               }
-              ,error=>{
+              , error => {
 
               }
             );
           },
-          error=>{
+          error => {
             console.log(error);
-            
+
           }
         );
       }
-      
+
     }
   }
 

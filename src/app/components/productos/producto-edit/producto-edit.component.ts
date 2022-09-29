@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductoService } from 'src/app/services/producto.service';
 
-interface HtmlInputEvent extends Event{
-  target : HTMLInputElement & EventTarget;
-} 
+interface HtmlInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
+}
 
 @Component({
   selector: 'app-producto-edit',
@@ -17,40 +17,40 @@ export class ProductoEditComponent implements OnInit {
   public id;
   public categorias;
   // public file :File;
-  public imgSelect : String | ArrayBuffer;
+  public imgSelect: String | ArrayBuffer;
   public success_message;
   public error_message;
   public stock;
   public imagenesData = [];
 
   constructor(
-    private _route : ActivatedRoute,
-    private _productoService : ProductoService
-  ) { 
+    private _route: ActivatedRoute,
+    private _productoService: ProductoService
+  ) {
   }
 
   ngOnInit() {
 
-    this._route.params.subscribe(params=>{
+    this._route.params.subscribe(params => {
       this.id = params['id'];
       this._productoService.get_producto(this.id).subscribe(
-        response=>{
+        response => {
           this.producto = response.producto;
-          
+
           this._productoService.get_categorias().subscribe(
-            response=>{
+            response => {
               this.categorias = response.categorias;
               console.log(this.categorias);
-              
+
             },
-            error=>{
-      
+            error => {
+
             }
           );
-          
-          
+
+
         },
-        error=>{
+        error => {
 
         }
       )
@@ -58,15 +58,15 @@ export class ProductoEditComponent implements OnInit {
 
   }
 
-  success_alert(){
-    this.success_message = ''; 
-   }
- 
-   error_alert(){
-     this.error_message = ''; 
-    }
+  success_alert() {
+    this.success_message = '';
+  }
 
-  imgSelected(event: HtmlInputEvent){
+  error_alert() {
+    this.error_message = '';
+  }
+
+  imgSelected(event: HtmlInputEvent) {
     this.imagenesData = [];
     var imagenes = [];
     var selectedFiles = event.target.files;
@@ -97,8 +97,8 @@ export class ProductoEditComponent implements OnInit {
     // }
   }
 
-  onSubmit(productoForm){
-    if(productoForm.valid){
+  onSubmit(productoForm) {
+    if (productoForm.valid) {
       this._productoService.update_producto({
         _id: this.id,
         codigo: productoForm.value.codigo,
@@ -111,19 +111,19 @@ export class ProductoEditComponent implements OnInit {
         idcategoria: productoForm.value.idcategoria,
         puntos: productoForm.value.puntos
       }).subscribe(
-        response=>{
+        response => {
           console.log(response);
           this.success_message = 'Se actualizó el producto correctamente';
         },
-        error=>{
-          
+        error => {
+
         }
       );
-      
-    }else{
+
+    } else {
       this.error_message = 'Complete correctamente el formulario';
     }
   }
 
-  
+
 }

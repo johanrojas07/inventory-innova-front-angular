@@ -1,3 +1,4 @@
+
 <div class="wrapper">
     <nav id="sidebar" class="sidebar">
         <a class="sidebar-brand" href="index.html">
@@ -16,9 +17,9 @@
 
             <ul class="sidebar-nav">
                 <li class="sidebar-header">
-                    Main
+                    Menu
                 </li>
-                <li class="sidebar-item">
+                <!-- <li class="sidebar-item">
                     <a href="#dashboards" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle mr-2 fas fa-fw fa-home"></i> <span class="align-middle">Dashboards</span>
                     </a>
@@ -29,12 +30,12 @@
                         <li class="sidebar-item"><a class="sidebar-link" href="dashboard-e-commerce.html">E-commerce</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
 
 
                 <li class="sidebar-item" routerLinkActive="sidebar-item active">
                     <a class="sidebar-link" [routerLink]="['/productos']">
-                        <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Productos</span>
+                        <i class="align-middle mr-2 fas fa-fw fa-shapes"></i> <span class="align-middle">Productos</span>
                     </a>
                 </li>
 
@@ -46,23 +47,26 @@
 
                 <li class="sidebar-item" *ngIf="identity.role == 'ADMIN'" routerLinkActive="sidebar-item active">
                     <a class="sidebar-link" [routerLink]="['/usuarios']">
-                        <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Usuarios</span>
+                        <i class="align-middle mr-2 fas fa-fw fa-hospital-user"></i> <span class="align-middle">Usuarios</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item" routerLinkActive="sidebar-item active">
                     <a class="sidebar-link" [routerLink]="['/ventas']">
-                        <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Ventas</span>
+                        <i class="align-middle mr-2 fas fa-fw fa-donate"></i> <span class="align-middle">Ventas</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item">
                     <a class="sidebar-link" (click)="logout()">
-                        <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Cerrar
-                            Sesión</span>
+                        <i style="color: red;" class="align-middle mr-2 fas fa-fw fa-sign-out-alt"></i> 
+                        <span class="align-middle">Cerrar Sesión</span>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
 </div>
+
+
+
