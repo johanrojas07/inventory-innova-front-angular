@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 export class VentaDetalleComponent implements OnInit {
 
   public id;
-  public venta : any = {
+  public venta: any = {
     iduser: '',
     idcliente: ''
   };
@@ -19,34 +19,34 @@ export class VentaDetalleComponent implements OnInit {
   public identity;
 
   constructor(
-    private _route : ActivatedRoute,
-    private _ventaService : VentaService,
-    private _userService : UserService,
-    private _router : Router
+    private _route: ActivatedRoute,
+    private _ventaService: VentaService,
+    private _userService: UserService,
+    private _router: Router
   ) {
-    this.identity =this._userService.getIdentity();
-   }
+    this.identity = this._userService.getIdentity();
+  }
 
   ngOnInit() {
 
-    if(this.identity){
-      this._route.params.subscribe(params=>{
+    if (this.identity) {
+      this._route.params.subscribe(params => {
         this.id = params['id'];
-  
+
         this._ventaService.data_venta(this.id).subscribe(
-          response=>{
-            
+          response => {
+
             this.venta = response.data.venta;
             this.detalle_venta = response.data.detalles;
             console.log("Venta", this.venta);
             console.log("Detalle Venta", this.detalle_venta);
           },
-          error=>{
-  
+          error => {
+
           }
         );
       });
-    }else{
+    } else {
       this._router.navigate(['']);
     }
 

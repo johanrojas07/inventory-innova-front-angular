@@ -31,7 +31,8 @@ export class VentaCreateComponent implements OnInit {
 
   public data_detalle: Array<any> = [];
   public detalle: any = {
-    idproducto: ''
+    idproducto: '',
+    cantidad: null
   };
   public error_message;
   filteredProducts: Observable<any[]>;
@@ -86,7 +87,23 @@ export class VentaCreateComponent implements OnInit {
 
     const filterValue = (value && value.identificador) ? value.identificador.toLowerCase() : value.toLowerCase();
 
-    return this.productos.filter(state => state.titulo.toLowerCase().includes(filterValue) || state.identificador.toLowerCase().includes(filterValue));
+    // Inicio Validacion para Codigo de Barra
+    const exist = this.productos.filter(state => state.codigo == filterValue);
+    if (exist.length > 0) {
+      this.producto = exist[0];
+      this.save_detalle({ valid: true, value: { cantidad: 1, isCode: true } })
+      return;
+    }
+
+    if (filterValue && /^\d+$/.test(filterValue) && (filterValue.length === 13)) {
+      this.toastr.error('Producto no encontrado con Codigo: ' + filterValue, 'Error', {
+        timeOut: 9000
+      });
+      this.controlFind.patchValue("");
+    }
+    // Fin Validacion para Codigo de Barra
+
+    return this.productos.filter(state => state.titulo.toLowerCase().includes(filterValue) || state.identificador.toLowerCase().includes(filterValue) || state.codigo.toLowerCase().includes(filterValue));
   }
 
   compareObjectSelect(data?) {
@@ -112,50 +129,63 @@ export class VentaCreateComponent implements OnInit {
 
   save_detalle(detalleForm) {
 
-
-
     if (detalleForm.valid && this.producto && this.producto.identificador) {
-
-      const existProduct = this.data_detalle.find(d => d.identificador == this.producto.identificador);
-      if (existProduct) {
-        this.toastr.warning('Este producto ya fue agregado, no es posible agregarlo nuevamente', 'Error', {
-          timeOut: 9000
-        });
-        return;
-      }
-
       if (detalleForm.value.cantidad <= this.producto.stock) {
+        const existProductIndex = this.data_detalle.findIndex(d => d.identificador == this.producto.identificador);
+        if (existProductIndex >= 0) {
 
-        this.data_detalle.push({
-          identificador: this.producto.identificador,
-          imagenes: this.producto.imagenes,
-          idproducto: this.producto._id,
-          cantidad: detalleForm.value.cantidad,
-          producto: this.producto.titulo,
-          precio_venta: this.producto.precio_venta
-        });
-
-
-        this.total = this.total + (parseInt(this.producto.precio_venta) * parseInt(detalleForm.value.cantidad));
-
-        this.detalle = new DetalleVenta('', '', null);
-        this.producto = null;
-        this.controlFind.patchValue("");
+          this.producto.stock = parseInt(this.producto.stock) - parseInt(detalleForm.value.cantidad);
+          this.data_detalle[existProductIndex].cantidad = parseInt(this.data_detalle[existProductIndex].cantidad) + parseInt(detalleForm.value.cantidad);
+          console.log("stock producto", this.producto.stock);
+          console.log("stock detalle", this.data_detalle[existProductIndex].cantidad);
+          this.toastr.info('Producto Actualizado', 'Informacion', {
+            timeOut: 3000
+          });
+        } else {
+          this.data_detalle.push({
+            identificador: this.producto.identificador,
+            imagenes: this.producto.imagenes,
+            idproducto: this.producto._id,
+            cantidad: detalleForm.value.cantidad,
+            producto: this.producto.titulo,
+            precio_venta: this.producto.precio_venta,
+            precio_venta_original: this.producto.precio_venta,
+            precio_compra: this.producto.precio_compra
+          });
+          this.toastr.success('Producto Agregado', 'Informacion', {
+            timeOut: 3000
+          });
+          this.producto.stock = this.producto.stock - detalleForm.value.cantidad;
+        }
       } else {
-        this.toastr.warning('No existe el suficiente stock para la venta', 'Warning', {
+        this.toastr.warning('No hay suficiente stock disponible. :(', 'Warning', {
           timeOut: 9000
         });
+
       }
+      this.detalle = new DetalleVenta('', '', null);
+      this.producto = null;
+      this.controlFind.patchValue("");
     } else {
-      this.toastr.error('Ocurrio un error, no estan los datos completos', 'Error', {
+      this.toastr.info('Complete el formulario', 'Error', {
         timeOut: 9000
       });
     }
   }
 
-  eliminar(idx, precio_venta, cantidad) {
+  getTotal() {
+    let total = 0;
+    this.data_detalle.forEach((item) => {
+      total = total + (parseInt(item.precio_venta) * parseInt(item.cantidad));
+    });
+    return total;
+  }
+
+  eliminar(idx) {
+    const objIndex = this.productos.findIndex((obj => obj._id == this.data_detalle[idx].idproducto));
+    this.productos[objIndex].stock = parseInt(this.productos[objIndex].stock) + parseInt(this.data_detalle[idx].cantidad);
+
     this.data_detalle.splice(idx, 1);
-    this.total = this.total - (parseInt(precio_venta) * parseInt(cantidad));
   }
 
   onSubmit(ventaForm) {

@@ -65,16 +65,18 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">Producto</th>
-                                        <th class="text-center">Precio Venta</th>
+                                        <th class="text-center">Precio Compra</th>
+                                        <th class="text-center">Precio Venta Aplicado</th>
                                         <th class="text-center">Cantidad</th>
                                         <th class="text-center">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let item of detalle_venta">
                                     <td class="text-center">{{item.idproducto.titulo}}</td>
-                                    <td class="text-center">${{item.idproducto.precio_venta}}</td>
+                                    <td class="text-center">${{item.idproducto.precio_compra}}</td>
+                                    <td class="text-center" matTooltip="Precio Sugerido: {{item.idproducto.precio_venta}}">${{item.precio_venta}}</td>
                                     <td class="text-center">{{item.cantidad}}</td>
-                                    <td class="text-center">${{(item.idproducto.precio_venta) * (item.cantidad)}}</td>
+                                    <td class="text-center">${{(item.precio_venta) * (item.cantidad)}}</td>
                                 </tbody>
                             </table>
                         </div>

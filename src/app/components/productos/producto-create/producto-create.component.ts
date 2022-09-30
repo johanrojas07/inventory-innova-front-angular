@@ -93,7 +93,6 @@ export class ProductoCreateComponent implements OnInit {
       reader.readAsDataURL(imagenes[i]);
       reader.onload = (e) => {
         this.imgSelect = reader.result;
-        console.log("reader.result;", reader.result);
         this.imagenesData.push(reader.result);
       };
     }
