@@ -88,7 +88,7 @@ export class VentaCreateComponent implements OnInit {
     const filterValue = (value && value.identificador) ? value.identificador.toLowerCase() : value.toLowerCase();
 
     // Inicio Validacion para Codigo de Barra
-    const exist = this.productos.filter(state => state.codigo == filterValue);
+    const exist = this.productos.filter(state => (state.codigo && state.codigo == filterValue));
     if (exist.length > 0) {
       this.producto = exist[0];
       this.save_detalle({ valid: true, value: { cantidad: 1, isCode: true } })
@@ -161,7 +161,12 @@ export class VentaCreateComponent implements OnInit {
         this.toastr.warning('No hay suficiente stock disponible. :(', 'Warning', {
           timeOut: 9000
         });
-
+        if (detalleForm.value.isCode) {
+          this.detalle = new DetalleVenta('', '', null);
+          this.producto = null;
+          this.controlFind.patchValue("");
+        }
+        return;
       }
       this.detalle = new DetalleVenta('', '', null);
       this.producto = null;
@@ -172,6 +177,14 @@ export class VentaCreateComponent implements OnInit {
       });
     }
   }
+
+  swipe(img: string) {
+    var image = new Image();
+    image.src = img;
+    var w = window.open("");
+    w.document.write(image.outerHTML);
+  }
+
 
   getTotal() {
     let total = 0;

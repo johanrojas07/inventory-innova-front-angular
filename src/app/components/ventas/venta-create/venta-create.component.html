@@ -1,11 +1,11 @@
 <div class="wrapper">
     <app-sidebar style="background: white;"></app-sidebar>
     <div class="main">
-        <nav class="navbar navbar-expand navbar-theme">
+        <!-- <nav class="navbar navbar-expand navbar-theme">
             <a class="sidebar-toggle d-flex mr-2">
                 <i class="hamburger align-self-center"></i>
             </a>
-        </nav>
+        </nav> -->
         <main class="content">
             <div class="container-fluid">
 
@@ -15,8 +15,8 @@
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <!-- <li class="breadcrumb-item"><a href="dashboard-default.html">Dashboard</a></li> -->
-                            <li class="breadcrumb-item"><a>Ventas</a></li>
+                            <li class="breadcrumb-item"><a [routerLink]="['/ventas']" >Ventas</a></li>
+                            <li class="breadcrumb-item"><a>Registrar Venta</a></li>
                         </ol>
                     </nav>
                 </div>
@@ -143,7 +143,7 @@
                                                 class="fas fa-trash"></i></button></td>
                                     <td class="td-table-styles">{{item.identificador}}</td>
                                     <td class="td-table-styles" matTooltip="Precio de compra: {{item.precio_compra }}" >
-                                        <img [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('"
+                                        <img style="cursor: pointer;" (click)="swipe(item.imagenes[0].imagen)" [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('"
                                             width="48" height="48" class="rounded-circle mr-2"
                                             alt="Avatar">{{item.producto}}
                                     </td>

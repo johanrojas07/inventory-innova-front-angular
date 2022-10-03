@@ -2,14 +2,13 @@
     <app-sidebar style="background: white !important;"></app-sidebar>
 
     <div class="main">
-        <nav class="navbar navbar-expand navbar-theme">
+        <!-- <nav class="navbar navbar-expand navbar-theme">
             <a class="sidebar-toggle d-flex mr-2">
                 <i class="hamburger align-self-center"></i>
             </a>
-        </nav>
+        </nav> -->
         <main class="content">
             <div class="container-fluid">
-
                 <div class="header">
                     <h1 class="header-title">
                         Productos
@@ -28,8 +27,9 @@
                                 {{success_message}}
                             </div>
 
-                            <button type="button" class="close" (click)="close_alert()" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <button type="button" class="close" (click)="close_alert()" data-dismiss="alert"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
                             </button>
                         </div>
                     </div>
@@ -40,12 +40,15 @@
                                     <div class="col-lg-6">
                                         <h5 class="card-title">Filtro de productos</h5>
                                         <form #searchForm="ngForm">
-                                            <div class="input-group date" id="datetimepicker-minimum" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" #filtro="ngModel" name="filtro" 
-                                                (input)="filterData($event.target.value)" [(ngModel)]="filtroText">
+                                            <div class="input-group date" id="datetimepicker-minimum"
+                                                data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input"
+                                                    #filtro="ngModel" name="filtro"
+                                                    (input)="filterData($event.target.value)" [(ngModel)]="filtroText">
                                                 <div class="input-group-append">
-                                       
-                                                    <button type="submit" class="input-group-text"><i class="fa fa-search"></i></button>
+
+                                                    <button type="submit" class="input-group-text"><i
+                                                            class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
                                         </form>
@@ -53,21 +56,26 @@
                                     <div class="col-lg-6">
                                         <h5 class="card-title">Opciones de productos</h5>
                                         <div class="btn-group">
-                                            
-                                            <button type="button" class="btn mb-1 btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                            <button type="button" class="btn mb-1 btn-primary dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Opciones
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" [routerLink]="['/producto/registrar']">Registrar producto</a>
-                                                <a class="dropdown-item" data-toggle="modal" data-target="#modal-data-categoria">Ver categorias</a>
-                                                <a class="dropdown-item" data-toggle="modal" data-target="#modal-save-categoria">Registrar Categoria</a>
-                                           
+                                                <a class="dropdown-item"
+                                                    [routerLink]="['/producto/registrar']">Registrar producto</a>
+                                                <a class="dropdown-item" data-toggle="modal"
+                                                    data-target="#modal-data-categoria">Ver categorias</a>
+                                                <a class="dropdown-item" data-toggle="modal"
+                                                    data-target="#modal-save-categoria">Registrar Categoria</a>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
+                            <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -78,53 +86,67 @@
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let item of filtroProductos | paginate: { itemsPerPage: 15, currentPage: p }; let idx = index">             
-                                        <td style="text-align: center;">{{item.identificador}}</td>                    
-                                        <td>
-                                            <img [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('" width="48" height="48" class="rounded-circle mr-2" alt="Avatar">{{item.titulo}}
-                                        </td>
-                                        <td>{{item.stock}}</td>
-                                        <td><b>$</b>{{item.precio_venta}}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn mb-1 btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-cog"></i>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" [routerLink]="['/producto/editar/',item._id]" >Editar registro</a>
-                                                   
-                                                    <a class="dropdown-item" (click)="eliminar(item._id)">Eliminar registro</a>
-                                                    <a class="dropdown-item" data-toggle="modal" (click)="get_id(item._id)" [attr.data-target]="'#modal-stock-'+idx">Aumentar Stock</a>
-                                                </div>
+                                <tbody
+                                    *ngFor="let item of filtroProductos | paginate: { itemsPerPage: 15, currentPage: p }; let idx = index">
+                                    <td style="text-align: center;">{{item.identificador}}</td>
+                                    <td>
+                                        <img style="cursor: pointer;" (click)="swipe(item.imagenes[0].imagen)"
+                                            [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :(' "
+                                            width="48" height="48" class="rounded-circle mr-2"
+                                            alt="Avatar">{{item.titulo}}
+                                    </td>
+                                    <td>{{item.stock}}</td>
+                                    <td><b>$</b>{{item.precio_venta}}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn mb-1 btn-secondary dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item"
+                                                    [routerLink]="['/producto/editar/',item._id]">Editar registro</a>
+
+                                                <a class="dropdown-item" (click)="eliminar(item._id)">Eliminar
+                                                    registro</a>
+                                                <a class="dropdown-item" data-toggle="modal" (click)="get_id(item._id)"
+                                                    [attr.data-target]="'#modal-stock-'+idx">Aumentar Stock</a>
                                             </div>
-                                        </td>  
-                                        <!--MODAL AUMENTAR STOCK-->
-                                        <div class="modal fade" [attr.id]="'modal-stock-'+idx" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
-                                            <form #stockForm="ngForm" (ngSubmit)="aumentar_stock(stockForm)">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Aumentar stock de {{item.titulo}}</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        </div>
+                                    </td>
+                                    <!--MODAL AUMENTAR STOCK-->
+                                    <div class="modal fade" [attr.id]="'modal-stock-'+idx" tabindex="-1" role="dialog"
+                                        style="display: none;" aria-hidden="true">
+                                        <form #stockForm="ngForm" (ngSubmit)="aumentar_stock(stockForm)">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Aumentar stock de {{item.titulo}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
                                                             <span aria-hidden="true">×</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body m-3">
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body m-3">
                                                         <div class="form-group">
-                                                            <input type="number" class="form-control" placeholder="¿Cuantos?" #producto_stock="ngModel" name="producto_stock" [(ngModel)]="producto_stockText" required>
+                                                            <input type="number" class="form-control"
+                                                                placeholder="¿Cuantos?" #producto_stock="ngModel"
+                                                                name="producto_stock" [(ngModel)]="producto_stockText"
+                                                                required>
                                                         </div>
-                                                            
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                                                            <button type="submit" class="btn btn-primary">Aumentar</button>
-                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-primary">Aumentar</button>
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
-                                        <!--MODAL AUMENTAR STOCK-->
-                          
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!--MODAL AUMENTAR STOCK-->
+
                                 </tbody>
                             </table>
                         </div>
@@ -133,23 +155,28 @@
                 </div>
 
 
-                 <!--MODAL AGREGAR CATEGORIA-->
-                 <div class="modal fade" id="modal-save-categoria" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                <!--MODAL AGREGAR CATEGORIA-->
+                <div class="modal fade" id="modal-save-categoria" tabindex="-1" role="dialog" style="display: none;"
+                    aria-hidden="true">
                     <form #categoriaForm="ngForm" (ngSubmit)="save_cat(categoriaForm)">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Registrar Categoria</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
+                                        <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
                                 <div class="modal-body m-3">
-                                   <div class="form-group">
-                                       <input type="text" class="form-control" placeholder="Titulo de la categoria" #titulo_cat="ngModel" name="titulo_cat" [(ngModel)]="titulo_catText" required>
-                                   </div>
-                                   <div class="form-group">
-                                        <textarea class="form-control" placeholder="Breve descripcion" #descripcion_cat="ngModel" name="descripcion_cat" [(ngModel)]="descripcion_catText" required></textarea>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Titulo de la categoria"
+                                            #titulo_cat="ngModel" name="titulo_cat" [(ngModel)]="titulo_catText"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" placeholder="Breve descripcion"
+                                            #descripcion_cat="ngModel" name="descripcion_cat"
+                                            [(ngModel)]="descripcion_catText" required></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -163,37 +190,38 @@
                 <!--MODAL AGREGAR CATEGORIA-->
 
                 <!--MODAL LISTAR CATEGORIA-->
-                <div class="modal fade" id="modal-data-categoria" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                <div class="modal fade" id="modal-data-categoria" tabindex="-1" role="dialog" style="display: none;"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollablea" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Listado de categorias</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
+                                    <span aria-hidden="true">×</span>
                                 </button>
                             </div>
                             <div class="modal-body m-3">
-                               <table class="table table-striped table-hover table-sm">
-                                <thead>
-                                    <th>Titulo</th>
-                                </thead>
-                                <tbody *ngFor="let item of categorias">
-                                    <td>{{item.titulo.toUpperCase()}}</td>
-                                </tbody>
-                               </table>
+                                <table class="table table-striped table-hover table-sm">
+                                    <thead>
+                                        <th>Titulo</th>
+                                    </thead>
+                                    <tbody *ngFor="let item of categorias">
+                                        <td>{{item.titulo.toUpperCase()}}</td>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                      
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <!--MODAL LISTAR CATEGORIA-->
 
-               
+
             </div>
         </main>
-       
+
     </div>
 </div>

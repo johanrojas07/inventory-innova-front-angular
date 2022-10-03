@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MaterialAllModules } from '../material.module';
 import { ToastrModule } from 'ngx-toastr';
+import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { ToastrModule } from 'ngx-toastr';
     VentaIndexComponent,
     VentaCreateComponent,
     VentaDetalleComponent,
+    PagenotfoundComponent
 
   ],
   imports: [

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
 import { VentaService } from 'src/app/services/venta.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-venta-index',
@@ -12,8 +13,10 @@ export class VentaIndexComponent implements OnInit {
 
   public identity;
   public ventas;
-
+  public isLoading = false;
+  
   constructor(
+    private toastr: ToastrService,
     private _userService : UserService,
     private _ventaService : VentaService,
     private _router : Router,
@@ -24,14 +27,19 @@ export class VentaIndexComponent implements OnInit {
   ngOnInit() {
     if(this.identity){
       //USUARIO AUTENTICADO
+      this.isLoading = true;
       this._ventaService.get_ventas().subscribe(
         response=>{
+          this.isLoading = false;
           this.ventas = response.ventas;
           console.log(this.ventas);
           
         },
         error=>{
-
+          this.isLoading = false;
+          this.toastr.error('No fue posible cargar las ventas : ' + error.error, 'Error', {
+            timeOut: 9000
+          });
         }
       );
     }else{

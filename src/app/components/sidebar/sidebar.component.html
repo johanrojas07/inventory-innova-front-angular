@@ -1,72 +1,170 @@
+<div class="main-menu">
+    <!-- <nav id="sidebar" class="sidebar"> -->
 
-<div class="wrapper">
-    <nav id="sidebar" class="sidebar">
-        <a class="sidebar-brand" href="index.html">
+
+    <div class="sidebar-content">
+        <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Menu
+            </li>
+
+            <li class="sidebar-item" routerLinkActive="sidebar-item active">
+                <a class="sidebar-link" [routerLink]="['/productos']">
+                    <i class="align-middle mr-2 fas fa-fw fa-shapes"></i> <span class="align-middle">Productos</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item" routerLinkActive="sidebar-item active">
+                <a class="sidebar-link" [routerLink]="['/clientes']">
+                    <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Clientes</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item" *ngIf="identity.role == 'ADMIN'" routerLinkActive="sidebar-item active">
+                <a class="sidebar-link" [routerLink]="['/usuarios']">
+                    <i class="align-middle mr-2 fas fa-fw fa-hospital-user"></i> <span
+                        class="align-middle">Usuarios</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item" routerLinkActive="sidebar-item active">
+                <a class="sidebar-link" [routerLink]="['/ventas']">
+                    <i class="align-middle mr-2 fas fa-fw fa-donate"></i> <span class="align-middle">Ventas</span>
+                </a>
+            </li>
+
+            <!-- <li class="sidebar-item">
+                <a class="sidebar-link" (click)="logout()">
+                    <i style="color: red;" class="align-middle mr-2 fas fa-fw fa-sign-out-alt"></i>
+                    <span class="align-middle">Cerrar Sesión</span>
+                </a>
+            </li> -->
+        </ul>
+
+        <div class="sidebar-user">
+            <img src="../../../assets/img/login_innova.png" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
+            <div class="font-weight-bold">Sistema de Ventas</div>
+            <small>Innova Ishop</small>
+        </div>
+        <ul class="logout">
+            <li class="sidebar-item">
+                <a class="sidebar-link" (click)="logout()">
+                    <i style="color: red;" class="align-middle mr-2 fas fa-fw fa-sign-out-alt"></i>
+                    <span class="align-middle">Cerrar Sesión</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sidebar-brand">
+        <a href="index.html">
             <svg>
                 <use xlink:href="#ion-ios-pulse-strong"></use>
             </svg>
             Innova Ishop
         </a>
-        <div class="sidebar-content">
-            <div class="sidebar-user">
-                <img src="../../../assets/img/login_innova.png" class="img-fluid rounded-circle mb-2"
-                    alt="Linda Miller" />
-                <div class="font-weight-bold">Sistema de Ventas</div>
-                <small>Angular</small>
-            </div>
-
-            <ul class="sidebar-nav">
-                <li class="sidebar-header">
-                    Menu
-                </li>
-                <!-- <li class="sidebar-item">
-                    <a href="#dashboards" data-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle mr-2 fas fa-fw fa-home"></i> <span class="align-middle">Dashboards</span>
-                    </a>
-                    <ul id="dashboards" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                        <li class="sidebar-item"><a class="sidebar-link" href="dashboard-default.html">Default</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="dashboard-analytics.html">Analytics</a>
-                        </li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="dashboard-e-commerce.html">E-commerce</a>
-                        </li>
-                    </ul>
-                </li> -->
-
-
-                <li class="sidebar-item" routerLinkActive="sidebar-item active">
-                    <a class="sidebar-link" [routerLink]="['/productos']">
-                        <i class="align-middle mr-2 fas fa-fw fa-shapes"></i> <span class="align-middle">Productos</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item" routerLinkActive="sidebar-item active">
-                    <a class="sidebar-link" [routerLink]="['/clientes']">
-                        <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Clientes</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item" *ngIf="identity.role == 'ADMIN'" routerLinkActive="sidebar-item active">
-                    <a class="sidebar-link" [routerLink]="['/usuarios']">
-                        <i class="align-middle mr-2 fas fa-fw fa-hospital-user"></i> <span class="align-middle">Usuarios</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item" routerLinkActive="sidebar-item active">
-                    <a class="sidebar-link" [routerLink]="['/ventas']">
-                        <i class="align-middle mr-2 fas fa-fw fa-donate"></i> <span class="align-middle">Ventas</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" (click)="logout()">
-                        <i style="color: red;" class="align-middle mr-2 fas fa-fw fa-sign-out-alt"></i> 
-                        <span class="align-middle">Cerrar Sesión</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    </div>
+    <!-- </nav> -->
 </div>
 
 
 
+
+<!-- 
+ <html>
+  <head>
+ 
+  </head>
+  <body><div class="area"></div><nav class="main-menu">
+            <ul>
+                <li>
+                    <a href="http://justinfarrow.com">
+                        <i class="fa fa-home fa-2x"></i>
+                        <span class="nav-text">
+                            Dashboard
+                        </span>
+                    </a>
+                  
+                </li>
+                <li class="has-subnav">
+                    <a href="#">
+                        <i class="fa fa-laptop fa-2x"></i>
+                        <span class="nav-text">
+                            Stars Components
+                        </span>
+                    </a>
+                    
+                </li>
+                <li class="has-subnav">
+                    <a href="#">
+                       <i class="fa fa-list fa-2x"></i>
+                        <span class="nav-text">
+                            Forms
+                        </span>
+                    </a>
+                    
+                </li>
+                <li class="has-subnav">
+                    <a href="#">
+                       <i class="fa fa-folder-open fa-2x"></i>
+                        <span class="nav-text">
+                            Pages
+                        </span>
+                    </a>
+                   
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-bar-chart-o fa-2x"></i>
+                        <span class="nav-text">
+                            Graphs and Statistics
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-font fa-2x"></i>
+                        <span class="nav-text">
+                           Quotes
+                        </span>
+                    </a>
+                </li>
+                <li>
+                   <a href="#">
+                       <i class="fa fa-table fa-2x"></i>
+                        <span class="nav-text">
+                            Tables
+                        </span>
+                    </a>
+                </li>
+                <li>
+                   <a href="#">
+                        <i class="fa fa-map-marker fa-2x"></i>
+                        <span class="nav-text">
+                            Maps
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                       <i class="fa fa-info fa-2x"></i>
+                        <span class="nav-text">
+                            Documentation
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="logout">
+                <li>
+                   <a href="#">
+                         <i class="fa fa-power-off fa-2x"></i>
+                        <span class="nav-text">
+                            Logout
+                        </span>
+                    </a>
+                </li>  
+            </ul>
+        </nav>
+  </body>
+    </html> -->

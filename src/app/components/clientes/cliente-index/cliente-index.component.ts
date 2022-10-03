@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClienteService } from 'src/app/services/cliente.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-cliente-index',
@@ -11,25 +11,33 @@ import Swal from 'sweetalert2';
 export class ClienteIndexComponent implements OnInit {
 
   public clientes;
+  public isLoading = false;
 
   constructor(
+    private toastr: ToastrService,
     private _clienteService: ClienteService
   ) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this._clienteService.get_clientes().subscribe(
-      response=>{
+      response => {
+        this.isLoading = false;
         this.clientes = response.clientes;
         console.log(this.clientes);
-        
+
       },
-      error=>{
+      error => {
+        this.isLoading = false;
+        this.toastr.error('No fue posible cargar los clientes: ' + error.error, 'Error', {
+          timeOut: 9000
+        });
 
       }
     )
   }
 
-  eliminar(id){
+  eliminar(id) {
     Swal.fire({
       title: 'Estas seguro de eliminarlo?',
       text: "Eliminación!",
@@ -47,21 +55,24 @@ export class ClienteIndexComponent implements OnInit {
         )
 
         this._clienteService.delete_cliente(id).subscribe(
-          resposen=>{
+          resposen => {
             this._clienteService.get_clientes().subscribe(
-              response=>{
+              response => {
                 this.clientes = response.clientes;
               },
-              error=>{
-
+              error => {
+                this.toastr.error('No fue posible obtener los clientes: ' + error.error, 'Error', {
+                  timeOut: 9000
+                });
               }
             );
           },
-          erro=>{
-
+          erro => {
+            this.toastr.error('No fue posible eliminar el cliente: ' + erro.error, 'Error', {
+              timeOut: 9000
+            });
           }
         );
-
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel

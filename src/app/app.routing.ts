@@ -14,26 +14,28 @@ import { UserEditComponent } from './components/users/user-edit/user-edit.compon
 import { VentaIndexComponent } from './components/ventas/venta-index/venta-index.component';
 import { VentaCreateComponent } from './components/ventas/venta-create/venta-create.component';
 import { VentaDetalleComponent } from './components/ventas/venta-detalle/venta-detalle.component';
+import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 
 
 
-const appRoute : Routes = [
-    {path: '', component: LoginComponent},
-    {path: 'dashboard',component: DashboardComponent},
-    {path: 'productos',component: ProductoIndexComponent},
-    {path: 'producto/registrar',component: ProductoCreateComponent},
-    {path: 'producto/editar/:id',component: ProductoEditComponent},
-    {path: 'clientes', component: ClienteIndexComponent},
-    {path: 'cliente/registrar', component: ClienteCreateComponent},
-    {path: 'cliente/editar/:id', component: ClienteEditComponent},
-    {path: 'usuarios',component: UserIndexComponent},
-    {path: 'usuarios/registrar', component: UserCreateComponent},
-    {path: 'usuario/editar/:id', component: UserEditComponent},
-    {path: 'ventas',component: VentaIndexComponent},
-    {path: 'venta/registrar',component: VentaCreateComponent},
-    {path: 'venta/:id',component: VentaDetalleComponent},
+const appRoute: Routes = [
+    { path: '', component: LoginComponent },
+    { path: 'dashboard', component: DashboardComponent },
+    { path: 'productos', component: ProductoIndexComponent },
+    { path: 'producto/registrar', component: ProductoCreateComponent },
+    { path: 'producto/editar/:id', component: ProductoEditComponent },
+    { path: 'clientes', component: ClienteIndexComponent },
+    { path: 'cliente/registrar', component: ClienteCreateComponent },
+    { path: 'cliente/editar/:id', component: ClienteEditComponent },
+    { path: 'usuarios', component: UserIndexComponent },
+    { path: 'usuarios/registrar', component: UserCreateComponent },
+    { path: 'usuario/editar/:id', component: UserEditComponent },
+    { path: 'ventas', component: VentaIndexComponent },
+    { path: 'venta/registrar', component: VentaCreateComponent },
+    { path: 'venta/:id', component: VentaDetalleComponent },
+    { path: '**', pathMatch: 'full', component: LoginComponent },
 ]
 
 
-export const appRoutingProviders : any[] = [];
-export const routing:ModuleWithProviders = RouterModule.forRoot(appRoute);
+export const appRoutingProviders: any[] = [];
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoute);

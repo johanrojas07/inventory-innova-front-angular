@@ -2,11 +2,11 @@
     <app-sidebar style="background: white !important;"></app-sidebar>
 
     <div class="main">
-        <nav class="navbar navbar-expand navbar-theme">
+        <!-- <nav class="navbar navbar-expand navbar-theme">
             <a class="sidebar-toggle d-flex mr-2">
                 <i class="hamburger align-self-center"></i>
             </a>
-        </nav>
+        </nav> -->
         <main class="content">
             <div class="container-fluid">
 
@@ -35,6 +35,7 @@
                                 </div>
                                 
                             </div>
+                            <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>

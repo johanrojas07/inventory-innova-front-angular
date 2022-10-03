@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { ProductoService } from 'src/app/services/producto.service';
 import Swal from 'sweetalert2';
 
@@ -21,22 +22,29 @@ export class ProductoIndexComponent implements OnInit {
   public producto_id;
   public success_message;
   public booleanValue = false;
+  public isLoading = false;
 
   constructor(
+    private toastr: ToastrService,
     private _productoService: ProductoService,
   ) {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this._productoService.get_productos('').subscribe(
       response => {
         this.productos = response.productos;
         this.filtroProductos = this.productos;
         console.log(this.productos);
+        this.isLoading = false;
 
       },
       error => {
-
+        this.toastr.error('No fue posible cargar los productos: ' + error.error, 'Error', {
+          timeOut: 9000
+        });
+        this.isLoading = false;
       }
     );
 
@@ -45,10 +53,19 @@ export class ProductoIndexComponent implements OnInit {
         this.categorias = response.categorias;
       },
       error => {
-
+        this.toastr.error('No fue posible cargar las categorias: ' + error.error, 'Error', {
+          timeOut: 9000
+        });
       }
     );
   }
+
+  swipe(img: string) {
+    var image = new Image();
+    image.src = img;
+    var w = window.open("");
+    w.document.write(image.outerHTML);
+ }
 
   orderBy(property) {
     if (this.booleanValue) {
@@ -79,12 +96,16 @@ export class ProductoIndexComponent implements OnInit {
               $('#modal-save-categoria').modal('hide');
             },
             error => {
-
+              this.toastr.error('No fue posible obtener las categorias: ' + error.error, 'Error', {
+                timeOut: 9000
+              });
             }
           );
         },
         error => {
-
+          this.toastr.error('No fue posible crea la categoria: ' + error.error, 'Error', {
+            timeOut: 9000
+          });
         }
       );
 
@@ -110,18 +131,25 @@ export class ProductoIndexComponent implements OnInit {
 
         this._productoService.delete_producto(id).subscribe(
           response => {
+            this.isLoading = true;
             this._productoService.get_productos('').subscribe(
               response => {
+                this.isLoading = false;
                 this.productos = response.productos;
                 this.filtroProductos = this.productos;
               }
               , erro => {
-
+                this.isLoading = false;
+                this.toastr.error('No fue posible obtener los productos: ' + erro.error, 'Error', {
+                  timeOut: 9000
+                });
               }
             );
           }
           , error => {
-
+            this.toastr.error('No fue posible eliminar el producto: ' + error.error, 'Error', {
+              timeOut: 9000
+            });
           }
         );
 
@@ -154,20 +182,28 @@ export class ProductoIndexComponent implements OnInit {
           stock: stockForm.value.producto_stock,
         }).subscribe(
           response => {
+            this.isLoading = true;
             this.success_message = 'Se aumento el stock correctamente';
             this._productoService.get_productos('').subscribe(
               response => {
                 console.log("SIIIIII", response);
+                this.isLoading = false;
                 this.productos = response.productos;
                 this.filtroProductos = this.productos;
                 $('.modal').modal('hide');
               }
               , error => {
-
+                this.isLoading = false;
+                this.toastr.error('No fue posible obtener los productos: ' + error.error, 'Error', {
+                  timeOut: 9000
+                });
               }
             );
           },
           error => {
+            this.toastr.error('No fue aumentar el stock del producto: ' + error.error, 'Error', {
+              timeOut: 9000
+            });
             console.log(error);
 
           }
