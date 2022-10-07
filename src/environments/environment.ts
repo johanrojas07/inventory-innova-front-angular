@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  urlApi: 'https://innovaback.ifxcorp.com/api/',
+  urlApi: 'http://localhost:5000/api/',
 };

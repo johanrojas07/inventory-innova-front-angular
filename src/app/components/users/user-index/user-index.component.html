@@ -39,7 +39,7 @@
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor="let item of usuarios | paginate: { itemsPerPage: 15, currentPage: p }">                                 
+                                <tbody *ngFor="let item of usuarios | paginate: { itemsPerPage: 15, currentPage: paginator }">                                 
                                         <td>
                                             {{item.nombres}} {{item.apellidos}}
                                         </td>
@@ -64,7 +64,7 @@
                             </table>
                         </div>
                     </div>
-                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <pagination-controls (pageChange)="paginator = $event"></pagination-controls>
                 </div>
 
 

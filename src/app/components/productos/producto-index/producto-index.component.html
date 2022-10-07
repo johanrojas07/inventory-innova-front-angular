@@ -87,7 +87,7 @@
                                     </tr>
                                 </thead>
                                 <tbody
-                                    *ngFor="let item of filtroProductos | paginate: { itemsPerPage: 15, currentPage: p }; let idx = index">
+                                    *ngFor="let item of filtroProductos | paginate: { itemsPerPage: 15, currentPage: paginator }; let idx = index">
                                     <td style="text-align: center;">{{item.identificador}}</td>
                                     <td>
                                         <img style="cursor: pointer;" (click)="swipe(item.imagenes[0].imagen)"
@@ -151,7 +151,7 @@
                             </table>
                         </div>
                     </div>
-                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    <pagination-controls (pageChange)="paginator = $event"></pagination-controls>
                 </div>
 
 

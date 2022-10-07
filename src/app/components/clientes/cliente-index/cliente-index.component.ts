@@ -12,6 +12,7 @@ export class ClienteIndexComponent implements OnInit {
 
   public clientes;
   public isLoading = false;
+  public paginator;
 
   constructor(
     private toastr: ToastrService,

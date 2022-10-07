@@ -33,7 +33,9 @@ const appRoute: Routes = [
     { path: 'ventas', component: VentaIndexComponent },
     { path: 'venta/registrar', component: VentaCreateComponent },
     { path: 'venta/:id', component: VentaDetalleComponent },
-    { path: '**', pathMatch: 'full', component: LoginComponent },
+    
+    { path: '**', redirectTo: '/404' },
+    { path: '404', component: PagenotfoundComponent },
 ]
 
 

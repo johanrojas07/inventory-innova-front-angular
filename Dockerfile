@@ -11,7 +11,9 @@ RUN npm install
 
 COPY . /app
 
-RUN npm run build --prod
+##RUN npm run build --prod
+RUN node_modules/.bin/ng build --prod --configuration production
+
 
 #Segunda Etapa
 FROM nginx:1.17.1-alpine

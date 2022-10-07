@@ -23,6 +23,11 @@ export class ProductoIndexComponent implements OnInit {
   public success_message;
   public booleanValue = false;
   public isLoading = false;
+  public paginator;
+  public titulo_catText;
+  public descripcion_catText;
+  public filtroText;
+  public producto_stockText;
 
   constructor(
     private toastr: ToastrService,

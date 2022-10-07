@@ -12,6 +12,7 @@ export class UserIndexComponent implements OnInit {
   public url;
   public usuarios;
   public identity;
+  public paginator;
 
   constructor(
     private _userService : UserService,
@@ -35,7 +36,10 @@ export class UserIndexComponent implements OnInit {
     }else{
       this._router.navigate(['dashboard']);
     }
-    
+  }
+
+  eliminar(data) {
+    console.log("ELIMINAR", data);
   }
 
 }

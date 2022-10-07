@@ -14,6 +14,7 @@ export class UserEditComponent implements OnInit {
   public success_message;
   public password;
   public identity;
+  public passwordText;
 
   constructor(
     private _route: ActivatedRoute,

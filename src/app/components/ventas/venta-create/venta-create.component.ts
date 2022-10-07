@@ -34,6 +34,7 @@ export class VentaCreateComponent implements OnInit {
     idproducto: '',
     cantidad: null
   };
+  public comentarios = '';
   public error_message;
   filteredProducts: Observable<any[]>;
 
@@ -83,7 +84,7 @@ export class VentaCreateComponent implements OnInit {
 
 
   private _filterStates(value: any): any[] {
-    console.log("LLEGOOOO", value);
+    console.log("Seleccion: ", value);
 
     const filterValue = (value && value.identificador) ? value.identificador.toLowerCase() : value.toLowerCase();
 
@@ -118,7 +119,6 @@ export class VentaCreateComponent implements OnInit {
 
 
   setDataProduct(event) {
-    console.log(" event.option.value", event.option.value);
     this.producto = event.option.value;
   }
 
@@ -204,6 +204,12 @@ export class VentaCreateComponent implements OnInit {
   onSubmit(ventaForm) {
     if (ventaForm.valid) {
       if (ventaForm.value.idcliente != '') {
+        if (this.data_detalle.length == 0 ) {
+          this.toastr.warning('No hay productos seleccionados', 'Error', {
+            timeOut: 9000
+          });
+          return;
+        }
 
         this.data_detalle.forEach(object => {
           delete object['imagenes'];
@@ -212,7 +218,8 @@ export class VentaCreateComponent implements OnInit {
         let data = {
           idcliente: ventaForm.value.idcliente,
           iduser: this.identity._id,
-          detalles: this.data_detalle
+          detalles: this.data_detalle,
+          comentarios: this.comentarios
         }
 
         console.log("Registrar venta", data);

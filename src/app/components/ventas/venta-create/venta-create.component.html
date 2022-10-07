@@ -15,7 +15,7 @@
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a [routerLink]="['/ventas']" >Ventas</a></li>
+                            <li class="breadcrumb-item"><a [routerLink]="['/ventas']">Ventas</a></li>
                             <li class="breadcrumb-item"><a>Registrar Venta</a></li>
                         </ol>
                     </nav>
@@ -90,12 +90,10 @@
                                                 [displayWith]="compareObjectSelect"
                                                 (optionSelected)="setDataProduct($event)">
                                                 <mat-option *ngFor="let option of filteredProducts | async"
-                                                    [value]="option"
-                                                    [disabled]="option.stock == 0"
-                                                    
-                                                    >
+                                                    [value]="option" [disabled]="option.stock == 0">
                                                     <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
-                                                    <span>{{option.identificador}} | {{option.titulo}} {{option.stock == 0 ? 'Sin Stock :(' : ''}}</span>
+                                                    <span>{{option.identificador}} | {{option.titulo}} {{option.stock ==
+                                                        0 ? 'Sin Stock :(' : ''}}</span>
                                                     <!-- <small>Population: {{state.population}}</small> -->
 
                                                 </mat-option>
@@ -105,7 +103,8 @@
 
                                         <div class="col-lg-3 form-group">
                                             <label for=""><b>Stock actual</b></label>
-                                            <input type="text" readonly class="form-control" value="{{(producto) ? producto.stock : '--|--'}}">
+                                            <input type="text" readonly class="form-control"
+                                                value="{{(producto) ? producto.stock : '--|--'}}">
                                         </div>
                                         <div class="col-lg-3 form-group">
                                             <label for=""><b>Cantidad</b></label>
@@ -114,7 +113,8 @@
                                         </div>
                                         <div class="col-lg-2 form-group">
                                             <label><b>*</b></label>
-                                            <button class="btn btn-primary btn-block" type="submit" [disabled]="!detalle.cantidad">Agregar</button>
+                                            <button class="btn btn-primary btn-block" type="submit"
+                                                [disabled]="!detalle.cantidad">Agregar</button>
                                         </div>
                                     </div>
                                 </form>
@@ -139,21 +139,28 @@
                                 </thead>
                                 <tbody *ngFor="let item of data_detalle; let idx = index">
                                     <td class="td-table-styles"><button class="btn btn-danger btn-sm"
-                                            (click)="eliminar(idx)"><i
-                                                class="fas fa-trash"></i></button></td>
+                                            (click)="eliminar(idx)"><i class="fas fa-trash"></i></button></td>
                                     <td class="td-table-styles">{{item.identificador}}</td>
-                                    <td class="td-table-styles" matTooltip="Precio de compra: {{item.precio_compra }}" >
-                                        <img style="cursor: pointer;" (click)="swipe(item.imagenes[0].imagen)" [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('"
+                                    <td class="td-table-styles" matTooltip="Precio de compra: {{item.precio_compra }}">
+                                        <img style="cursor: pointer;" (click)="swipe(item.imagenes[0].imagen)"
+                                            [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('"
                                             width="48" height="48" class="rounded-circle mr-2"
                                             alt="Avatar">{{item.producto}}
                                     </td>
                                     <td class="td-table-styles">
-                                        <i style="color: rgb(240, 164, 8);" *ngIf="item.precio_compra >= item.precio_venta" matTooltip="El precio de venta es menor al precio de compra" class="align-middle mr-2 fas fa-fw fa-exclamation-triangle"></i> 
-                                        <input style="width: auto; display: inline;" type="number" matTooltip="Precio Sugerido: {{item.precio_venta_original}}" #valor="ngModel" name="valor"
-                                                [(ngModel)]="data_detalle[idx].precio_venta" class="form-control">
+                                        <i style="color: rgb(240, 164, 8);"
+                                            *ngIf="item.precio_compra >= item.precio_venta"
+                                            matTooltip="El precio de venta es menor al precio de compra"
+                                            class="align-middle mr-2 fas fa-fw fa-exclamation-triangle"></i>
+                                        <input style="width: auto; display: inline;" type="number"
+                                            matTooltip="Precio Sugerido: {{item.precio_venta_original}}"
+                                            #valor="ngModel" name="valor" [(ngModel)]="data_detalle[idx].precio_venta"
+                                            class="form-control">
                                     </td>
-                                    <td class="td-table-styles" style="padding-left: 1%;">{{item.cantidad | number}} </td>
-                                    <td class="td-table-styles">{{((item.precio_venta) * (item.cantidad)) | number}}</td>
+                                    <td class="td-table-styles" style="padding-left: 1%;">{{item.cantidad | number}}
+                                    </td>
+                                    <td class="td-table-styles">{{((item.precio_venta) * (item.cantidad)) | number}}
+                                    </td>
                                 </tbody>
                                 <tfoot>
                                     <td><b>Total</b></td>
@@ -167,6 +174,20 @@
                             <div class="card-footer">
 
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Comentarios (Opcionales)</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="col-lg-12">
+                                    <textarea class="form-control" matInput [(ngModel)]="comentarios"
+                                        placeholder="Ex. Se pago 50 mil y se deben 10 mil"></textarea>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

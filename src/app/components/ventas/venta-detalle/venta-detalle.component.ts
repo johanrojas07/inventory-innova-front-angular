@@ -13,9 +13,10 @@ export class VentaDetalleComponent implements OnInit {
   public id;
   public venta: any = {
     iduser: '',
-    idcliente: ''
+    idcliente: '',
+    comentarios: ''
   };
-  public detalle_venta;
+  public detalle_venta = [];
   public identity;
 
   constructor(
@@ -38,8 +39,7 @@ export class VentaDetalleComponent implements OnInit {
 
             this.venta = response.data.venta;
             this.detalle_venta = response.data.detalles;
-            console.log("Venta", this.venta);
-            console.log("Detalle Venta", this.detalle_venta);
+            console.log("Venta", response);
           },
           error => {
 
@@ -50,6 +50,22 @@ export class VentaDetalleComponent implements OnInit {
       this._router.navigate(['']);
     }
 
+  }
+
+  getTotal() {
+    let total = 0;
+    this.detalle_venta.forEach((item) => {
+      total = total + (parseInt(item.precio_venta) * parseInt(item.cantidad));
+    });
+    return total;
+  }
+
+  
+  swipe(img: string) {
+    var image = new Image();
+    image.src = img;
+    var w = window.open("");
+    w.document.write(image.outerHTML);
   }
 
 }
