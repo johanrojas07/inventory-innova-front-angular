@@ -21,6 +21,11 @@ export class ProductoService {
     return this._http.get(this.url + 'productos/' + filtro, { headers: headers });
   }
 
+  get_dashboard(): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.get(this.url + 'producto/dashboard', { headers: headers });
+  }
+
   get_categorias(): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.get(this.url + 'categorias', { headers: headers });

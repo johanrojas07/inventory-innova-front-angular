@@ -28,6 +28,7 @@ export class ProductoIndexComponent implements OnInit {
   public descripcion_catText;
   public filtroText;
   public producto_stockText;
+  public imagen_view = null;
 
   constructor(
     private toastr: ToastrService,
@@ -65,12 +66,26 @@ export class ProductoIndexComponent implements OnInit {
     );
   }
 
-  swipe(img: string) {
-    var image = new Image();
-    image.src = img;
-    var w = window.open("");
-    w.document.write(image.outerHTML);
- }
+  swipe(idProducto: string) {
+    this.imagen_view = '';
+    this.isLoading = true;
+    this._productoService.get_producto(idProducto).subscribe(
+      (response) => {
+        this.isLoading = false;
+        if (response && response.producto && response.producto.imagenes) {
+          this.imagen_view = response.producto.imagenes[0].imagen;
+        } else {
+          this.toastr.error('No se encontro ninguna imagen', 'Error', {
+            timeOut: 9000
+          });
+        }
+      }, () => {
+        this.isLoading = false;
+        this.toastr.error('No fue posible cargar la imagen', 'Error', {
+          timeOut: 9000
+        });
+      })
+  }
 
   orderBy(property) {
     if (this.booleanValue) {
@@ -84,7 +99,8 @@ export class ProductoIndexComponent implements OnInit {
 
   filterData(searchValue) {
     this.filtroProductos = this.productos.filter((item) => {
-      return item.titulo.toLowerCase().includes(searchValue.toLowerCase()) || item.identificador.toLowerCase().includes(searchValue.toLowerCase()) || item.descripcion.toLowerCase().includes(searchValue.toLowerCase());
+      return (item.titulo.toLowerCase().includes(searchValue.toLowerCase()) || item.identificador.toLowerCase().includes(searchValue.toLowerCase()) || item.descripcion.toLowerCase().includes(searchValue.toLowerCase()))
+        || item && item.idcategoria && (item.idcategoria.titulo.toLowerCase().includes(searchValue.toLowerCase()) || item.idcategoria.descripcion.toLowerCase().includes(searchValue.toLowerCase()));
     });
   }
 

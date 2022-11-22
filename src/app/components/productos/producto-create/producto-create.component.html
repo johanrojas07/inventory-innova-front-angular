@@ -12,7 +12,7 @@
 
                 <div class="header">
                     <h1 class="header-title">
-                        Registro de productos
+                        Registro de producto
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -57,19 +57,19 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label">Titulo del producto</label>
-                                                <input type="text" class="form-control" placeholder="Ingrese el titulo del producto" #titulo="ngModel" name="titulo" [(ngModel)]="producto.titulo" required>
+                                                <input type="text" class="form-control" placeholder="Ingrese el titulo del producto" #titulo="ngModel" name="titulo"  [(ngModel)]="producto.titulo" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-2">
                                             <div class="form-group">
                                                 <label class="form-label">Precio compra</label>
-                                                <input type="number" class="form-control" placeholder="$0"  #precio_compra="ngModel" name="precio_compra" [(ngModel)]="producto.precio_compra" required>
+                                                <input type="text" class="form-control" placeholder="$0" (input)="changeNumber()" #precio_compra="ngModel" name="precio_compra" [(ngModel)]="producto.precio_compra" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-2">
                                             <div class="form-group">
                                                 <label class="form-label">Precio venta</label>
-                                                <input type="number" class="form-control" placeholder="$0"  #precio_venta="ngModel" name="precio_venta" [(ngModel)]="producto.precio_venta" required>
+                                                <input type="text" class="form-control" placeholder="$0" (input)="changeNumber()" #precio_venta="ngModel" name="precio_venta" [(ngModel)]="producto.precio_venta" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-2">

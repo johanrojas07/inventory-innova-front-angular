@@ -44,14 +44,25 @@
                                                     {{item.nombres}}</option>
                                             </select>
                                         </div>
-                                        <div class="col-lg-2 form-group">
+                                        <div class="col-lg-2 form-group text-center">
 
                                             <a [routerLink]="['/cliente/registrar']" class="btn btn-primary">Nuevo
                                                 cliente</a>
                                         </div>
-                                        <div class="col-lg-2 form-group">
+                                        <div class="col-lg-2 form-group text-center">
+                                            <div>
+                                                <button type="submit" class="btn btn-primary">Registrar venta</button>
+                                            </div>
+                                            <div>
+                                                <b> Pago en: </b>
+                                                <select name="" class="form-control" #tipo_pago="ngModel"
+                                                    name="tipo_pago" [(ngModel)]="venta.tipo_pago">
+                                                    <!-- <option value="">SELECCIONAR</option> -->
+                                                    <option [value]="item.id" *ngFor="let item of tipos_pago">
+                                                        {{item.name}}</option>
+                                                </select>
+                                            </div>
 
-                                            <button type="submit" class="btn btn-primary">Registrar venta</button>
                                         </div>
                                     </div>
                                 </form>
@@ -78,6 +89,10 @@
                                 <h5 class="card-title">Detalles de la venta</h5>
                             </div>
                             <div class="card-body">
+                                <div class="col-12" style="text-align: center; padding-bottom: 16px;" *ngIf="isLoading">
+                                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                    Cargando los productos
+                                </div>
                                 <form #detalleForm="ngForm" (ngSubmit)="save_detalle(detalleForm)">
                                     <div class="row">
                                         <div class="col-lg-4 form-group">
@@ -90,7 +105,8 @@
                                                 [displayWith]="compareObjectSelect"
                                                 (optionSelected)="setDataProduct($event)">
                                                 <mat-option *ngFor="let option of filteredProducts | async"
-                                                    [value]="option" [disabled]="option.stock == 0">
+                                                    [value]="option" [disabled]="option.stock == 0"
+                                                    matTooltip="{{option.titulo}}">
                                                     <!-- <img class="example-option-img" aria-hidden [src]="state.flag" height="25"> -->
                                                     <span>{{option.identificador}} | {{option.titulo}} {{option.stock ==
                                                         0 ? 'Sin Stock :(' : ''}}</span>
@@ -142,7 +158,8 @@
                                             (click)="eliminar(idx)"><i class="fas fa-trash"></i></button></td>
                                     <td class="td-table-styles">{{item.identificador}}</td>
                                     <td class="td-table-styles" matTooltip="Precio de compra: {{item.precio_compra }}">
-                                        <img style="cursor: pointer;" (click)="swipe(item.imagenes[0].imagen)"
+                                        <img style="cursor: pointer;" (click)="imagen_view = item.imagenes[0].imagen;"
+                                            data-toggle="modal" data-target="#modal-ver-imagen"
                                             [src]="(item.imagenes && item.imagenes[0]) ? item.imagenes[0].imagen : 'No Existe :('"
                                             width="48" height="48" class="rounded-circle mr-2"
                                             alt="Avatar">{{item.producto}}
@@ -192,6 +209,31 @@
                     </div>
                 </div>
 
+
+                <!--MODAL VER IMAGEN-->
+                <div class="modal fade" id="modal-ver-imagen" tabindex="-1" role="dialog" style="display: none;"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title w-100" id="exampleModalLabel">
+                                    Imagen
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">
+                                        ×
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="modal-body m-3 text-center">
+                                <img style="cursor: pointer; width: 100%; max-width: 1363px;"
+                                    [src]="(imagen_view && imagen_view != '') ? imagen_view : 'No Existe :(' "
+                                    alt="Cargando..." >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--MODAL VER IMAGEN-->
             </div>
         </main>
 

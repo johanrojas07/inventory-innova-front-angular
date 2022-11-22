@@ -72,15 +72,17 @@
                                     </tr>
                                 </thead>
                                 <tbody *ngFor="let item of detalle_venta">
-                                    <td class="text-center">  <img style="cursor: pointer;" (click)="swipe(item.idproducto.imagenes[0].imagen)"
+                                    <td class="text-center">  
+                                        {{item.idproducto.identificador}}                                        
+                                        <img style="cursor: pointer;" (click)="swipe(item.idproducto.imagenes[0].imagen)"
                                         [src]="(item.idproducto.imagenes && item.idproducto.imagenes[0]) ? item.idproducto.imagenes[0].imagen : 'No Existe :('"
                                         width="48" height="48" class="rounded-circle mr-2"
                                         alt="Avatar">
                                         {{item.idproducto.titulo}}</td>
-                                    <td class="text-center">${{item.idproducto.precio_compra}}</td>
-                                    <td class="text-center" matTooltip="Precio Sugerido: {{item.idproducto.precio_venta}}">${{item.precio_venta}}</td>
+                                    <td class="text-center">${{item.idproducto.precio_compra | number}}</td>
+                                    <td class="text-center" matTooltip="Precio Sugerido: {{item.idproducto.precio_venta}}">${{item.precio_venta | number}}</td>
                                     <td class="text-center">{{item.cantidad}}</td>
-                                    <td class="text-center">${{(item.precio_venta) * (item.cantidad)}}</td>
+                                    <td class="text-center">${{((item.precio_venta) * (item.cantidad)) | number}}</td>
                                 </tbody>
                                 <tfoot style="text-align: center;">
                                     <td>-</td>

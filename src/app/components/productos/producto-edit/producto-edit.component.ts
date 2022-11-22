@@ -28,22 +28,19 @@ export class ProductoEditComponent implements OnInit {
     private _route: ActivatedRoute,
     private _productoService: ProductoService
   ) {
-    this.producto = new Producto('', '', '', 1, 1, 1, '', 1,'','',[]);
+    this.producto = new Producto('', '', '', '1', '1', 1, '', 1, '', '', []);
   }
 
   ngOnInit() {
-
     this._route.params.subscribe(params => {
       this.id = params['id'];
       this._productoService.get_producto(this.id).subscribe(
         response => {
           this.producto = response.producto;
-          this.imagenesData = (this.producto && this.producto.imagenes) ? this.producto.imagenes.map(s => s.imagen) :null;
+          this.imagenesData = (this.producto && this.producto.imagenes) ? this.producto.imagenes.map(s => s.imagen) : null;
           this._productoService.get_categorias().subscribe(
             response => {
               this.categorias = response.categorias;
-              console.log(this.categorias);
-
             },
             error => {
 
@@ -107,8 +104,8 @@ export class ProductoEditComponent implements OnInit {
         titulo: productoForm.value.titulo,
         descripcion: productoForm.value.descripcion,
         imagenes: this.imagenesData,
-        precio_compra: productoForm.value.precio_compra,
-        precio_venta: productoForm.value.precio_venta,
+        precio_compra: (productoForm.value.precio_compra + '').replace(/,/g, "").replace(/\D/g, ''),
+        precio_venta: (productoForm.value.precio_venta + '').replace(/,/g, "").replace(/\D/g, ''),
         idcategoria: productoForm.value.idcategoria,
         puntos: productoForm.value.puntos
       }).subscribe(
@@ -124,6 +121,25 @@ export class ProductoEditComponent implements OnInit {
     } else {
       this.error_message = 'Complete correctamente el formulario';
     }
+  }
+
+  changeNumber() {
+    this.producto.precio_compra = (this.producto.precio_compra + "").replace(/\D/g, '');
+    this.producto.precio_venta = (this.producto.precio_venta + "").replace(/\D/g, '');
+    this.producto.precio_compra = this.changeDato(this.producto.precio_compra);
+    this.producto.precio_venta = this.changeDato(this.producto.precio_venta + "");
+  }
+
+  changeDato(value) {
+    var chars = value.replace(/,/g, "").split("").reverse()
+    var withCommas = []
+    for (var i = 1; i <= chars.length; i++) {
+      withCommas.push(chars[i - 1])
+      if (i % 3 == 0 && i != chars.length) {
+        withCommas.push(",")
+      }
+    }
+    return withCommas.reverse().join("");
   }
 
 

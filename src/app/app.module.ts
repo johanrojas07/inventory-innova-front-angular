@@ -28,6 +28,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MaterialAllModules } from '../material.module';
 import { ToastrModule } from 'ngx-toastr';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
+import { ChartsModule, ThemeService } from 'ng2-charts';
+
 
 
 @NgModule({
@@ -52,6 +54,7 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 
   ],
   imports: [
+    ChartsModule,
     MaterialAllModules,
     BrowserModule,
     AppRoutingModule,
@@ -64,7 +67,7 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
     ReactiveFormsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [],
+  providers: [ThemeService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

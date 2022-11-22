@@ -42,6 +42,7 @@
                                         <th>Cliente</th>
                                         <th>Fecha</th>
                                         <th>Trabajador</th>
+                                        <th style="width: 55%; max-width: 34%;">Productos</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
@@ -52,6 +53,9 @@
                                         <td>{{item.fecha | date: 'MMM d, y, h:mm:ss a'}}</td>
                                         <td>
                                            {{item.iduser.nombres}} {{item.iduser.apellidos}}
+                                        </td>
+                                        <td class="text-productos">
+                                            {{getProductosName(item.data_detalle)}}
                                         </td>
                                         <td>
                                             <div class="btn-group">

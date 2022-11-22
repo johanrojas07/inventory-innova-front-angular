@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Producto } from "../../../models/Producto";
 import { ProductoService } from 'src/app/services/producto.service';
+import { Router } from '@angular/router';
 
 interface HtmlInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
@@ -22,8 +23,9 @@ export class ProductoCreateComponent implements OnInit {
 
   constructor(
     private _productoService: ProductoService,
+    private _router: Router
   ) {
-    this.producto =  new Producto('', '', '', 1, 1, 1, '', 1,'','',[]);
+    this.producto = new Producto('', '', '', '1', '1', 1, '', 1, '', '', []);
   }
 
   ngOnInit() {
@@ -57,19 +59,23 @@ export class ProductoCreateComponent implements OnInit {
         titulo: productoForm.value.titulo,
         descripcion: productoForm.value.descripcion,
         imagenes: this.imagenesData,
-        precio_compra: productoForm.value.precio_compra,
-        precio_venta: productoForm.value.precio_venta,
+        precio_compra: productoForm.value.precio_compra.replace(/,/g, "").replace(/\D/g, ''),
+        precio_venta: productoForm.value.precio_venta.replace(/,/g, "").replace(/\D/g, ''),
         stock: productoForm.value.stock,
         idcategoria: productoForm.value.idcategoria,
         puntos: productoForm.value.puntos,
       }).subscribe(
         response => {
           this.success_message = 'Se registro el producto correctamente';
+          this.error_message = '';
           this.imagenesData = [];
           this.imgSelect = '../../../../assets/img/default.jpg';
-        },
-        error => {
+          this.producto = new Producto('', '', '', '1', '1', 1, '', 1, '', '', []);
 
+        },
+        () => {
+          this.success_message = '';
+          this.error_message = 'No fue posible crear el producto';
         }
       );
 
@@ -77,6 +83,25 @@ export class ProductoCreateComponent implements OnInit {
       this.error_message = 'Complete correctamente el formulario';
 
     }
+  }
+
+  changeNumber() {
+    this.producto.precio_compra = (this.producto.precio_compra + "").replace(/\D/g, '');
+    this.producto.precio_venta = (this.producto.precio_venta + "").replace(/\D/g, '');
+    this.producto.precio_compra = this.changeDato(this.producto.precio_compra);
+    this.producto.precio_venta = this.changeDato(this.producto.precio_venta + "");
+  }
+
+  changeDato(value) {
+    var chars = value.replace(/,/g, "").split("").reverse()
+    var withCommas = []
+    for (var i = 1; i <= chars.length; i++) {
+      withCommas.push(chars[i - 1])
+      if (i % 3 == 0 && i != chars.length) {
+        withCommas.push(",")
+      }
+    }
+    return withCommas.reverse().join("");
   }
 
   imgSelected(event: HtmlInputEvent) {

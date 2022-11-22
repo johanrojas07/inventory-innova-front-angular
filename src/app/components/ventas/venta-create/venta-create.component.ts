@@ -20,14 +20,21 @@ export class VentaCreateComponent implements OnInit {
   public controlFind = new FormControl('');
   public identity;
   public clientes: any;
+  public tipos_pago: any = [
+    {id: 1, name: 'Efectivo'},
+    {id: 2, name: 'Nequi'},
+    {id: 3, name: 'Sin Pagar'},
+  ];
   public venta: any = {
     idcliente: '',
+    tipo_pago: 1
   };
   public productos;
   public producto: any = {
     stock: '--|--',
   }
   public total = 0;
+  public imagen_view = '';
 
   public data_detalle: Array<any> = [];
   public detalle: any = {
@@ -37,6 +44,7 @@ export class VentaCreateComponent implements OnInit {
   public comentarios = '';
   public error_message;
   filteredProducts: Observable<any[]>;
+  public isLoading = false;
 
 
   constructor(
@@ -52,27 +60,34 @@ export class VentaCreateComponent implements OnInit {
 
   ngOnInit() {
     if (this.identity) {
+      this.isLoading = true;
       this._clienteService.get_clientes().subscribe(
         response => {
           this.venta.idcliente = (response.clientes && response.clientes[0]) ? response.clientes[0]._id : null;
+          this.venta.tipo_pago = 1;
           this.clientes = response.clientes;
         },
-        error => {
-
+        () => {
+          this.toastr.error('Error obteniendo los clientes :(.', 'Error', {
+            timeOut: 9000
+          });
         }
       );
 
       this._productoService.get_productos('').subscribe(
         response => {
           this.productos = response.productos;
-          console.log("this.productos", this.productos)
           this.filteredProducts = this.controlFind.valueChanges.pipe(
             startWith(''),
             map(state => (state ? this._filterStates(state) : this.productos.slice())),
           );
-          console.log("this.filteredProducts", this.filteredProducts)
+          this.isLoading = false;
         },
-        error => {
+        () => {
+          this.toastr.error('Error obteniendo los productos :(.', 'Error', {
+            timeOut: 9000
+          });
+          this.isLoading = false;
 
         }
       );
@@ -142,6 +157,8 @@ export class VentaCreateComponent implements OnInit {
             timeOut: 3000
           });
         } else {
+
+          console.log("HOLAAA", this.producto);
           this.data_detalle.push({
             identificador: this.producto.identificador,
             imagenes: this.producto.imagenes,
@@ -152,6 +169,13 @@ export class VentaCreateComponent implements OnInit {
             precio_venta_original: this.producto.precio_venta,
             precio_compra: this.producto.precio_compra
           });
+          this._productoService.get_producto(this.producto._id).subscribe(
+            (response) => {
+              if (response && response.producto && response.producto.imagenes) {
+                this.data_detalle[this.data_detalle.length-1].imagenes = response.producto.imagenes;
+              }
+            })
+
           this.toastr.success('Producto Agregado', 'Informacion', {
             timeOut: 3000
           });
@@ -204,7 +228,7 @@ export class VentaCreateComponent implements OnInit {
   onSubmit(ventaForm) {
     if (ventaForm.valid) {
       if (ventaForm.value.idcliente != '') {
-        if (this.data_detalle.length == 0 ) {
+        if (this.data_detalle.length == 0) {
           this.toastr.warning('No hay productos seleccionados', 'Error', {
             timeOut: 9000
           });
@@ -219,26 +243,32 @@ export class VentaCreateComponent implements OnInit {
           idcliente: ventaForm.value.idcliente,
           iduser: this.identity._id,
           detalles: this.data_detalle,
-          comentarios: this.comentarios
+          comentarios: this.comentarios,
+          tipo_pago: parseInt(ventaForm.value.tipo_pago),
+          total_venta: this.getTotal()
         }
 
         console.log("Registrar venta", data);
         this._ventaService.save_data(data).subscribe(
-          response => {
+          (response) => {
             this._router.navigate(['ventas']);
           },
           error => {
+            this.toastr.error('Error registrando la venta. :(', 'Error', {
+              timeOut: 9000
+            });
             console.log(error);
           }
         );
-
       } else {
-        console.log('error');
+        this.toastr.warning('Cliente no definido', 'Warning', {
+          timeOut: 9000
+        });
       }
-
     } else {
-      console.log('error');
-
+      this.toastr.warning('Formulario no valido', 'Warning', {
+        timeOut: 9000
+      });
     }
   }
 }
