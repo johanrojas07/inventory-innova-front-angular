@@ -5,3 +5,37 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+
+.wrapper {
+    display: flex;
+  }
+  
+  .main {
+    flex: 1;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+  }
+  
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  /* Estilo CSS para hacer la paginación responsive */
+@media (max-width: 576px) { /* Pantallas más pequeñas que 576px */
+    .pagination li {
+      display: block; /* Hace que cada elemento li ocupe todo el ancho y se apile verticalmente */
+      margin-bottom: 5px; /* Espacio entre cada elemento */
+    }
+  }
+  

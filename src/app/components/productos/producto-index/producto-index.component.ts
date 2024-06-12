@@ -144,14 +144,13 @@ export class ProductoIndexComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        Swal.fire(
-          'Registro eliminado!',
-          'Se elimino correctamente.',
-          'success'
-        )
-
         this._productoService.delete_producto(id).subscribe(
           response => {
+            Swal.fire(
+              'Registro eliminado!',
+              'Se elimino correctamente.',
+              'success'
+            )    
             this.isLoading = true;
             this._productoService.get_productos('').subscribe(
               response => {

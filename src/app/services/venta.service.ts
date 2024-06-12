@@ -16,9 +16,10 @@ export class VentaService {
     this.url = environment.urlApi;
   }
 
-  get_ventas():Observable<any>{
-    let headers = new HttpHeaders().set('Content-Type','application/json');
-    return this._http.get(this.url+'ventas',{headers:headers});
+  get_ventas(fetchAll: boolean = false): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const params = fetchAll ? '?todo=true' : '';
+    return this._http.get(this.url + 'ventas' + params, { headers: headers });
   }
 
   save_data(data):Observable<any>{
