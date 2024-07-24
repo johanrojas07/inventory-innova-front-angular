@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  urlApi: 'https://innovaback.ifxcorp.com/api/',
+  urlApi: 'https://inventory-innova-back-node-express-mongo.vercel.app/api/',
 };
