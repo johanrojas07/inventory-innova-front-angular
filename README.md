@@ -1,39 +1,95 @@
-# Front
+# Front - Inventory Innova
+
+Frontend del sistema de inventario Inventory Innova desarrollado con Angular 8.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
 
-## Development server
+## 🚀 Despliegue en Producción
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Para desplegar este proyecto en producción usando Firebase Hosting, consulta la [Guía de Despliegue](./DEPLOY.md).
 
-## Code scaffolding
+**Resumen rápido:**
+1. Construye el proyecto: `$env:NODE_OPTIONS="--openssl-legacy-provider"; npm run build-prod`
+2. Autentícate: `npx firebase-tools login`
+3. Despliega: `npx firebase-tools deploy --only hosting`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 📋 Requisitos
 
-## Build
+- Node.js (compatible con Angular 8)
+- Cuenta de Firebase (para producción)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## 🛠️ Instalación Local
 
-## Running unit tests
+```bash
+npm install
+npm start
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+El servidor de desarrollo se ejecutará en `http://localhost:4200/`
 
-## Running end-to-end tests
+## 🏗️ Build para Producción
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+```bash
+# Windows PowerShell
+$env:NODE_OPTIONS="--openssl-legacy-provider"; npm run build-prod
 
-## Further help
+# Linux/Mac
+NODE_OPTIONS=--openssl-legacy-provider npm run build-prod
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## 📁 Estructura del Proyecto
 
+```
+├── src/
+│   ├── app/
+│   │   ├── components/      # Componentes de Angular
+│   │   ├── services/        # Servicios de API
+│   │   └── models/          # Modelos TypeScript
+│   ├── assets/              # Recursos estáticos
+│   └── environments/        # Configuraciones de entorno
+├── dist/                    # Carpeta de build (generada)
+├── firebase.json            # Configuración de Firebase
+└── angular.json             # Configuración de Angular
+```
 
-## Docker:
+## 🧪 Testing
 
- docker build -t inventoryfront .
+```bash
+# Unit tests
+npm test
 
- docker run -d -it -p 88:80 inventoryfront
+# End-to-end tests
+npm run e2e
+```
 
- docker tag inventoryfront aparra000/innovafront:latest
+## 📚 Comandos Útiles
 
- docker push aparra000/innovafront:latest
+```bash
+# Generar componente
+ng generate component component-name
 
+# Generar servicio
+ng generate service service-name
+
+# Ayuda
+ng help
+```
+
+## 🐳 Docker
+
+```bash
+docker build -t inventoryfront .
+docker run -d -it -p 88:80 inventoryfront
+docker tag inventoryfront aparra000/innovafront:latest
+docker push aparra000/innovafront:latest
+```
+
+## 📚 Documentación
+
+- [Guía de Despliegue](./DEPLOY.md) - Instrucciones detalladas para desplegar en Firebase
+- [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md)
+
+## 🌐 URLs de Producción
+
+- **Frontend**: https://innova-6ab12.web.app
+- **Backend API**: https://inventory-innova-back-node-express-mongo.vercel.app/api/
