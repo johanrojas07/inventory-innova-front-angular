@@ -1,121 +1,281 @@
-<div class="wrapper">
-    <app-sidebar style="background: white !important;"></app-sidebar>
+<div class="wrapper venta-detalle-wrapper">
+    <app-sidebar></app-sidebar>
 
     <div class="main">
-        <!-- <nav class="navbar navbar-expand navbar-theme">
-            <a class="sidebar-toggle d-flex mr-2">
-                <i class="hamburger align-self-center"></i>
-            </a>
-        </nav> -->
         <main class="content">
             <div class="container-fluid">
-
+                <!-- Header -->
                 <div class="header">
-                    <h1 class="header-title">
-                        Venta
-                    </h1>
+                    <div class="header-content">
+                        <h1 class="header-title">
+                            <i class="fas fa-receipt"></i>
+                            Detalle de Venta
+                        </h1>
+                        <button class="btn-back" [routerLink]="['/ventas']">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver a Ventas
+                        </button>
+                    </div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a [routerLink]="['/ventas']" >Ventas</a></li>
-                            <li class="breadcrumb-item"><a>Detalle de venta</a></li>
+                            <li class="breadcrumb-item"><a [routerLink]="['/ventas']">Ventas</a></li>
+                            <li class="breadcrumb-item active">Detalle de venta</li>
                         </ol>
                     </nav>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-xl-12 form-group">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Datos de venta</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-4 form-group">
-                                        <label><b>Cliente</b></label>
-                                        <input type="text" class="form-control" readonly value="{{venta.idcliente.nombres}}">
-                                    </div>
-                                    <div class="col-4 form-group">
-                                        <label><b>Correo</b></label>
-                                        <input type="text" class="form-control" readonly value="{{venta.idcliente.correo}}">
-                                    </div> 
-                                    <div class="col-4 form-group">
-                                        <label><b>DNI</b></label>
-                                        <input type="text" class="form-control" readonly value="{{venta.idcliente.dni}}">
-                                    </div>
-                                    <div class="col-4 form-group">
-                                        <label><b>Trabajador</b></label>
-                                        <input type="text" class="form-control" readonly value="{{venta.iduser.nombres}} {{venta.iduser.apellidos}}">
-                                    </div>
-                                    <div class="col-4 form-group">
-                                        <label><b>Correo del trabajador</b></label>
-                                        <input type="text" class="form-control" readonly value="{{venta.iduser.email}}">
-                                    </div> 
-                           
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-12 col-xl-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Detalles de venta</h5>
-    
-                            </div>
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Producto</th>
-                                        <th class="text-center">Precio Compra</th>
-                                        <th class="text-center">Precio Venta Aplicado</th>
-                                        <th class="text-center">Cantidad</th>
-                                        <th class="text-center">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngFor="let item of detalle_venta">
-                                    <td class="text-center">  
-                                        {{item.idproducto.identificador}}                                        
-                                        <img style="cursor: pointer;" (click)="swipe(item.idproducto.imagenes[0].imagen)"
-                                        [src]="(item.idproducto.imagenes && item.idproducto.imagenes[0]) ? item.idproducto.imagenes[0].imagen : 'No Existe :('"
-                                        width="48" height="48" class="rounded-circle mr-2"
-                                        alt="Avatar">
-                                        {{item.idproducto.titulo}}</td>
-                                    <td class="text-center">${{item.idproducto.precio_compra | number}}</td>
-                                    <td class="text-center" matTooltip="Precio Sugerido: {{item.idproducto.precio_venta}}">${{item.precio_venta | number}}</td>
-                                    <td class="text-center">{{item.cantidad}}</td>
-                                    <td class="text-center">${{((item.precio_venta) * (item.cantidad)) | number}}</td>
-                                </tbody>
-                                <tfoot style="text-align: center;">
-                                    <td>-</td>
-                                    <td>-</td> 
-                                    <td>-</td>
-                                    <td><b>Total Venta:</b></td>
-                                    <td>$ {{(getTotal()) | number}}</td>
-                                </tfoot>
-                            </table>
-                        </div>
+                <!-- Loading State -->
+                <div class="loading-container" *ngIf="isLoading">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando información de la venta...</p>
                     </div>
-
-                    <div class="col-12 col-xl-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Comentarios (Opcionales)</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="col-lg-12">
-                                    <textarea class="form-control" matInput [(ngModel)]="venta.comentarios" readonly></textarea>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-           
                 </div>
 
+                <!-- Error State -->
+                <div class="error-container" *ngIf="errorMessage && !isLoading">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Error al cargar la venta</strong>
+                            <p>{{ errorMessage }}</p>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Main Content -->
+                <div class="venta-detalle-content" *ngIf="!isLoading && !errorMessage && venta._id">
+                    <!-- Summary Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="summary-card summary-card-primary">
+                                <div class="summary-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <h6 class="summary-label">Fecha de Venta</h6>
+                                    <p class="summary-value">{{ venta.fecha | date:'dd/MM/yyyy' }}</p>
+                                    <small class="summary-time">{{ venta.fecha | date:'HH:mm:ss' }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="summary-card summary-card-success">
+                                <div class="summary-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <h6 class="summary-label">Total de Venta</h6>
+                                    <p class="summary-value">{{ getTotal() | number:'1.0-0' }} <span class="currency-code">COP</span></p>
+                                    <small class="summary-subtitle">{{ detalle_venta.length }} producto(s)</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="summary-card summary-card-info">
+                                <div class="summary-icon">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <div class="summary-info">
+                                    <h6 class="summary-label">Total de Unidades</h6>
+                                    <p class="summary-value">{{ getTotalCantidad() }}</p>
+                                    <small class="summary-subtitle">Unidades vendidas</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-               
+                    <!-- Client and Seller Info -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <i class="fas fa-user"></i>
+                                    <h5>Información del Cliente</h5>
+                                </div>
+                                <div class="info-card-body">
+                                    <div class="info-item">
+                                        <span class="info-label">
+                                            <i class="fas fa-user-circle"></i>
+                                            Nombre:
+                                        </span>
+                                        <span class="info-value">{{ venta.idcliente?.nombres || 'N/A' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">
+                                            <i class="fas fa-envelope"></i>
+                                            Correo:
+                                        </span>
+                                        <span class="info-value">{{ venta.idcliente?.correo || 'N/A' }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">
+                                            <i class="fas fa-id-card"></i>
+                                            DNI:
+                                        </span>
+                                        <span class="info-value">{{ venta.idcliente?.dni || 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="info-card">
+                                <div class="info-card-header">
+                                    <i class="fas fa-user-tie"></i>
+                                    <h5>Información del Vendedor</h5>
+                                </div>
+                                <div class="info-card-body">
+                                    <div class="info-item">
+                                        <span class="info-label">
+                                            <i class="fas fa-user-circle"></i>
+                                            Nombre:
+                                        </span>
+                                        <span class="info-value">{{ venta.iduser?.nombres }} {{ venta.iduser?.apellidos }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">
+                                            <i class="fas fa-envelope"></i>
+                                            Correo:
+                                        </span>
+                                        <span class="info-value">{{ venta.iduser?.email || 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="card products-card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-shopping-cart"></i>
+                                Productos Vendidos
+                            </h5>
+                            <span class="badge badge-count">{{ detalle_venta.length }} producto(s)</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-products">
+                                    <thead>
+                                        <tr>
+                                            <th class="product-col">Producto</th>
+                                            <th class="price-col">Precio Compra</th>
+                                            <th class="price-col">Precio Venta</th>
+                                            <th class="quantity-col">Cantidad</th>
+                                            <th class="subtotal-col">Subtotal</th>
+                                            <th class="margin-col">Ganancia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of detalle_venta; let i = index">
+                                            <td class="product-cell">
+                                                <div class="product-info">
+                                                    <div class="product-image-wrapper" (click)="verImagenProducto(item.idproducto)">
+                                                        <img *ngIf="item.idproducto?.imagenes && item.idproducto.imagenes[0]"
+                                                             [src]="item.idproducto.imagenes[0].imagen"
+                                                             [alt]="item.idproducto.titulo"
+                                                             class="product-image">
+                                                        <div *ngIf="!item.idproducto?.imagenes || !item.idproducto.imagenes[0]" class="product-no-image">
+                                                            <i class="fas fa-image"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-details">
+                                                        <div class="product-id">ID: {{ item.idproducto?.identificador || 'N/A' }}</div>
+                                                        <div class="product-title">{{ item.idproducto?.titulo || 'Producto sin nombre' }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="price-cell">
+                                                <span class="price-value price-compra">{{ item.idproducto?.precio_compra | number:'1.0-0' }} <small>COP</small></span>
+                                            </td>
+                                            <td class="price-cell">
+                                                <span class="price-value price-venta">{{ item.precio_venta | number:'1.0-0' }} <small>COP</small></span>
+                                                <small class="price-suggested" *ngIf="item.idproducto?.precio_venta && item.precio_venta != item.idproducto.precio_venta">
+                                                    Sugerido: {{ item.idproducto.precio_venta | number:'1.0-0' }}
+                                                </small>
+                                            </td>
+                                            <td class="quantity-cell">
+                                                <span class="quantity-badge">{{ item.cantidad }}</span>
+                                            </td>
+                                            <td class="subtotal-cell">
+                                                <span class="subtotal-value">{{ (item.precio_venta * item.cantidad) | number:'1.0-0' }} <small>COP</small></span>
+                                            </td>
+                                            <td class="margin-cell">
+                                                <span class="margin-value" [class.positive]="getMargenGanancia(item) >= 0" [class.negative]="getMargenGanancia(item) < 0">
+                                                    <i class="fas" [class.fa-arrow-up]="getMargenGanancia(item) >= 0" [class.fa-arrow-down]="getMargenGanancia(item) < 0"></i>
+                                                    {{ getMargenGanancia(item) | number:'1.0-0' }} <small>COP</small>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-right total-label">
+                                                <strong>Total de la Venta:</strong>
+                                            </td>
+                                            <td class="total-quantity">
+                                                <strong>{{ getTotalCantidad() }}</strong>
+                                            </td>
+                                            <td class="total-amount" colspan="2">
+                                                <strong>{{ getTotal() | number:'1.0-0' }} <span class="currency-code">COP</span></strong>
+                                            </td>
+                                        </tr>
+                                        <tr class="profit-row">
+                                            <td colspan="4" class="text-right profit-label">
+                                                <strong>Ganancia Total:</strong>
+                                            </td>
+                                            <td class="profit-amount" colspan="2">
+                                                <strong [class.positive]="getTotalGanancia() >= 0" [class.negative]="getTotalGanancia() < 0">
+                                                    {{ getTotalGanancia() | number:'1.0-0' }} <span class="currency-code">COP</span>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="card comments-card" *ngIf="venta.comentarios">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-comment-alt"></i>
+                                Comentarios
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="comments-content">
+                                <p>{{ venta.comentarios }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
-       
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal fade" id="modalImagenProducto" tabindex="-1" role="dialog" aria-labelledby="modalImagenProductoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalImagenProductoLabel">
+                        <i class="fas fa-image"></i>
+                        {{ productoImagenSeleccionado?.titulo || 'Imagen del Producto' }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModalImagen()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img *ngIf="imagenProductoSeleccionada" [src]="imagenProductoSeleccionada" alt="Imagen del producto" class="img-fluid product-image-large">
+                    <div *ngIf="!imagenProductoSeleccionada" class="no-image-large">
+                        <i class="fas fa-image"></i>
+                        <p>No hay imagen disponible</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

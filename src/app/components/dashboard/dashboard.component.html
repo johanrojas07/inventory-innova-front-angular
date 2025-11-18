@@ -1,522 +1,866 @@
 <div class="wrapper">
-    <app-sidebar style="background: white !important;"></app-sidebar>
+    <app-sidebar></app-sidebar>
 
     <div class="main">
         <main class="content">
-            <div class="row">
-                <div class="col-md-3 stretch-card grid-margin">
-                    <div class="card bg-gradient-danger card-img-holder text-white"
-                        style="background: linear-gradient(to right, #ffbf96, #fe7096) !important;">
-                        <div class="card-body">
-                            <!-- <img src="assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                alt="circle-image" /> -->
-                            <h4 class="font-weight-normal mb-3">Numero de Productos
-                                <i class="mdi mdi-chart-line mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{((data) ? data.num_productos : 0) | number}}</h2>
-                            <!-- <h6 class="card-text">Increased by 60%</h6> -->
+            <!-- Header -->
+            <div class="header mb-4">
+                <h1 class="header-title">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- Cards de Estadísticas Principales -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stat-card stat-card-primary">
+                        <div class="stat-card-body">
+                            <div class="stat-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h5 class="stat-title">Productos</h5>
+                                <p class="stat-value">{{ data.num_productos | number }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 stretch-card grid-margin">
-                    <div class="card bg-gradient-info card-img-holder text-white"
-                        style="background: linear-gradient(to right, #90caf9, #047edf 99%) !important;">
-                        <div class="card-body">
-                            <!-- <img src="assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                alt="circle-image" /> -->
-                            <h4 class="font-weight-normal mb-3">Plata Invertida (Inventario Actual)
-                                <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{((data) ? data.plata_invertida : 0) | number}} COP</h2>
-                            <!-- <h6 class="card-text">Decreased by 10%</h6> -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stat-card stat-card-info">
+                        <div class="stat-card-body">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h5 class="stat-title">Inversión</h5>
+                                <p class="stat-value">
+                                    <span class="currency-amount">{{ data.plata_invertida | number:'1.0-0' }}</span>
+                                    <span class="currency-code">COP</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 stretch-card grid-margin">
-                    <div class="card bg-gradient-success card-img-holder text-white"
-                        style="background: linear-gradient(to right, #84d9d2, #07cdae) !important;">
-                        <div class="card-body">
-                            <!-- <img src="assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                alt="circle-image" /> -->
-                            <h4 class="font-weight-normal mb-3">Plata Por Venden (Inventario Actual)
-                                <i class="mdi mdi-diamond mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{((data) ? data.plata_vender : 0) | number}} COP</h2>
-                            <!-- <h6 class="card-text">Increased by 5%</h6> -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stat-card stat-card-success">
+                        <div class="stat-card-body">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h5 class="stat-title">Valor Inventario</h5>
+                                <p class="stat-value">
+                                    <span class="currency-amount">{{ data.plata_vender | number:'1.0-0' }}</span>
+                                    <span class="currency-code">COP</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 stretch-card grid-margin">
-                    <div class="card bg-gradient-success card-img-holder text-white"
-                        style="background: linear-gradient(to right, #dac736, #e85313) !important;">
-                        <div class="card-body">
-                            <!-- <img src="assets/images/dashboard/circle.svg" class="card-img-absolute"
-                                alt="circle-image" /> -->
-                            <h4 class="font-weight-normal mb-3">Numero De Ventas Totales
-                                <i class="mdi mdi-diamond mdi-24px float-right"></i>
-                            </h4>
-                            <h2 class="mb-5">{{data.num_ventas}}</h2>
-                            <!-- <h6 class="card-text">Increased by 5%</h6> -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stat-card stat-card-warning">
+                        <div class="stat-card-body">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h5 class="stat-title">Total Ventas</h5>
+                                <p class="stat-value">{{ data.num_ventas | number }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center" style="margin-top: 5px; margin-bottom: 20px;">
-                <div class="leaderboard col-lg-10 grid-margin stretch-card">
-                    <header class="row">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 511.999 511.999"
-                            style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve"
-                            class="leaderboard__icon">
-                            <g>
-                                <g>
-                                    <path d="M466.45,49.374c-7.065-8.308-17.368-13.071-28.267-13.071H402.41v-11.19C402.41,11.266,391.143,0,377.297,0H134.705
-                                c-13.848,0-25.112,11.266-25.112,25.112v11.19H73.816c-10.899,0-21.203,4.764-28.267,13.071
-                                c-6.992,8.221-10.014,19.019-8.289,29.624c9.4,57.8,45.775,108.863,97.4,136.872c4.717,11.341,10.059,22.083,16.008,32.091
-                                c19.002,31.975,42.625,54.073,68.627,64.76c2.635,26.644-15.094,51.885-41.794,57.9c-0.057,0.013-0.097,0.033-0.153,0.046
-                                c-5.211,1.245-9.09,5.921-9.09,11.513v54.363h-21.986c-19.602,0-35.549,15.947-35.549,35.549v28.058
-                                c0,6.545,5.305,11.85,11.85,11.85H390.56c6.545,0,11.85-5.305,11.85-11.85v-28.058c0-19.602-15.947-35.549-35.549-35.549h-21.988
-                                V382.18c0-5.603-3.893-10.286-9.118-11.52c-0.049-0.012-0.096-0.028-0.145-0.04c-26.902-6.055-44.664-31.55-41.752-58.394
-                                c25.548-10.86,48.757-32.761,67.479-64.264c5.949-10.009,11.29-20.752,16.008-32.095c51.622-28.01,87.995-79.072,97.395-136.87
-                                C476.465,68.392,473.443,57.595,466.45,49.374z M60.652,75.192c-0.616-3.787,0.431-7.504,2.949-10.466
-                                c2.555-3.004,6.277-4.726,10.214-4.726h35.777v21.802c0,34.186,4.363,67.3,12.632,97.583
-                                C89.728,153.706,67.354,116.403,60.652,75.192z M366.861,460.243c6.534,0,11.85,5.316,11.85,11.85v16.208H134.422v-16.208
-                                c0-6.534,5.316-11.85,11.85-11.85H366.861z M321.173,394.03v42.513H191.96V394.03H321.173z M223.037,370.331
-                                c2.929-3.224,5.607-6.719,8.002-10.46c7.897-12.339,12.042-26.357,12.228-40.674c4.209,0.573,8.457,0.88,12.741,0.88
-                                c4.661,0,9.279-0.358,13.852-1.036c0.27,19.239,7.758,37.45,20.349,51.289H223.037z M378.709,81.803
-                                c0,58.379-13.406,113.089-37.747,154.049c-23.192,39.03-53.364,60.525-84.956,60.525c-31.597,0-61.771-21.494-84.966-60.523
-                                c-24.342-40.961-37.748-95.671-37.748-154.049V25.112c0-0.78,0.634-1.413,1.412-1.413h242.591c0.78,0,1.414,0.634,1.414,1.413
-                                V81.803z M451.348,75.192c-6.702,41.208-29.074,78.51-61.569,104.191c8.268-30.283,12.631-63.395,12.631-97.58V60.001h35.773
-                                c3.938,0,7.66,1.723,10.214,4.726C450.915,67.688,451.963,71.405,451.348,75.192z" />
-                                </g>
-                            </g>
-                            <g>
-                                <g>
-                                    <path d="M327.941,121.658c-1.395-4.288-5.103-7.414-9.566-8.064l-35.758-5.196l-15.991-32.402
-                                c-1.997-4.044-6.116-6.605-10.626-6.605c-4.511,0-8.63,2.561-10.626,6.605l-15.991,32.402l-35.758,5.196
-                                c-4.464,0.648-8.172,3.775-9.566,8.065c-1.393,4.291-0.231,8.999,2.999,12.148l25.875,25.221l-6.109,35.613
-                                c-0.763,4.446,1.064,8.938,4.714,11.59c3.648,2.651,8.487,3,12.479,0.902L256,190.32l31.982,16.813
-                                c1.734,0.911,3.627,1.36,5.512,1.36c2.456,0,4.902-0.763,6.966-2.263c3.65-2.652,5.477-7.144,4.714-11.59l-6.109-35.613
-                                l25.875-25.221C328.172,130.658,329.334,125.949,327.941,121.658z M278.064,146.405c-2.793,2.722-4.068,6.644-3.408,10.489
-                                l3.102,18.09l-16.245-8.541c-1.725-0.908-3.62-1.36-5.514-1.36c-1.894,0-3.788,0.454-5.514,1.36l-16.245,8.541l3.102-18.09
-                                c0.66-3.844-0.615-7.766-3.408-10.489l-13.141-12.81l18.162-2.64c3.859-0.56,7.196-2.985,8.922-6.482l8.123-16.458l8.122,16.458
-                                c1.727,3.497,5.062,5.921,8.922,6.482l18.162,2.64L278.064,146.405z" />
-                                </g>
-                            </g>
-                        </svg>
 
-                        <h1 class="leaderboard__title"><span class="leaderboard__title--top">Saldos</span><span
-                                class="leaderboard__title--bottom">Actualizados</span></h1>
-                    </header>
-
-                    <div class="row leaderboard__profiles">
-                        <div class="leaderboard__profile col">
-                            <span class="leaderboard__name">Efectivo: </span>
-                            <input type="number"  matTooltip="Saldo Original: {{originalSaldos.efectivo}}"  #efectivo="ngModel" name="efectivo" [(ngModel)]="saldos.efectivo" />
-                            <span class="leaderboard__value">{{saldos.efectivo | number}}<span>$</span></span>
-                        </div>
-
-                        <div class="leaderboard__profile col">
-                            <span class="leaderboard__name">Nequi: </span>
-                            <input type="number" matTooltip="Saldo Original: {{originalSaldos.nequi}}" #nequi="ngModel" name="nequi" [(ngModel)]="saldos.nequi" />
-                            <span class="leaderboard__value">{{saldos.nequi | number}}<span>$</span></span>
-                        </div>
-
-                        <div class="leaderboard__profile col">
-                            <span class="leaderboard__name">Sin Pagar: </span>
+            <!-- Sección de Saldos -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mb-3">
+                    <div class="card card-saldos">
+                        <div class="card-header">
                             <div>
-                                <input style="width: 100%; margin-bottom: 8px;" type="number" matTooltip="Saldo Original: {{originalSaldos.sin_pagar}}"  #sin_pagar="ngModel" name="sin_pagar" [(ngModel)]="saldos.sin_pagar"/>
-                                <textarea class="form-control" #info_sin_pagar="ngModel" name="info_sin_pagar" [(ngModel)]="saldos.info_sin_pagar" ></textarea>
+                                <h5 class="card-title">
+                                    <i class="fas fa-wallet"></i>
+                                    Monitoreo de Saldos
+                                </h5>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i>
+                                    Sistema de seguimiento de movimientos de dinero
+                                </small>
                             </div>
-                            
-                            <span class="leaderboard__value" style="color: red;">{{saldos.sin_pagar | number}}<span>$</span></span>
-                        </div>
-                        <div class="leaderboard__profile col">
-                            <span class="leaderboard__name"> - </span>
-                            <span class="leaderboard__name"> Total: </span>
-                            <span class="leaderboard__value" style="color: #385bdd;">{{getTotalSaldo() | number}}<span>$</span></span>
-                        </div>
-                        <div class="leaderboard__profile col">
-                            <span class="leaderboard__name">Motivo del ultimo cambio: </span>
-                            <textarea class="form-control" #motivo="ngModel" name="motivo" [(ngModel)]="saldos.motivo" ></textarea>
-
-                            <div style="text-align: end;">
-                                <button type="button" class="btn mb-1 btn-secondary" aria-haspopup="true"
-                                aria-expanded="false" (click)="actualizarSaldos()">
-                                <i class="fas fa-cog"></i> Actualizar Saldos
+                            <button class="btn btn-sm btn-primary" (click)="openUpdateModal()">
+                                <i class="fas fa-edit"></i>
+                                Registrar Movimiento
                             </button>
-                            </div>
-                           
                         </div>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="row">
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
                         <div class="card-body">
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <h4 class="card-title">Visit And Sales Statistics</h4>
-                                <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal">
-                                    <ul>
-                                        <li>
-                                            <span class="legend-dots"></span>CHN
-                                        </li>
-                                        <li>
-                                            <span class="legend-dots"></span>USA
-                                        </li>
-                                        <li class="mr-0">
-                                            <span class="legend-dots"></span>UK
-                                        </li>
-                                    </ul>
+                            <div class="row">
+                                <!-- Efectivo -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="saldo-card saldo-efectivo">
+                                        <div class="saldo-card-header">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                            <h6>Efectivo</h6>
+                                        </div>
+                                        <div class="saldo-card-body">
+                                            <p class="saldo-value">
+                                                <span class="currency-amount">{{ saldos.efectivo | number:'1.0-0' }}</span>
+                                                <span class="currency-code">COP</span>
+                                            </p>
+                                            <div class="saldo-comparison" *ngIf="originalSaldos.efectivo !== saldos.efectivo">
+                                                <small class="saldo-original">
+                                                    <i class="fas fa-history"></i>
+                                                    Anterior: <span class="currency-amount-small">{{ originalSaldos.efectivo | number:'1.0-0' }}</span> COP
+                                                </small>
+                                                <span class="saldo-badge" 
+                                                      [class.badge-up]="saldos.efectivo > originalSaldos.efectivo"
+                                                      [class.badge-down]="saldos.efectivo < originalSaldos.efectivo">
+                                                    <i class="fas" 
+                                                       [class.fa-arrow-up]="saldos.efectivo > originalSaldos.efectivo"
+                                                       [class.fa-arrow-down]="saldos.efectivo < originalSaldos.efectivo"></i>
+                                                    {{ (saldos.efectivo - originalSaldos.efectivo) | number:'1.0-0' }} COP
+                                                </span>
+                                            </div>
+                                            <small class="saldo-no-change" *ngIf="originalSaldos.efectivo === saldos.efectivo">
+                                                <i class="fas fa-check-circle"></i>
+                                                Sin cambios
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Nequi -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="saldo-card saldo-nequi">
+                                        <div class="saldo-card-header">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <h6>Nequi</h6>
+                                        </div>
+                                        <div class="saldo-card-body">
+                                            <p class="saldo-value">
+                                                <span class="currency-amount">{{ saldos.nequi | number:'1.0-0' }}</span>
+                                                <span class="currency-code">COP</span>
+                                            </p>
+                                            <div class="saldo-comparison" *ngIf="originalSaldos.nequi !== saldos.nequi">
+                                                <small class="saldo-original">
+                                                    <i class="fas fa-history"></i>
+                                                    Anterior: <span class="currency-amount-small">{{ originalSaldos.nequi | number:'1.0-0' }}</span> COP
+                                                </small>
+                                                <span class="saldo-badge" 
+                                                      [class.badge-up]="saldos.nequi > originalSaldos.nequi"
+                                                      [class.badge-down]="saldos.nequi < originalSaldos.nequi">
+                                                    <i class="fas" 
+                                                       [class.fa-arrow-up]="saldos.nequi > originalSaldos.nequi"
+                                                       [class.fa-arrow-down]="saldos.nequi < originalSaldos.nequi"></i>
+                                                    {{ (saldos.nequi - originalSaldos.nequi) | number:'1.0-0' }} COP
+                                                </span>
+                                            </div>
+                                            <small class="saldo-no-change" *ngIf="originalSaldos.nequi === saldos.nequi">
+                                                <i class="fas fa-check-circle"></i>
+                                                Sin cambios
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sin Pagar -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="saldo-card saldo-pendiente">
+                                        <div class="saldo-card-header">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <h6>Sin Pagar</h6>
+                                        </div>
+                                        <div class="saldo-card-body">
+                                            <p class="saldo-value">
+                                                <span class="currency-amount">{{ saldos.sin_pagar | number:'1.0-0' }}</span>
+                                                <span class="currency-code">COP</span>
+                                            </p>
+                                            <div class="saldo-comparison" *ngIf="originalSaldos.sin_pagar !== saldos.sin_pagar">
+                                                <small class="saldo-original">
+                                                    <i class="fas fa-history"></i>
+                                                    Anterior: <span class="currency-amount-small">{{ originalSaldos.sin_pagar | number:'1.0-0' }}</span> COP
+                                                </small>
+                                                <span class="saldo-badge" 
+                                                      [class.badge-up]="saldos.sin_pagar > originalSaldos.sin_pagar"
+                                                      [class.badge-down]="saldos.sin_pagar < originalSaldos.sin_pagar">
+                                                    <i class="fas" 
+                                                       [class.fa-arrow-up]="saldos.sin_pagar > originalSaldos.sin_pagar"
+                                                       [class.fa-arrow-down]="saldos.sin_pagar < originalSaldos.sin_pagar"></i>
+                                                    {{ (saldos.sin_pagar - originalSaldos.sin_pagar) | number:'1.0-0' }} COP
+                                                </span>
+                                            </div>
+                                            <small class="saldo-no-change" *ngIf="originalSaldos.sin_pagar === saldos.sin_pagar">
+                                                <i class="fas fa-check-circle"></i>
+                                                Sin cambios
+                                            </small>
+                                            <div class="saldo-info" *ngIf="saldos.info_sin_pagar">
+                                                <small><i class="fas fa-info-circle"></i> {{ saldos.info_sin_pagar }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <canvas baseChart #visitSaleChart [chartType]="'bar'" [datasets]="visitSaleChartData"
-                                [labels]="visitSaleChartLabels" [options]="visitSaleChartOptions"
-                                [colors]="visitSaleChartColors"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Traffic Sources</h4>
-                            <canvas baseChart [chartType]="'doughnut'" [datasets]="trafficChartData"
-                                [labels]="trafficChartLabels" [options]="trafficChartOptions"
-                                [colors]="trafficChartColors"></canvas>
-                            <div id="traffic-chart-legend"
-                                class="rounded-legend legend-vertical legend-bottom-left pt-4">
-                                <ul>
-                                    <li>
-                                        <span class="legend-dots"></span>Search Engines
-                                        <span class="float-right">30%</span>
-                                    </li>
-                                    <li>
-                                        <span class="legend-dots"></span>Direct Click
-                                        <span class="float-right">30%</span>
-                                    </li>
-                                    <li>
-                                        <span class="legend-dots"></span>Bookmarks Click
-                                        <span class="float-right">40%</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="row">
-                <div class="col-12 grid-margin">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Recent Tickets</h4>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Assignee
-                                            </th>
-                                            <th>
-                                                Subject
-                                            </th>
-                                            <th>
-                                                Status
-                                            </th>
-                                            <th>
-                                                Last Update
-                                            </th>
-                                            <th>
-                                                Tracking ID
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <img src="assets/images/faces/face1.jpg" class="mr-2" alt="image">
-                                                David Grey
-                                            </td>
-                                            <td>
-                                                Fund is not recieved
-                                            </td>
-                                            <td>
-                                                <label class="badge badge-gradient-success">DONE</label>
-                                            </td>
-                                            <td>
-                                                Dec 5, 2017
-                                            </td>
-                                            <td>
-                                                WD-12345
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="assets/images/faces/face2.jpg" class="mr-2" alt="image">
-                                                Stella Johnson
-                                            </td>
-                                            <td>
-                                                High loading time
-                                            </td>
-                                            <td>
-                                                <label class="badge badge-gradient-warning">PROGRESS</label>
-                                            </td>
-                                            <td>
-                                                Dec 12, 2017
-                                            </td>
-                                            <td>
-                                                WD-12346
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="assets/images/faces/face3.jpg" class="mr-2" alt="image">
-                                                Marina Michel
-                                            </td>
-                                            <td>
-                                                Website down for one week
-                                            </td>
-                                            <td>
-                                                <label class="badge badge-gradient-info">ON HOLD</label>
-                                            </td>
-                                            <td>
-                                                Dec 16, 2017
-                                            </td>
-                                            <td>
-                                                WD-12347
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="assets/images/faces/face4.jpg" class="mr-2" alt="image">
-                                                John Doe
-                                            </td>
-                                            <td>
-                                                Loosing control on server
-                                            </td>
-                                            <td>
-                                                <label class="badge badge-gradient-danger">REJECTED</label>
-                                            </td>
-                                            <td>
-                                                Dec 3, 2017
-                                            </td>
-                                            <td>
-                                                WD-12348
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5 grid-margin stretch-card">
-                    <div class="card">
-                    </div>
-                </div>
-                <div class="col-md-7 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Recent Updates</h4>
-                            <div class="d-flex">
-                                <div class="d-flex align-items-center mr-4 text-muted font-weight-light">
-                                    <i class="mdi mdi-account-outline icon-sm mr-2"></i>
-                                    <span>jack Menqu</span>
-                                </div>
-                                <div class="d-flex align-items-center text-muted font-weight-light">
-                                    <i class="mdi mdi-clock icon-sm mr-2"></i>
-                                    <span>October 3rd, 2018</span>
-                                </div>
-                            </div>
+
+                            <!-- Total -->
                             <div class="row mt-3">
-                                <div class="col-6 pr-1">
-                                    <img src="assets/images/dashboard/img_1.jpg" class="mb-2 mw-100 w-100 rounded"
-                                        alt="image">
-                                    <img src="assets/images/dashboard/img_4.jpg" class="mw-100 w-100 rounded"
-                                        alt="image">
-                                </div>
-                                <div class="col-6 pl-1">
-                                    <img src="assets/images/dashboard/img_2.jpg" class="mb-2 mw-100 w-100 rounded"
-                                        alt="image">
-                                    <img src="assets/images/dashboard/img_3.jpg" class="mw-100 w-100 rounded"
-                                        alt="image">
+                                <div class="col-12">
+                                    <div class="saldo-total-card">
+                                        <div class="saldo-total-content">
+                                            <div class="saldo-total-info">
+                                                <div class="saldo-total-label">
+                                                    <i class="fas fa-coins"></i>
+                                                    <span>Total Disponible</span>
+                                                </div>
+                                                <p class="saldo-total-value">
+                                                    <span class="currency-amount">{{ getTotalSaldo() | number:'1.0-0' }}</span>
+                                                    <span class="currency-code">COP</span>
+                                                </p>
+                                            </div>
+                                            <div class="saldo-total-stats" *ngIf="getTotalSaldo() > 0">
+                                                <div class="total-stat-item">
+                                                    <small>Efectivo</small>
+                                                    <strong>{{ ((saldos.efectivo / getTotalSaldo()) * 100) | number:'1.0-0' }}%</strong>
+                                                </div>
+                                                <div class="total-stat-item">
+                                                    <small>Nequi</small>
+                                                    <strong>{{ ((saldos.nequi / getTotalSaldo()) * 100) | number:'1.0-0' }}%</strong>
+                                                </div>
+                                                <div class="total-stat-item">
+                                                    <small>Pendiente</small>
+                                                    <strong>{{ ((saldos.sin_pagar / getTotalSaldo()) * 100) | number:'1.0-0' }}%</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-flex mt-5 align-items-top">
-                                <img src="assets/images/faces/face3.jpg" class="img-sm rounded-circle mr-3" alt="image">
-                                <div class="mb-0 flex-grow">
-                                    <h5 class="mr-2 mb-2">School Website - Authentication Module.</h5>
-                                    <p class="mb-0 font-weight-light">It is a long established fact that a reader will
-                                        be distracted
-                                        by the readable
-                                        content of a page.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfica de Distribución de Saldos -->
+                <div class="col-lg-4 mb-3">
+                    <div class="card card-saldos">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-chart-pie"></i>
+                                Distribución
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas baseChart 
+                                    [chartType]="'doughnut'" 
+                                    [datasets]="saldoChartData"
+                                    [labels]="saldoChartLabels"
+                                    [options]="saldoChartOptions"
+                                    [colors]="saldoChartColors"
+                                    *ngIf="getTotalSaldo() > 0">
+                            </canvas>
+                            <div class="empty-chart" *ngIf="getTotalSaldo() === 0">
+                                <i class="fas fa-chart-pie"></i>
+                                <p>No hay saldos</p>
+                            </div>
+                            <div class="chart-legend mt-2" *ngIf="getTotalSaldo() > 0">
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #10b981;"></span>
+                                    <span>Efectivo: {{ ((saldos.efectivo / getTotalSaldo()) * 100) | number:'1.0-0' }}%</span>
                                 </div>
-                                <div class="ml-auto">
-                                    <i class="mdi mdi-heart-outline text-muted"></i>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #3b82f6;"></span>
+                                    <span>Nequi: {{ ((saldos.nequi / getTotalSaldo()) * 100) | number:'1.0-0' }}%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background: #ef4444;"></span>
+                                    <span>Sin Pagar: {{ ((saldos.sin_pagar / getTotalSaldo()) * 100) | number:'1.0-0' }}%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-7 grid-margin grid-margin-md-0 stretch-card">
+
+            <!-- Historial de Movimientos -->
+            <div class="row mb-4">
+                <div class="col-12">
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-history"></i>
+                                Historial de Movimientos
+                            </h5>
+                        </div>
                         <div class="card-body">
-                            <h4 class="card-title">Project Status</h4>
-                            <div class="table-responsive">
-                                <table class="table">
+                            <div class="loading-historial" *ngIf="isLoadingHistorial">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Cargando historial...</p>
+                            </div>
+                            <div class="historial-container" *ngIf="!isLoadingHistorial && historialSaldos && historialSaldos.length > 0">
+                                <div class="historial-item" *ngFor="let movimiento of historialSaldos; let i = index">
+                                    <div class="historial-header">
+                                        <div class="historial-number">#{{ historialSaldos.length - i }}</div>
+                                        <div class="historial-date">
+                                            <i class="fas fa-clock"></i>
+                                            <span class="relative-time">{{ getRelativeTime(movimiento.fecha) }}</span>
+                                            <small class="absolute-time">({{ movimiento.fecha | date:'dd/MM/yyyy HH:mm' }})</small>
+                                        </div>
+                                    </div>
+                                    <div class="historial-content">
+                                        <div class="historial-saldos">
+                                            <div class="historial-saldo-item">
+                                                <i class="fas fa-money-bill-wave text-success"></i>
+                                                <span>Efectivo: <strong>{{ movimiento.efectivo | number:'1.0-0' }} COP</strong></span>
+                                            </div>
+                                            <div class="historial-saldo-item">
+                                                <i class="fas fa-mobile-alt text-primary"></i>
+                                                <span>Nequi: <strong>{{ movimiento.nequi | number:'1.0-0' }} COP</strong></span>
+                                            </div>
+                                            <div class="historial-saldo-item">
+                                                <i class="fas fa-exclamation-triangle text-danger"></i>
+                                                <span>Sin Pagar: <strong>{{ movimiento.sin_pagar | number:'1.0-0' }} COP</strong></span>
+                                            </div>
+                                        </div>
+                                        <div class="historial-motivo" *ngIf="movimiento.motivo">
+                                            <i class="fas fa-comment-alt"></i>
+                                            <span>{{ movimiento.motivo }}</span>
+                                        </div>
+                                        <div class="historial-info" *ngIf="movimiento.info_sin_pagar">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>{{ movimiento.info_sin_pagar }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="empty-historial" *ngIf="!isLoadingHistorial && (!historialSaldos || historialSaldos.length === 0)">
+                                <i class="fas fa-history"></i>
+                                <p>No hay movimientos registrados</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análisis de Inventario -->
+            <div class="row mb-4">
+                <div class="col-lg-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-chart-bar"></i>
+                                Análisis de Inventario
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container-large">
+                                <canvas baseChart 
+                                        [chartType]="'bar'" 
+                                        [datasets]="inventarioChartData"
+                                        [labels]="inventarioChartLabels"
+                                        [options]="inventarioChartOptions"
+                                        [colors]="inventarioChartColors">
+                                </canvas>
+                            </div>
+                            <div class="chart-info mt-3">
+                                <div class="info-item">
+                                    <span class="info-label">Inversión:</span>
+                                    <span class="info-value">{{ data.plata_invertida | number:'1.0-0' }} COP</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Valor Venta:</span>
+                                    <span class="info-value">{{ data.plata_vender | number:'1.0-0' }} COP</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Margen:</span>
+                                    <span class="info-value text-warning">{{ (data.plata_vender - data.plata_invertida) | number:'1.0-0' }} COP</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-tags"></i>
+                                Productos por Categoría
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="categorias-list-container" *ngIf="productosPorCategoria.length > 0">
+                                <div class="categorias-list">
+                                    <div class="categoria-item" 
+                                         *ngFor="let categoria of productosPorCategoria"
+                                         (click)="verProductosCategoria(categoria)">
+                                        <div class="categoria-info">
+                                            <div class="categoria-name">
+                                                <i class="fas fa-folder"></i>
+                                                <span>{{ categoria.nombre }}</span>
+                                            </div>
+                                            <div class="categoria-stats">
+                                                <span class="categoria-count">{{ categoria.cantidad }} productos</span>
+                                                <span class="categoria-percent">{{ categoria.porcentaje }}%</span>
+                                            </div>
+                                        </div>
+                                        <div class="categoria-bar">
+                                            <div class="categoria-bar-fill" [style.width.%]="categoria.porcentaje"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="empty-list" *ngIf="productosPorCategoria.length === 0">
+                                <i class="fas fa-tags"></i>
+                                <p>No hay productos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos con Stock Bajo -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-exclamation-triangle text-warning"></i>
+                                Productos con Stock Bajo
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="stock-bajo-table" *ngIf="productosStockBajo.length > 0">
+                                <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                #
-                                            </th>
-                                            <th>
-                                                Name
-                                            </th>
-                                            <th>
-                                                Due Date
-                                            </th>
-                                            <th>
-                                                Progress
-                                            </th>
+                                            <th style="width: 60px;">Imagen</th>
+                                            <th>Producto</th>
+                                            <th>Identificador</th>
+                                            <th>Stock Actual</th>
+                                            <th>Precio Compra</th>
+                                            <th>Precio Venta</th>
+                                            <th>Estado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <tr *ngFor="let producto of productosStockBajo">
                                             <td>
-                                                1
-                                            </td>
-                                            <td>
-                                                Herman Beck
-                                            </td>
-                                            <td>
-                                                May 15, 2015
-                                            </td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-success" role="progressbar"
-                                                        style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-                                                        aria-valuemax="100">
+                                                <div class="producto-image-cell" [attr.data-producto-id]="producto._id">
+                                                    <img *ngIf="getProductImage(producto)" 
+                                                         [src]="getProductImage(producto)" 
+                                                         [alt]="producto.titulo"
+                                                         class="producto-thumbnail"
+                                                         (click)="verImagenProducto(producto)"
+                                                         (error)="$event.target.src='assets/img/no-image.png'">
+                                                    <div *ngIf="!getProductImage(producto) && !isImageLoading(producto)" 
+                                                         class="producto-no-image"
+                                                         (click)="verImagenProducto(producto)">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                    <div *ngIf="isImageLoading(producto)" 
+                                                         class="producto-loading-image">
+                                                        <i class="fas fa-spinner fa-spin"></i>
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <td>
-                                                2
-                                            </td>
-                                            <td>
-                                                Messsy Adam
-                                            </td>
-                                            <td>
-                                                Jul 01, 2015
-                                            </td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-danger" role="progressbar"
-                                                        style="width: 75%" aria-valuenow="75" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                    </div>
+                                                <div class="producto-name-cell">
+                                                    <i class="fas fa-box"></i>
+                                                    <span>{{ producto.titulo }}</span>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <td>
-                                                3
+                                                <span class="badge badge-secondary">{{ producto.identificador }}</span>
                                             </td>
                                             <td>
-                                                John Richards
+                                                <span class="stock-badge" 
+                                                      [class.stock-critico]="producto.stock <= 3"
+                                                      [class.stock-bajo]="producto.stock > 3 && producto.stock <= 5"
+                                                      [class.stock-medio]="producto.stock > 5">
+                                                    {{ producto.stock }} unidades
+                                                </span>
                                             </td>
                                             <td>
-                                                Apr 12, 2015
+                                                <span class="price-value price-compra">{{ producto.precio_compra | number:'1.0-0' }} COP</span>
                                             </td>
                                             <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-warning" role="progressbar"
-                                                        style="width: 90%" aria-valuenow="90" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                4
+                                                <span class="price-value">{{ producto.precio_venta | number:'1.0-0' }} COP</span>
                                             </td>
                                             <td>
-                                                Peter Meggik
-                                            </td>
-                                            <td>
-                                                May 15, 2015
-                                            </td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-primary" role="progressbar"
-                                                        style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                5
-                                            </td>
-                                            <td>
-                                                Edward
-                                            </td>
-                                            <td>
-                                                May 03, 2015
-                                            </td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-danger" role="progressbar"
-                                                        style="width: 35%" aria-valuenow="35" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                5
-                                            </td>
-                                            <td>
-                                                Ronald
-                                            </td>
-                                            <td>
-                                                Jun 05, 2015
-                                            </td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-info" role="progressbar"
-                                                        style="width: 65%" aria-valuenow="65" aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                                </div>
+                                                <span class="status-badge" 
+                                                      [class.status-critico]="producto.stock <= 3"
+                                                      [class.status-alerta]="producto.stock > 3 && producto.stock <= 5"
+                                                      [class.status-ok]="producto.stock > 5">
+                                                    <i class="fas" 
+                                                       [class.fa-exclamation-circle]="producto.stock <= 5"
+                                                       [class.fa-exclamation-triangle]="producto.stock > 5 && producto.stock <= 7"
+                                                       [class.fa-info-circle]="producto.stock > 7"></i>
+                                                    {{ producto.stock <= 3 ? 'Crítico' : (producto.stock <= 5 ? 'Bajo' : 'Atención') }}
+                                                </span>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="empty-list" *ngIf="productosStockBajo.length === 0">
+                                <i class="fas fa-check-circle text-success"></i>
+                                <p>Todo el stock está en buen estado</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5 stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Todo</h4>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            </div>
         </main>
+    </div>
+</div>
+
+<!-- Modal para Productos por Categoría -->
+<div class="modal fade" id="modalProductosCategoria" tabindex="-1" role="dialog" aria-labelledby="modalProductosCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="modalProductosCategoriaLabel">
+                        <i class="fas fa-folder"></i>
+                        Productos: {{ categoriaSeleccionada?.nombre }}
+                    </h5>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        {{ categoriaSeleccionada?.cantidad }} productos en esta categoría
+                    </small>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModalCategoria()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="productos-categoria-grid" *ngIf="productosCategoriaSeleccionada.length > 0">
+                    <div class="producto-categoria-card" *ngFor="let producto of productosCategoriaSeleccionada">
+                        <div class="producto-categoria-image" 
+                             (click)="verImagenProducto(producto)"
+                             [attr.data-producto-id]="producto._id">
+                            <img *ngIf="getProductImage(producto)" 
+                                 [src]="getProductImage(producto)" 
+                                 [alt]="producto.titulo"
+                                 class="producto-image"
+                                 (error)="$event.target.src='assets/img/no-image.png'">
+                            <div *ngIf="!getProductImage(producto) && !isImageLoading(producto)" class="producto-no-image-large">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <div *ngIf="isImageLoading(producto)" class="producto-loading-image-large">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Cargando...</p>
+                            </div>
+                        </div>
+                        <div class="producto-categoria-header">
+                            <div class="producto-categoria-title">
+                                <i class="fas fa-box"></i>
+                                <span>{{ producto.titulo }}</span>
+                            </div>
+                            <span class="producto-categoria-badge" 
+                                  [class.stock-critico]="producto.stock <= 3"
+                                  [class.stock-bajo]="producto.stock > 3 && producto.stock <= 5"
+                                  [class.stock-ok]="producto.stock > 5">
+                                {{ producto.stock }} unidades
+                            </span>
+                        </div>
+                        <div class="producto-categoria-body">
+                            <div class="producto-categoria-info">
+                                <div class="info-row">
+                                    <span class="info-label">ID:</span>
+                                    <span class="info-value">{{ producto.identificador || 'N/A' }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Stock:</span>
+                                    <span class="info-value">{{ producto.stock }} unidades</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Precio Compra:</span>
+                                    <span class="info-value price-compra">{{ producto.precio_compra | number:'1.0-0' }} COP</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Precio Venta:</span>
+                                    <span class="info-value price">{{ producto.precio_venta | number:'1.0-0' }} COP</span>
+                                </div>
+                            </div>
+                            <div class="producto-categoria-desc" *ngIf="producto.descripcion">
+                                <i class="fas fa-align-left"></i>
+                                <span>{{ producto.descripcion }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="empty-list" *ngIf="productosCategoriaSeleccionada.length === 0">
+                    <i class="fas fa-box-open"></i>
+                    <p>No hay productos en esta categoría</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cerrarModalCategoria()">
+                    <i class="fas fa-times"></i>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Ver Imagen -->
+<div class="modal fade" id="modal-ver-imagen-dashboard" tabindex="-1" role="dialog" aria-labelledby="modalImagenDashboardLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalImagenDashboardLabel">
+                    <i class="fas fa-image"></i>
+                    Imagen del Producto: {{ productoNombreCargandoImagen }}
+                </h5>
+                <button type="button" class="close" (click)="closeImageModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div *ngIf="isLoadingImage" class="loading-image">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Cargando imagen...</p>
+                </div>
+                <img *ngIf="!isLoadingImage && imagen_view" 
+                    [src]="imagen_view" 
+                    alt="Imagen del producto" 
+                    class="product-image-modal">
+                <div *ngIf="!isLoadingImage && !imagen_view" class="no-image">
+                    <i class="fas fa-image"></i>
+                    <p>No hay imagen disponible</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para Ver Imagen -->
+
+<!-- Modal para Actualizar Saldos -->
+<div class="modal fade" id="modalActualizarSaldos" tabindex="-1" role="dialog" aria-labelledby="modalActualizarSaldosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="modalActualizarSaldosLabel">
+                        <i class="fas fa-exchange-alt"></i>
+                        Registrar Movimiento de Saldos
+                    </h5>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Registra cambios en los saldos y explica el motivo del movimiento
+                    </small>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeUpdateModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #saldosForm="ngForm">
+                    <div class="row">
+                        <!-- Efectivo -->
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    Efectivo (COP)
+                                </label>
+                                <div class="input-group input-group-currency">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           name="efectivo" 
+                                           [(ngModel)]="saldos.efectivo"
+                                           #efectivo="ngModel"
+                                           min="0"
+                                           step="1"
+                                           placeholder="0">
+                                </div>
+                                <small class="form-text text-muted" *ngIf="originalSaldos.efectivo !== saldos.efectivo">
+                                    Original: {{ originalSaldos.efectivo | number:'1.0-0' }} COP
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Nequi -->
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    Nequi (COP)
+                                </label>
+                                <div class="input-group input-group-currency">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           name="nequi" 
+                                           [(ngModel)]="saldos.nequi"
+                                           #nequi="ngModel"
+                                           min="0"
+                                           step="1"
+                                           placeholder="0">
+                                </div>
+                                <small class="form-text text-muted" *ngIf="originalSaldos.nequi !== saldos.nequi">
+                                    Original: {{ originalSaldos.nequi | number:'1.0-0' }} COP
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Sin Pagar -->
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Sin Pagar (COP)
+                                </label>
+                                <div class="input-group input-group-currency">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           name="sin_pagar" 
+                                           [(ngModel)]="saldos.sin_pagar"
+                                           #sin_pagar="ngModel"
+                                           min="0"
+                                           step="1"
+                                           placeholder="0">
+                                </div>
+                                <small class="form-text text-muted" *ngIf="originalSaldos.sin_pagar !== saldos.sin_pagar">
+                                    Original: {{ originalSaldos.sin_pagar | number:'1.0-0' }} COP
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Sin Pagar -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-info-circle"></i>
+                            Información sobre "Sin Pagar"
+                        </label>
+                        <textarea class="form-control" 
+                                  rows="3"
+                                  name="info_sin_pagar" 
+                                  [(ngModel)]="saldos.info_sin_pagar"
+                                  #info_sin_pagar="ngModel"
+                                  placeholder="Describe detalles sobre los pagos pendientes..."></textarea>
+                    </div>
+
+                    <!-- Motivo del Cambio -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-comment-alt"></i>
+                            Motivo del Movimiento <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" 
+                                  rows="4"
+                                  name="motivo" 
+                                  [(ngModel)]="nuevoMotivo"
+                                  #motivo="ngModel"
+                                  required
+                                  placeholder="Ejemplo: Retiro de efectivo para compra de mercancía, Transferencia de Nequi a efectivo, Pago recibido de cliente pendiente, etc..."></textarea>
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            Describe claramente por qué se están moviendo los saldos. Este registro quedará en el historial para auditoría.
+                        </small>
+                        <div class="motivo-anterior mt-2" *ngIf="originalMotif">
+                            <i class="fas fa-history"></i>
+                            <strong>Último motivo:</strong> {{ originalMotif }}
+                        </div>
+                    </div>
+
+                    <!-- Resumen de Cambios -->
+                    <div class="alert alert-warning" *ngIf="hasChanges()">
+                        <h6><i class="fas fa-exchange-alt"></i> Resumen del Movimiento:</h6>
+                        <div class="movement-summary">
+                            <div class="movement-item" *ngIf="originalSaldos.efectivo !== saldos.efectivo">
+                                <div class="movement-label">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <strong>Efectivo</strong>
+                                </div>
+                                <div class="movement-values">
+                                    <span class="movement-old">{{ originalSaldos.efectivo | currency:'COP':'symbol':'1.0-0' }}</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span class="movement-new">{{ saldos.efectivo | currency:'COP':'symbol':'1.0-0' }}</span>
+                                    <span class="movement-diff" 
+                                          [class.text-success]="saldos.efectivo > originalSaldos.efectivo" 
+                                          [class.text-danger]="saldos.efectivo < originalSaldos.efectivo">
+                                        <i class="fas" 
+                                           [class.fa-arrow-up]="saldos.efectivo > originalSaldos.efectivo"
+                                           [class.fa-arrow-down]="saldos.efectivo < originalSaldos.efectivo"></i>
+                                        {{ (saldos.efectivo - originalSaldos.efectivo) | currency:'COP':'symbol':'1.0-0' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="movement-item" *ngIf="originalSaldos.nequi !== saldos.nequi">
+                                <div class="movement-label">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <strong>Nequi</strong>
+                                </div>
+                                <div class="movement-values">
+                                    <span class="movement-old">{{ originalSaldos.nequi | number:'1.0-0' }} COP</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span class="movement-new">{{ saldos.nequi | number:'1.0-0' }} COP</span>
+                                    <span class="movement-diff" 
+                                          [class.text-success]="saldos.nequi > originalSaldos.nequi" 
+                                          [class.text-danger]="saldos.nequi < originalSaldos.nequi">
+                                        <i class="fas" 
+                                           [class.fa-arrow-up]="saldos.nequi > originalSaldos.nequi"
+                                           [class.fa-arrow-down]="saldos.nequi < originalSaldos.nequi"></i>
+                                        {{ (saldos.nequi - originalSaldos.nequi) | number:'1.0-0' }} COP
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="movement-item" *ngIf="originalSaldos.sin_pagar !== saldos.sin_pagar">
+                                <div class="movement-label">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>Sin Pagar</strong>
+                                </div>
+                                <div class="movement-values">
+                                    <span class="movement-old">{{ originalSaldos.sin_pagar | number:'1.0-0' }} COP</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span class="movement-new">{{ saldos.sin_pagar | number:'1.0-0' }} COP</span>
+                                    <span class="movement-diff" 
+                                          [class.text-success]="saldos.sin_pagar < originalSaldos.sin_pagar" 
+                                          [class.text-danger]="saldos.sin_pagar > originalSaldos.sin_pagar">
+                                        <i class="fas" 
+                                           [class.fa-arrow-up]="saldos.sin_pagar > originalSaldos.sin_pagar"
+                                           [class.fa-arrow-down]="saldos.sin_pagar < originalSaldos.sin_pagar"></i>
+                                        {{ (saldos.sin_pagar - originalSaldos.sin_pagar) | number:'1.0-0' }} COP
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert-no-changes" *ngIf="!hasChanges()">
+                        <i class="fas fa-info-circle"></i>
+                        <span>No has realizado cambios en los saldos. Si deseas registrar un movimiento, modifica al menos uno de los valores.</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeUpdateModal()">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button type="button" 
+                        class="btn btn-primary" 
+                        (click)="actualizarSaldos()"
+                        [disabled]="!nuevoMotivo || nuevoMotivo.trim() === '' || nuevoMotivo === originalMotif || isSaving">
+                    <i class="fas fa-save" *ngIf="!isSaving"></i>
+                    <i class="fas fa-spinner fa-spin" *ngIf="isSaving"></i>
+                    {{ isSaving ? 'Guardando...' : 'Guardar Cambios' }}
+                </button>
+            </div>
+        </div>
     </div>
 </div>

@@ -53,6 +53,16 @@ export class ProductoService {
     return this._http.post(this.url + 'categoria/registrar', data, { headers: headers });
   }
 
+  update_categoria(id, data): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.put(this.url + 'categoria/editar/' + id, data, { headers: headers });
+  }
+
+  delete_categoria(id): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.delete(this.url + 'categoria/' + id, { headers: headers });
+  }
+
   delete_producto(id): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.delete(this.url + 'producto/' + id, { headers: headers });
@@ -63,5 +73,9 @@ export class ProductoService {
     return this._http.put(this.url + 'producto/stock/' + data._id, data, { headers: headers });
   }
 
+  verificar_identificador(identificador: string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.get(this.url + 'productos/' + identificador, { headers: headers });
+  }
 
 }

@@ -1,57 +1,200 @@
-<main class="main h-100 w-100">
-    <div class="container h-100">
-        <div class="row h-100">
-            <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
-                
-                <div class="d-table-cell align-middle">
+<div class="login-container" (mousemove)="onMouseMove($event)">
+    <!-- Cursor Follower -->
+    <div class="cursor-follower" [style.left.px]="cursorX" [style.top.px]="cursorY"></div>
+    
+    <!-- Innova Logo - Top Left -->
+    <div class="logo-top-left">
+        <img src="../../../assets/img/login_innova.png" alt="Innova Ishop" class="logo-innova-small">
+    </div>
+    
+    <!-- Interactive Bubbles -->
+    <div class="bubbles-container">
+        <div class="bubble" 
+             *ngFor="let bubble of bubbles; let i = index"
+             [style.left.%]="bubble.x"
+             [style.top.%]="bubble.y"
+             [style.width.px]="bubble.size"
+             [style.height.px]="bubble.size"
+             [style.animation-duration.s]="bubble.duration"
+             [style.animation-delay.s]="bubble.delay"
+             [class.bubble-hit]="bubble.hit">
+        </div>
+    </div>
+    
+    <!-- Animated Background -->
+    <div class="animated-background">
+        <div class="gradient-overlay"></div>
+    </div>
 
-                    <div class="text-center mt-4">
-                        <h1 class="h2">Iniciar Sesión</h1>
-                        <p class="lead">
-                            Sistema de Ventas Innova Ishop
-                        </p>
+    <!-- Login Card -->
+    <div class="login-wrapper">
+        <div class="login-card">
+            <!-- Logo and Header -->
+            <div class="login-header">
+                <!-- Animated Avatar -->
+                <div class="avatar-container" 
+                     (mouseenter)="onAvatarHover()"
+                     (mouseleave)="onAvatarLeave()">
+                    <div class="avatar-face">
+                        <div class="avatar-eyes">
+                            <div class="eye left-eye" 
+                                 [class.blink]="isBlinking" 
+                                 [class.closed]="isPasswordTyping">
+                                <div class="pupil" 
+                                     [style.transform]="getPupilTransform('left')"></div>
+                            </div>
+                            <div class="eye right-eye" 
+                                 [class.blink]="isBlinking" 
+                                 [class.closed]="isPasswordTyping">
+                                <div class="pupil" 
+                                     [style.transform]="getPupilTransform('right')"></div>
+                            </div>
+                        </div>
+                        <div class="avatar-mouth" [class.smile]="isSmiling" [class.surprised]="isSurprised"></div>
                     </div>
+                    <div class="avatar-pulse"></div>
+                </div>
+                <h1 class="login-title">
+                    <span class="title-main">Bienvenido</span>
+                    <span class="title-sub">Innova Ishop</span>
+                </h1>
+                <p class="login-subtitle">Sistema de Gestión de Ventas</p>
+            </div>
 
-                    <div class="card">
-                        <div class="card-body">
-                            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
-                                <div class="m-sm-4">
-                                    <div *ngIf="data_error" class="alert alert-danger alert-dismissible" role="alert">
-                                        <div class="alert-message">
-                                            {{data_error}}
-                                        </div>
-                                        <button type="button" (click)="close_alert()" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">x</span>
-                                        </button>
-                                    </div>
-                                    <div class="text-center">
-                                        <img src="../../../assets/img/login_innova.png" alt="Linda Miller" class="img-fluid rounded-circle" width="112" height="112" />
-                                    </div>
-                                  
-                                        <div class="form-group">
-                                            <label>Correo Electrónico</label>
-                                            <input class="form-control form-control-lg" type="email" placeholder="Ingrese correo electrónico" #email="ngModel" name="email" [(ngModel)]="user.email" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Contraseña</label>
-                                            <input class="form-control form-control-lg" type="password" placeholder="Ingrese contraseña" #password="ngModel" name="password" [(ngModel)]="user.password" required/>
-                                            <small>
-                                           
-                                        </small>
-                                        </div>
-                                       
-                                        <div class="text-center mt-3">
-                                  
-                                            <button type="submit" class="btn btn-lg btn-primary">Ingresar</button>
-                                        </div>
-                                 
-                                </div>
-                            </form>
+            <!-- Error Alert -->
+            <div class="alert-container" *ngIf="data_error">
+                <div class="alert alert-error">
+                    <div class="alert-content">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ data_error }}</span>
+                    </div>
+                    <button type="button" class="alert-close" (click)="close_alert()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lockout Message -->
+            <div class="alert-container" *ngIf="isLocked">
+                <div class="alert alert-warning">
+                    <div class="alert-content">
+                        <i class="fas fa-lock"></i>
+                        <span>Cuenta bloqueada. Intente nuevamente en {{ lockoutTime }} segundos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="login-form">
+                <!-- Usuario Field -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Usuario
+                    </label>
+                    <div class="input-wrapper" [class.error]="emailError && emailTouched" [class.success]="!emailError && emailTouched && user.email">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            class="form-input" 
+                            placeholder="Ingrese su usuario"
+                            #email="ngModel" 
+                            name="email" 
+                            [(ngModel)]="user.email"
+                            (blur)="onEmailBlur()"
+                            (input)="onEmailInput()"
+                            [disabled]="isSubmitting || isLocked"
+                            required>
+                        <div class="input-status" *ngIf="emailTouched">
+                            <i class="fas fa-check-circle" *ngIf="!emailError && user.email"></i>
+                            <i class="fas fa-times-circle" *ngIf="emailError"></i>
                         </div>
                     </div>
-
+                    <div class="error-message" *ngIf="emailError && emailTouched">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {{ emailError }}
+                    </div>
                 </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Contraseña
+                    </label>
+                    <div class="input-wrapper" [class.error]="passwordError && passwordTouched" [class.success]="!passwordError && passwordTouched && user.password">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input 
+                            [type]="showPassword ? 'text' : 'password'" 
+                            class="form-input" 
+                            placeholder="Ingrese su contraseña"
+                            #password="ngModel" 
+                            name="password" 
+                            [(ngModel)]="user.password"
+                            (focus)="onPasswordFocus()"
+                            (blur)="onPasswordBlur()"
+                            (input)="onPasswordInput()"
+                            [disabled]="isSubmitting || isLocked"
+                            required>
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            (click)="togglePasswordVisibility()"
+                            [disabled]="isSubmitting || isLocked">
+                            <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                        </button>
+                        <div class="input-status" *ngIf="passwordTouched">
+                            <i class="fas fa-check-circle" *ngIf="!passwordError && user.password"></i>
+                            <i class="fas fa-times-circle" *ngIf="passwordError"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" *ngIf="passwordError && passwordTouched">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {{ passwordError }}
+                    </div>
+                    
+                    <!-- Password Strength Indicator -->
+                    <div class="password-strength" *ngIf="user.password && passwordTouched && !passwordError">
+                        <div class="strength-bar">
+                            <div class="strength-fill" 
+                                 [style.width.%]="getPasswordStrength().percentage"
+                                 [style.background-color]="getPasswordStrength().color"></div>
+                        </div>
+                        <div class="strength-text">
+                            <span [style.color]="getPasswordStrength().color">
+                                {{ getPasswordStrength().strength }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit" 
+                    class="login-button"
+                    [disabled]="isSubmitting || isLocked || (emailError && emailTouched) || (passwordError && passwordTouched)">
+                    <span *ngIf="!isSubmitting">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Iniciar Sesión
+                    </span>
+                    <span *ngIf="isSubmitting" class="loading-content">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Iniciando sesión...
+                    </span>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>
+                    <i class="fas fa-info-circle"></i>
+                    Si olvidó su contraseña, contacte al administrador
+                </p>
             </div>
         </div>
     </div>
-</main>
+</div>

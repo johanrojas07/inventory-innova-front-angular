@@ -1,141 +1,394 @@
-
-<div class="wrapper">
-    <app-sidebar style="background: white !important;"></app-sidebar>
+<div class="wrapper producto-edit-wrapper">
+    <app-sidebar></app-sidebar>
 
     <div class="main">
-        <!-- <nav class="navbar navbar-expand navbar-theme">
-            <a class="sidebar-toggle d-flex mr-2">
-                <i class="hamburger align-self-center"></i>
-            </a>
-        </nav> -->
         <main class="content">
             <div class="container-fluid">
-
                 <div class="header">
-                    <h1 class="header-title">
-                        Editar de producto
+                    <h1 class="header-title producto-edit-header-title">
+                        <i class="fas fa-edit"></i>
+                        <span>Editar Producto</span>
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <!-- <li class="breadcrumb-item"><a href="dashboard-default.html">Dashboard</a></li> -->
                             <li class="breadcrumb-item"><a [routerLink]="['/productos']">Productos</a></li>
-                            <li class="breadcrumb-item"><a>Edición de producto</a></li>
+                            <li class="breadcrumb-item active">Editar Producto</li>
                         </ol>
                     </nav>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-lg-12" *ngIf="error_message">
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <div class="alert-message">
-                                {{error_message}}
-                            </div>
 
-                            <button type="button" (click)="error_alert()" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
+                <!-- Loading State -->
+                <div class="loading-container" *ngIf="isLoading">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando producto...</p>
                     </div>
-                    <div class="col-12 col-lg-12" *ngIf="success_message">
-                        <div class="alert alert-info alert-dismissible" role="alert">
-                            <div class="alert-message">
-                                {{success_message}}
-                            </div>
+                </div>
 
-                            <button type="button" class="close" (click)="success_alert()" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Complete el formulario</h5>
-                                <h6 class="card-subtitle text-muted">Productos.</h6>
-                            </div>
-                            <div class="card-body">
-                                <form #productoForm="ngForm" (ngSubmit)="onSubmit(productoForm)">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label">Titulo del producto</label>
-                                                <input type="text" class="form-control" placeholder="Ingrese el titulo del producto" #titulo="ngModel" name="titulo" [(ngModel)]="producto.titulo" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Precio compra</label>
-                                                <input type="text" class="form-control" placeholder="$0" (input)="changeNumber()" #precio_compra="ngModel" name="precio_compra" [(ngModel)]="producto.precio_compra" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Precio venta</label>
-                                                <input type="text" class="form-control" placeholder="$0" (input)="changeNumber()" #precio_venta="ngModel" name="precio_venta" [(ngModel)]="producto.precio_venta" required>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Descripcion</label>
-                                        <textarea class="form-control" placeholder="Breve descripcion"  #descripcion="ngModel" name="descripcion" [(ngModel)]="producto.descripcion"> required</textarea>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label class="form-label">Categoria</label>
-                                                <select class="form-control"  #idcategoria="ngModel" required name="idcategoria" [(ngModel)]="producto.idcategoria">
-                                                    <option value="" disabled>SELECCIONAR</option>
-                                                    <option value="{{item._id}}" *ngFor="let item of categorias">{{item.titulo.toUpperCase()}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <div class="form-group">
-                                                <label class="form-label">Puntos</label>
-                                                <input type="number" required class="form-control"  #puntos="ngModel" name="puntos" [(ngModel)]="producto.puntos">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Codigo</label>
-                                                <input type="text" class="form-control"  #codigo="ngModel" name="codigo" [(ngModel)]="producto.codigo" placeholder="Cod. Barras" >
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Identificador</label>
-                                                <input type="text" required class="form-control"  #identificador="ngModel" name="identificador" [(ngModel)]="producto.identificador" placeholder="#001">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-
-                                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                                </form>
+                <!-- Content -->
+                <div *ngIf="!isLoading">
+                    <div class="row">
+                        <div class="col-12" *ngIf="error_message">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <strong>Error:</strong> {{error_message}}
+                                <button type="button" (click)="error_alert()" class="close" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-xl-4">
-                        <div class="card">
-                            <div class="card-header">
-
+                        <div class="col-12" *ngIf="success_message">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle"></i>
+                                <strong>Éxito:</strong> {{success_message}}
+                                <button type="button" class="close" (click)="success_alert()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <img [src]="(imagenesData && imagenesData[0]) ? imagenesData[0] : 'No Existe :('" width="48" height="48" class="rounded-circle mr-2" alt="Avatar">{{producto.titulo}}
-                                    <div class="mt-2">
-                                        <input class="btn btn-primary" required (change)="imgSelected($event)" type="file" multiple style="width: 100% !important;">
+                        </div>
+
+                        <div class="col-12 col-xl-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-edit"></i>
+                                        Información del Producto
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <form #productoForm="ngForm" (ngSubmit)="onSubmit(productoForm)">
+                                        <!-- Información Básica -->
+                                        <div class="form-section">
+                                            <h6 class="section-title">
+                                                <i class="fas fa-info-circle"></i>
+                                                Información Básica
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-tag"></i>
+                                                            Título del Producto <span class="text-danger">*</span>
+                                                        </label>
+                                                        <input type="text" class="form-control" 
+                                                            placeholder="Ej: Laptop HP 15.6 pulgadas" 
+                                                            #titulo="ngModel" name="titulo"  
+                                                            [(ngModel)]="producto.titulo" 
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-hashtag"></i>
+                                                            Identificador <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="input-wrapper-identificador">
+                                                            <input type="text" 
+                                                                class="form-control" 
+                                                                [class.is-invalid]="identificadorExiste"
+                                                                [class.is-valid]="!identificadorExiste && producto.identificador && !isCheckingIdentificador && identificadorError === ''"
+                                                                placeholder="#001"
+                                                                #identificador="ngModel" 
+                                                                name="identificador" 
+                                                                [(ngModel)]="producto.identificador" 
+                                                                (blur)="verificarIdentificador()"
+                                                                (input)="verificarIdentificador()"
+                                                                required>
+                                                            <span class="identificador-status" *ngIf="isCheckingIdentificador">
+                                                                <i class="fas fa-spinner fa-spin"></i>
+                                                            </span>
+                                                            <span class="identificador-status text-success" *ngIf="!isCheckingIdentificador && !identificadorExiste && producto.identificador && identificadorError === ''">
+                                                                <i class="fas fa-check-circle"></i>
+                                                            </span>
+                                                            <span class="identificador-status text-danger" *ngIf="!isCheckingIdentificador && identificadorExiste">
+                                                                <i class="fas fa-times-circle"></i>
+                                                            </span>
+                                                        </div>
+                                                        <small class="form-text text-danger" *ngIf="identificadorExiste">
+                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                            {{ identificadorError }}
+                                                        </small>
+                                                        <small class="form-text text-muted" *ngIf="!identificadorExiste && producto.identificador && !isCheckingIdentificador && identificadorError === ''">
+                                                            <i class="fas fa-check"></i>
+                                                            Identificador disponible
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-align-left"></i>
+                                                            Descripción
+                                                        </label>
+                                                        <textarea class="form-control" 
+                                                            rows="3"
+                                                            placeholder="Breve descripción del producto"  
+                                                            #descripcion="ngModel" 
+                                                            name="descripcion" 
+                                                            [(ngModel)]="producto.descripcion"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Precios y Categoría -->
+                                        <div class="form-section">
+                                            <h6 class="section-title">
+                                                <i class="fas fa-dollar-sign"></i>
+                                                Precios y Categoría
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            Precio Compra <span class="text-danger">*</span>
+                                                            <small class="text-muted d-block">(COP)</small>
+                                                        </label>
+                                                        <div class="input-group input-group-currency">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">$</span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control price-input" 
+                                                                placeholder="0"
+                                                                (input)="changeNumber()" 
+                                                                #precio_compra="ngModel" 
+                                                                name="precio_compra" 
+                                                                [(ngModel)]="producto.precio_compra" 
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-tag"></i>
+                                                            Precio Venta <span class="text-danger">*</span>
+                                                            <small class="text-muted d-block">(COP)</small>
+                                                        </label>
+                                                        <div class="input-group input-group-currency">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">$</span>
+                                                            </div>
+                                                            <input type="text" 
+                                                                class="form-control price-input" 
+                                                                placeholder="0"
+                                                                (input)="changeNumber()" 
+                                                                #precio_venta="ngModel" 
+                                                                name="precio_venta" 
+                                                                [(ngModel)]="producto.precio_venta" 
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-chart-line"></i>
+                                                            Margen de Ganancia
+                                                        </label>
+                                                        <div class="margen-info">
+                                                            <div class="margen-valor" [class.margen-positivo]="margenGanancia > 0" [class.margen-negativo]="margenGanancia < 0">
+                                                                <i class="fas" [class.fa-arrow-up]="margenGanancia > 0" [class.fa-arrow-down]="margenGanancia < 0"></i>
+                                                                <span class="margen-numero">{{ margenGanancia | number:'1.0-0' }}</span>
+                                                                <span class="margen-cop">COP</span>
+                                                            </div>
+                                                            <div class="margen-porcentaje" [class.margen-positivo]="porcentajeGanancia > 0" [class.margen-negativo]="porcentajeGanancia < 0">
+                                                                {{ porcentajeGanancia >= 0 ? '+' : '' }}{{ porcentajeGanancia.toFixed(1) }}%
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-folder"></i>
+                                                            Categoría <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="categoria-autocomplete-wrapper">
+                                                            <input type="text" 
+                                                                class="form-control categoria-input" 
+                                                                placeholder="Buscar categoría..."
+                                                                [(ngModel)]="categoriaBusqueda"
+                                                                (input)="filtrarCategorias()"
+                                                                (focus)="onCategoriaFocus()"
+                                                                (blur)="onCategoriaBlur()"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                            <input type="hidden" 
+                                                                name="idcategoria" 
+                                                                #idcategoria="ngModel"
+                                                                [(ngModel)]="producto.idcategoria" 
+                                                                required>
+                                                            <div class="categoria-dropdown" *ngIf="mostrarDropdownCategorias && categoriasFiltradas.length > 0">
+                                                                <div class="categoria-option" 
+                                                                     *ngFor="let categoria of categoriasFiltradas"
+                                                                     (mousedown)="seleccionarCategoria(categoria)">
+                                                                    <div class="categoria-option-title">
+                                                                        <i class="fas fa-folder"></i>
+                                                                        <strong>{{ categoria.titulo }}</strong>
+                                                                    </div>
+                                                                    <div class="categoria-option-desc" *ngIf="categoria.descripcion">
+                                                                        {{ categoria.descripcion }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="categoria-dropdown empty" *ngIf="mostrarDropdownCategorias && categoriasFiltradas.length === 0">
+                                                                <div class="categoria-option-empty">
+                                                                    <i class="fas fa-search"></i>
+                                                                    No se encontraron categorías
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-star"></i>
+                                                            Puntos
+                                                        </label>
+                                                        <input type="number" 
+                                                            class="form-control" 
+                                                            placeholder="0"
+                                                            #puntos="ngModel" 
+                                                            name="puntos" 
+                                                            [(ngModel)]="producto.puntos"
+                                                            min="0">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">
+                                                            <i class="fas fa-barcode"></i>
+                                                            Código de Barras
+                                                        </label>
+                                                        <input type="text" 
+                                                            class="form-control" 
+                                                            placeholder="Código de barras"
+                                                            #codigo="ngModel" 
+                                                            name="codigo" 
+                                                            [(ngModel)]="producto.codigo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Botones de Acción -->
+                                        <div class="form-actions">
+                                            <button type="button" class="btn btn-secondary" [routerLink]="['/productos']">
+                                                <i class="fas fa-times"></i>
+                                                Cancelar
+                                            </button>
+                                            <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || identificadorExiste || isCheckingIdentificador">
+                                                <i class="fas" [class.fa-save]="!isSubmitting" [class.fa-spinner]="isSubmitting" [class.fa-spin]="isSubmitting"></i>
+                                                {{ isSubmitting ? 'Guardando...' : 'Actualizar Producto' }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar de Imágenes -->
+                        <div class="col-12 col-xl-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-images"></i>
+                                        Imágenes del Producto
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="imagenes-container">
+                                        <!-- Vista Previa de Imágenes -->
+                                        <div class="imagenes-preview" *ngIf="imagenesData && imagenesData.length > 0">
+                                            <div class="imagen-preview-item" *ngFor="let imagen of imagenesData; let i = index">
+                                                <img [src]="imagen" 
+                                                     [alt]="producto.titulo" 
+                                                     class="imagen-preview">
+                                                <button type="button" 
+                                                        class="btn-remove-imagen" 
+                                                        (click)="removerImagen(i)"
+                                                        title="Eliminar imagen">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Placeholder cuando no hay imágenes -->
+                                        <div class="imagenes-empty" *ngIf="!imagenesData || imagenesData.length === 0">
+                                            <i class="fas fa-image"></i>
+                                            <p>No hay imágenes</p>
+                                            <small>Agrega imágenes para el producto</small>
+                                        </div>
+
+                                        <!-- Input de Archivo -->
+                                        <div class="imagenes-upload">
+                                            <label class="btn-upload-imagen">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <span>{{ imagenesData && imagenesData.length > 0 ? 'Cambiar Imágenes' : 'Agregar Imágenes' }}</span>
+                                                <input type="file" 
+                                                       (change)="imgSelected($event)" 
+                                                       multiple 
+                                                       accept="image/*"
+                                                       style="display: none;">
+                                            </label>
+                                            <small class="upload-hint">
+                                                <i class="fas fa-info-circle"></i>
+                                                Puedes seleccionar múltiples imágenes. Formatos: JPG, PNG, GIF
+                                            </small>
+                                        </div>
                                     </div>
-                                    <small>For best results, use an image at least 128px by 128px in .jpg
-                                    format</small>
+                                </div>
+                            </div>
+
+                            <!-- Información Adicional -->
+                            <div class="card" *ngIf="producto">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información Adicional
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="info-item">
+                                        <span class="info-label">
+                                            <i class="fas fa-boxes"></i>
+                                            Stock Actual:
+                                        </span>
+                                        <span class="info-value stock-badge" 
+                                              [class.stock-critico]="producto.stock <= 3"
+                                              [class.stock-bajo]="producto.stock > 3 && producto.stock <= 5"
+                                              [class.stock-ok]="producto.stock > 5">
+                                            {{ producto.stock || 0 }} unidades
+                                        </span>
+                                    </div>
+                                    <div class="info-item" *ngIf="producto.precio_compra">
+                                        <span class="info-label">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            Precio Compra:
+                                        </span>
+                                        <span class="info-value">{{ producto.precio_compra | number:'1.0-0' }} COP</span>
+                                    </div>
+                                    <div class="info-item" *ngIf="producto.precio_venta">
+                                        <span class="info-label">
+                                            <i class="fas fa-tag"></i>
+                                            Precio Venta:
+                                        </span>
+                                        <span class="info-value price-venta">{{ producto.precio_venta | number:'1.0-0' }} COP</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </main>
-       
     </div>
 </div>

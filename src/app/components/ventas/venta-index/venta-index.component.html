@@ -1,12 +1,22 @@
 <div class="wrapper">
-  <app-sidebar style="background: white !important;"></app-sidebar>
+  <app-sidebar></app-sidebar>
 
   <div class="main">
     <main class="content mt-1">
       <div class="container-fluid">
         <div class="header mb-1">
-          <h1 class="header-title">Ventas <button class="btn btn-secondary" (click)="fetchAllSales()">Obtener todas las
-              ventas</button>
+          <h1 class="header-title">
+            <span>Ventas</span>
+            <div class="header-actions">
+              <a [routerLink]="['/venta/registrar']" class="btn-register">
+                <i class="fas fa-plus"></i>
+                <span>Registrar venta</span>
+              </a>
+              <button class="btn-refresh" (click)="fetchAllSales()" [disabled]="isLoading">
+                <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+                <span>Obtener todas las ventas</span>
+              </button>
+            </div>
           </h1>
 
           <nav aria-label="breadcrumb">
@@ -15,77 +25,689 @@
             </ol>
           </nav>
         </div>
-        <div class="row mb-2">
-          <div class="col-md-4">
+
+        <!-- Sistema de Tabs -->
+        <div class="tabs-container">
+          <div class="tabs-header">
+            <button class="tab-button" [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
+              <i class="fas fa-chart-line"></i>
+              <span>Dashboard</span>
+            </button>
+            <button class="tab-button" [class.active]="activeTab === 'ventas'" (click)="activeTab = 'ventas'">
+              <i class="fas fa-list"></i>
+              <span>Lista de Ventas</span>
+            </button>
+          </div>
+
+          <!-- Tab Dashboard -->
+          <div class="tab-content" *ngIf="activeTab === 'dashboard'">
+            <!-- Refresh Button -->
+            <div class="dashboard-actions mb-3">
+              <button class="btn-refresh-dashboard" (click)="fetchAllSales()" [disabled]="isLoading">
+                <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+                <span>Actualizar Dashboard</span>
+              </button>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-alert mb-3" *ngIf="isLoadingError && !isLoading">
+              <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                  <strong>Error al cargar datos</strong>
+                  <p>{{ errorMessage }}</p>
+                  <button class="btn btn-sm btn-primary mt-2" (click)="fetchAllSales()">
+                    <i class="fas fa-redo"></i> Reintentar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Indicadores principales -->
+            <div class="row mb-3">
+              <!-- Skeleton Loaders - Misma estructura que las tarjetas reales -->
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-primary skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 60%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-success skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 60%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-info skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 60%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-warning skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 60%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cards Reales -->
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-primary">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Total de Ventas</h5>
+                      <p class="stat-value">{{ totalVentas }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-success">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Total Vendido</h5>
+                      <p class="stat-value">{{ totalVendido | currency:'USD':'symbol':'1.0-0' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-info">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Productos Vendidos</h5>
+                      <p class="stat-value">{{ productosVendidos }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-warning">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Promedio por Venta</h5>
+                      <p class="stat-value">{{ promedioVenta | currency:'USD':'symbol':'1.0-0' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Indicadores de tiempo -->
+            <div class="row mb-3">
+              <!-- Skeleton Loaders -->
+              <div class="col-md-4 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-today skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 50%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 30%;"></p>
+                      <p class="stat-subtitle skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-week skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 50%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 30%;"></p>
+                      <p class="stat-subtitle skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-month skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 50%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 30%;"></p>
+                      <p class="stat-subtitle skeleton-text-shimmer" style="width: 40%;"></p>
+                      <span class="stat-badge skeleton-text-shimmer" style="width: 35%; display: inline-block;"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cards Reales -->
+              <div class="col-md-4 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-today">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Ventas de Hoy</h5>
+                      <p class="stat-value">{{ ventasHoy }}</p>
+                      <p class="stat-subtitle">{{ totalHoy | currency:'USD':'symbol':'1.0-0' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-week">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-calendar-week"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Esta Semana</h5>
+                      <p class="stat-value">{{ ventasSemana }}</p>
+                      <p class="stat-subtitle">{{ totalSemana | currency:'USD':'symbol':'1.0-0' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-month">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Este Mes</h5>
+                      <p class="stat-value">{{ ventasMes }}</p>
+                      <p class="stat-subtitle">{{ totalMes | currency:'USD':'symbol':'1.0-0' }}</p>
+                      <span class="stat-badge" [class.positive]="porcentajeCambio >= 0" [class.negative]="porcentajeCambio < 0">
+                        <i class="fas" [class.fa-arrow-up]="porcentajeCambio >= 0" [class.fa-arrow-down]="porcentajeCambio < 0"></i>
+                        {{ porcentajeCambio | number:'1.1-1' }}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Indicadores de extremos -->
+            <div class="row mb-3">
+              <!-- Skeleton Loaders -->
+              <div class="col-md-6 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-high skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 60%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 mb-3" *ngIf="isLoading">
+                <div class="stat-card stat-card-low skeleton-shimmer">
+                  <div class="stat-card-body">
+                    <div class="stat-icon skeleton-icon-shimmer"></div>
+                    <div class="stat-info">
+                      <h5 class="stat-title skeleton-text-shimmer" style="width: 60%;"></h5>
+                      <p class="stat-value skeleton-text-shimmer" style="width: 40%;"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cards Reales -->
+              <div class="col-md-6 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-high">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Venta Más Alta</h5>
+                      <p class="stat-value">{{ ventaMasAlta | currency:'USD':'symbol':'1.0-0' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6 mb-3" *ngIf="!isLoading">
+                <div class="stat-card stat-card-low">
+                  <div class="stat-card-body">
+                    <div class="stat-icon">
+                      <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="stat-info">
+                      <h5 class="stat-title">Venta Más Baja</h5>
+                      <p class="stat-value">{{ ventaMasBaja | currency:'USD':'symbol':'1.0-0' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Gráfico de ventas por día -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">
+                      <i class="fas fa-chart-bar"></i>
+                      Ventas de los Últimos 7 Días
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <!-- Skeleton Chart -->
+                    <div class="chart-container skeleton-shimmer" *ngIf="isLoading">
+                      <div class="chart-bars">
+                        <div class="chart-bar-item" *ngFor="let i of [1,2,3,4,5,6,7]">
+                          <div class="bar-wrapper">
+                            <div class="bar skeleton-bar-shimmer" [style.height.%]="30 + (i * 10)"></div>
+                          </div>
+                          <div class="bar-label skeleton-text-shimmer" style="width: 30px; height: 12px; margin: 0 auto; display: block;"></div>
+                          <div class="bar-value skeleton-text-shimmer" style="width: 20px; height: 12px; margin: 4px auto 0; display: block;"></div>
+                          <div class="bar-amount skeleton-text-shimmer" style="width: 50px; height: 10px; margin: 4px auto 0; display: block;"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Chart Real -->
+                    <div class="chart-container" *ngIf="!isLoading && ventasPorDia.length > 0">
+                      <div class="chart-bars">
+                        <div class="chart-bar-item" *ngFor="let dia of ventasPorDia">
+                          <div class="bar-wrapper">
+                            <div class="bar" [style.height.%]="getBarHeight(dia.total)"></div>
+                          </div>
+                          <div class="bar-label">{{ dia.nombre }}</div>
+                          <div class="bar-value">{{ dia.ventas }}</div>
+                          <div class="bar-amount">{{ dia.total | currency:'USD':'symbol':'1.0-0' }}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="empty-state" *ngIf="!isLoading && ventasPorDia.length === 0">
+                      <i class="fas fa-chart-bar"></i>
+                      <p>No hay datos para mostrar</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top productos y clientes -->
+            <div class="row mb-3">
+              <div class="col-md-6 mb-3">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">
+                      <i class="fas fa-trophy"></i>
+                      Top 5 Productos Más Vendidos
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <!-- Skeleton Top List -->
+                    <div class="top-list skeleton-shimmer" *ngIf="isLoading">
+                      <div class="top-item" *ngFor="let i of [1,2,3,4,5]">
+                        <div class="top-rank skeleton-text-shimmer" style="width: 30px; height: 30px; border-radius: 50%;"></div>
+                        <div class="top-info" style="flex: 1;">
+                          <div class="top-name skeleton-text-shimmer" style="width: 60%; height: 16px; margin-bottom: 8px;"></div>
+                          <div class="top-details" style="display: flex; gap: 12px;">
+                            <span class="skeleton-text-shimmer" style="width: 80px; height: 14px;"></span>
+                            <span class="skeleton-text-shimmer" style="width: 80px; height: 14px;"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Top List Real -->
+                    <div class="top-list" *ngIf="!isLoading && topProductos.length > 0; else noTopProductos">
+                      <div class="top-item" *ngFor="let producto of topProductos; let i = index">
+                        <div class="top-rank">{{ i + 1 }}</div>
+                        <div class="top-info">
+                          <div class="top-name">{{ producto.nombre }}</div>
+                          <div class="top-details">
+                            <span><i class="fas fa-box"></i> {{ producto.cantidad }} unidades</span>
+                            <span><i class="fas fa-shopping-cart"></i> {{ producto.ventas }} ventas</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-template #noTopProductos>
+                      <div class="empty-state" *ngIf="!isLoading">
+                        <i class="fas fa-box"></i>
+                        <p>No hay productos vendidos</p>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">
+                      <i class="fas fa-users"></i>
+                      Top 5 Clientes
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <!-- Skeleton Top List -->
+                    <div class="top-list skeleton-shimmer" *ngIf="isLoading">
+                      <div class="top-item" *ngFor="let i of [1,2,3,4,5]">
+                        <div class="top-rank skeleton-text-shimmer" style="width: 30px; height: 30px; border-radius: 50%;"></div>
+                        <div class="top-info" style="flex: 1;">
+                          <div class="top-name skeleton-text-shimmer" style="width: 60%; height: 16px; margin-bottom: 8px;"></div>
+                          <div class="top-details" style="display: flex; gap: 12px;">
+                            <span class="skeleton-text-shimmer" style="width: 80px; height: 14px;"></span>
+                            <span class="skeleton-text-shimmer" style="width: 80px; height: 14px;"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Top List Real -->
+                    <div class="top-list" *ngIf="!isLoading && topClientes.length > 0; else noTopClientes">
+                      <div class="top-item" *ngFor="let cliente of topClientes; let i = index">
+                        <div class="top-rank">{{ i + 1 }}</div>
+                        <div class="top-info">
+                          <div class="top-name">{{ cliente.nombre }}</div>
+                          <div class="top-details">
+                            <span><i class="fas fa-dollar-sign"></i> {{ cliente.total | currency:'USD':'symbol':'1.0-0' }}</span>
+                            <span><i class="fas fa-shopping-cart"></i> {{ cliente.ventas }} compras</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-template #noTopClientes>
+                      <div class="empty-state" *ngIf="!isLoading">
+                        <i class="fas fa-users"></i>
+                        <p>No hay clientes registrados</p>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="row mb-3">
+              <!-- Skeleton Loaders -->
+              <div class="col-md-6 mb-3" *ngIf="isLoading">
+                <div class="card skeleton-shimmer">
+                  <div class="card-header">
+                    <h5 class="card-title skeleton-text-shimmer" style="width: 60%; height: 18px;"></h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="info-item">
+                      <div class="skeleton-icon-shimmer" style="width: 24px; height: 24px; border-radius: 4px;"></div>
+                      <span class="skeleton-text-shimmer" style="width: 120px; height: 16px; display: inline-block;"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3" *ngIf="isLoading">
+                <div class="card skeleton-shimmer">
+                  <div class="card-header">
+                    <h5 class="card-title skeleton-text-shimmer" style="width: 60%; height: 18px;"></h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="info-item">
+                      <div class="skeleton-icon-shimmer" style="width: 24px; height: 24px; border-radius: 4px;"></div>
+                      <span class="skeleton-text-shimmer" style="width: 120px; height: 16px; display: inline-block;"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cards Reales -->
+              <div class="col-md-6 mb-3" *ngIf="!isLoading">
             <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">
+                      <i class="fas fa-credit-card"></i>
+                      Método de Pago Más Usado
+                    </h5>
+                  </div>
               <div class="card-body">
-                <h5 class="card-title">Total de Ventas</h5>
-                <p class="card-text">{{ totalVentas }}</p>
+                    <div class="info-item">
+                      <i class="fas fa-money-bill-wave"></i>
+                      <span>{{ metodoPagoMasUsado }}</span>
+                    </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+              <div class="col-md-6 mb-3" *ngIf="!isLoading">
             <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">
+                      <i class="fas fa-user-tie"></i>
+                      Vendedor Más Activo
+                    </h5>
+                  </div>
               <div class="card-body">
-                <h5 class="card-title">Total Vendido</h5>
-                <p class="card-text">{{ totalVendido | currency }}</p>
+                    <div class="info-item">
+                      <i class="fas fa-user"></i>
+                      <span>{{ vendedorMasActivo }}</span>
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+
+            <!-- Ventas por Mes -->
+            <div class="row">
+              <div class="col-12">
             <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">
+                      <i class="fas fa-calendar-alt"></i>
+                      Ventas por Mes (Últimos 6 meses)
+                    </h5>
+                  </div>
               <div class="card-body">
-                <h5 class="card-title">Productos Vendidos</h5>
-                <p class="card-text">{{ productosVendidos }}</p>
+                    <!-- Skeleton Month Cards -->
+                    <div class="row skeleton-shimmer" *ngIf="isLoading">
+                      <div class="col-12 col-md-4 col-lg-3 mb-3" *ngFor="let i of [1,2,3,4,5,6]">
+                        <div class="month-card">
+                          <div class="month-card-body">
+                            <h6 class="month-title skeleton-text-shimmer" style="width: 70%; height: 18px;"></h6>
+                            <div class="month-stats">
+                              <div class="month-stat-item">
+                                <span class="stat-label skeleton-text-shimmer" style="width: 50px; height: 14px; display: inline-block;"></span>
+                                <span class="stat-number skeleton-text-shimmer" style="width: 40px; height: 14px; display: inline-block; margin-left: 8px;"></span>
+                              </div>
+                              <div class="month-stat-item">
+                                <span class="stat-label skeleton-text-shimmer" style="width: 50px; height: 14px; display: inline-block;"></span>
+                                <span class="stat-number skeleton-text-shimmer" style="width: 60px; height: 14px; display: inline-block; margin-left: 8px;"></span>
+                              </div>
+                              <div class="month-stat-item">
+                                <span class="stat-label skeleton-text-shimmer" style="width: 60px; height: 14px; display: inline-block;"></span>
+                                <span class="stat-number skeleton-text-shimmer" style="width: 40px; height: 14px; display: inline-block; margin-left: 8px;"></span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Month Cards Reales -->
+                    <div class="row" *ngIf="!isLoading && hasVentasPorMes(); else noVentasMes">
+                      <ng-container *ngFor="let mes of ventasPorMes | keyvalue">
+                        <div class="col-12 col-md-4 col-lg-3 mb-3">
+                          <div class="month-card">
+                            <div class="month-card-body">
+                              <h6 class="month-title">{{ mes.value.nombreMes }}</h6>
+                              <div class="month-stats">
+                                <div class="month-stat-item">
+                                  <span class="stat-label">Ventas:</span>
+                                  <span class="stat-number">{{ mes.value.totalVentas }}</span>
+                                </div>
+                                <div class="month-stat-item">
+                                  <span class="stat-label">Total:</span>
+                                  <span class="stat-number">{{ mes.value.totalVendido | currency }}</span>
+                                </div>
+                                <div class="month-stat-item">
+                                  <span class="stat-label">Productos:</span>
+                                  <span class="stat-number">{{ mes.value.productosVendidos }}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <ng-template #noVentasMes>
+                      <div class="empty-state" *ngIf="!isLoading">
+                        <i class="fas fa-inbox"></i>
+                        <p>No hay ventas registradas en los últimos 6 meses</p>
+                      </div>
+                    </ng-template>
+                  </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="row mb-2">
-          <div class="col-lg-6">
-            <a [routerLink]="['/venta/registrar']" class="btn btn-primary">Registrar venta</a>
+
+          <!-- Tab Lista de Ventas -->
+          <div class="tab-content" *ngIf="activeTab === 'ventas'">
+            <!-- Error Message -->
+            <div class="error-alert mb-3" *ngIf="isLoadingError && !isLoading">
+              <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                  <strong>Error al cargar datos</strong>
+                  <p>{{ errorMessage }}</p>
+                  <button class="btn btn-sm btn-primary mt-2" (click)="fetchAllSales()">
+                    <i class="fas fa-redo"></i> Reintentar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input type="text" class="form-control" placeholder="Buscar por cliente, trabajador o producto..." (input)="filterVentas($event)" [disabled]="isLoading">
           </div>
-          <div class="col-lg-6 text-right">
-            <input type="text" class="form-control" placeholder="Buscar..." (input)="filterVentas($event)">
           </div>
         </div>
+
         <div class="row">
           <div class="col-12">
             <div class="card">
               <div class="card-body">
-                <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-
-                <table class="table table-striped table-hover" *ngIf="!isLoading">
+                <!-- Skeleton Table -->
+                <div class="table-responsive skeleton-table-wrapper" *ngIf="isLoading">
+                  <table class="table table-skeleton">
+                    <thead>
+                      <tr>
+                        <th><div class="skeleton-text-shimmer" style="width: 100px; height: 16px; margin: 0 auto;"></div></th>
+                        <th><div class="skeleton-text-shimmer" style="width: 180px; height: 16px; margin: 0 auto;"></div></th>
+                        <th><div class="skeleton-text-shimmer" style="width: 150px; height: 16px; margin: 0 auto;"></div></th>
+                        <th><div class="skeleton-text-shimmer" style="width: 200px; height: 16px; margin: 0 auto;"></div></th>
+                        <th><div class="skeleton-text-shimmer" style="width: 120px; height: 16px; margin: 0 auto;"></div></th>
+                        <th><div class="skeleton-text-shimmer" style="width: 100px; height: 16px; margin: 0 auto;"></div></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+                        <td><div class="skeleton-text-shimmer" style="width: 80%; height: 16px; margin: 0 auto;"></div></td>
+                        <td>
+                          <div class="skeleton-fecha-wrapper">
+                            <div class="skeleton-text-shimmer" style="width: 70%; height: 16px; margin: 0 auto 4px;"></div>
+                            <div class="skeleton-text-shimmer" style="width: 50%; height: 12px; margin: 0 auto;"></div>
+                          </div>
+                        </td>
+                        <td><div class="skeleton-text-shimmer" style="width: 75%; height: 16px; margin: 0 auto;"></div></td>
+                        <td><div class="skeleton-text-shimmer" style="width: 85%; height: 16px; margin: 0 auto;"></div></td>
+                        <td><div class="skeleton-text-shimmer" style="width: 60%; height: 16px; margin: 0 auto;"></div></td>
+                        <td><div class="skeleton-text-shimmer" style="width: 70px; height: 32px; border-radius: 0.5rem; margin: 0 auto;"></div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Table Real -->
+                    <div class="table-responsive" *ngIf="!isLoading">
+                      <table class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th>Cliente</th>
                       <th>Fecha</th>
                       <th>Trabajador</th>
                       <th>Productos</th>
+                            <th>Total</th>
                       <th>Opciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let item of paginatedVentas">
                       <td>{{ item.idcliente.nombres }}</td>
-                      <td>{{ item.fecha | date: 'MMM d, y, h:mm:ss a' }}</td>
-                      <td>{{ item.iduser.nombres }} {{ item.iduser.apellidos }}</td>
-                      <td>{{ getProductosName(item.data_detalle) }}</td>
-                      <td>
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-cog"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" [routerLink]="['/venta/', item._id]">Detalle de venta</a>
+                      <td class="fecha-cell">
+                        <div class="fecha-venta">
+                          <div class="fecha-relativa-wrapper">
+                            <i class="fas fa-clock"></i>
+                            <span class="fecha-relativa">{{ getRelativeTime(item.fecha) }}</span>
+                          </div>
+                          <div class="fecha-absoluta-wrapper">
+                            <small class="fecha-absoluta">{{ item.fecha | date: 'dd/MM/yyyy' }}</small>
+                            <small class="fecha-hora">{{ item.fecha | date: 'HH:mm' }}</small>
                           </div>
                         </div>
+                      </td>
+                      <td>{{ item.iduser.nombres }} {{ item.iduser.apellidos }}</td>
+                            <td>
+                              <div class="productos-cell">
+                                <span class="text-productos">{{ getProductosName(item.data_detalle) }}</span>
+                                <button 
+                                  type="button" 
+                                  class="btn-view-products" 
+                                  [attr.title]="'Ver todos los productos'"
+                                  (click)="showProductosModal(item)">
+                                  <i class="fas fa-eye"></i>
+                          </button>
+                        </div>
+                            </td>
+                            <td>
+                              <strong class="total-venta-value">{{ item.total_venta | number:'1.0-0' }} <small>COP</small></strong>
+                            </td>
+                      <td>
+                        <button class="btn btn-detail" (click)="verDetalleVenta(item._id)" [attr.title]="'Ver detalle de la venta'">
+                          <i class="fas fa-eye"></i>
+                          <span>Ver detalle</span>
+                        </button>
+                      </td>
+                    </tr>
+                          <tr *ngIf="paginatedVentas.length === 0">
+                            <td colspan="6" class="text-center empty-table">
+                              <i class="fas fa-inbox"></i>
+                              <p>No se encontraron ventas</p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <nav *ngIf="totalPages() > 1">
+                    </div>
+
+                    <nav *ngIf="totalPages() > 1 && !isLoading" class="pagination-wrapper">
                   <ul class="pagination justify-content-center">
                     <li class="page-item" [class.disabled]="currentPage === 1">
                       <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
@@ -103,39 +725,476 @@
                     </li>
                   </ul>
                 </nav>
-
-
               </div>
             </div>
           </div>
         </div>
-
-        <div class="row mt-4">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Ventas por Mes</h5>
-                <div class="row">
-                  <ng-container *ngFor="let mes of ventasPorMes | keyvalue">
-                    <div class="col-12 col-md-4 mb-3">
-                      <div class="card">
-                        <div class="card-body">
-                          <h6 class="card-subtitle mb-2 text-muted">{{ mes.value.nombreMes }}</h6>
-                          <p class="card-text">Total Ventas: {{ mes.value.totalVentas }}</p>
-                          <p class="card-text">Total Vendido: {{ mes.value.totalVendido | currency }}</p>
-                          <p class="card-text">Productos Vendidos: {{ mes.value.productosVendidos }}</p>
                         </div>
                       </div>
                     </div>
-                  </ng-container>
+    </main>
+                </div>
+              </div>
+
+<!-- Modal para ver productos completos -->
+<div class="modal fade" id="productosModal" tabindex="-1" role="dialog" aria-labelledby="productosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productosModalLabel">
+          <i class="fas fa-shopping-cart"></i>
+          Productos de la Venta
+          <span class="badge badge-count" *ngIf="selectedVentaInfo">{{ selectedVentaInfo.idcliente?.nombres || 'Cliente' }}</span>
+        </h5>
+        <button type="button" class="close" (click)="closeProductosModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Buscador -->
+        <div class="productos-search-wrapper" *ngIf="selectedVentaProductos.length > 0">
+          <div class="search-box-productos">
+            <i class="fas fa-search"></i>
+            <input 
+              type="text" 
+              class="form-control search-input-productos" 
+              placeholder="Buscar producto por nombre o ID..." 
+              [(ngModel)]="busquedaProductosModal"
+              (input)="filtrarProductosModal()"
+              [ngModelOptions]="{standalone: true}">
+            <button 
+              type="button" 
+              class="btn-clear-search-productos" 
+              *ngIf="busquedaProductosModal"
+              (click)="limpiarBusquedaProductosModal()"
+              title="Limpiar búsqueda">
+              <i class="fas fa-times"></i>
+            </button>
+            </div>
+          <div class="productos-count-modal">
+            <span *ngIf="selectedVentaProductosFiltrados.length === selectedVentaProductos.length">
+              {{ selectedVentaProductos.length }} producto(s)
+            </span>
+            <span *ngIf="selectedVentaProductosFiltrados.length !== selectedVentaProductos.length">
+              {{ selectedVentaProductosFiltrados.length }} de {{ selectedVentaProductos.length }} producto(s)
+            </span>
+          </div>
+        </div>
+
+        <div class="productos-modal-content" *ngIf="selectedVentaProductos.length > 0 && selectedVentaProductosFiltrados.length > 0">
+          <div class="productos-table-wrapper">
+            <table class="table table-productos-modal">
+              <thead>
+                <tr>
+                  <th class="product-col">Producto</th>
+                  <th class="quantity-col">Cantidad</th>
+                  <th class="price-col">Precio Unitario</th>
+                  <th class="subtotal-col">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of selectedVentaProductosFiltrados">
+                  <td class="product-cell">
+                    <div class="product-info-modal">
+                      <div class="product-image-modal-wrapper" 
+                           (click)="verImagenProductoDetalle(item.producto)"
+                           [attr.data-producto-id]="item.producto?._id"
+                           *ngIf="item.producto">
+                        <img *ngIf="getProductImageModal(item.producto)" 
+                             [src]="getProductImageModal(item.producto)" 
+                             [alt]="item.producto.titulo" 
+                             class="product-image-modal">
+                        <div *ngIf="isImageLoadingModal(item.producto)" class="producto-loading-image-small">
+                          <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <div *ngIf="!getProductImageModal(item.producto) && !isImageLoadingModal(item.producto)" class="product-no-image-modal">
+                          <i class="fas fa-image"></i>
+                        </div>
+                      </div>
+                      <div class="product-details-modal">
+                        <div class="product-id-modal">ID: {{ item.producto?.identificador || 'N/A' }}</div>
+                        <div class="product-title-modal" [title]="item.producto?.titulo || 'Producto sin nombre'">{{ item.producto?.titulo || 'Producto sin nombre' }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="quantity-cell">
+                    <span class="quantity-badge-modal">{{ item.cantidad }}</span>
+                  </td>
+                  <td class="price-cell">
+                    <span class="price-value-modal">{{ item.precio_venta | number:'1.0-0' }} <small>COP</small></span>
+                  </td>
+                  <td class="subtotal-cell">
+                    <span class="subtotal-value-modal">{{ item.subtotal | number:'1.0-0' }} <small>COP</small></span>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3" class="text-right total-label-modal">
+                    <strong>Total:</strong>
+                  </td>
+                  <td class="total-amount-modal">
+                    <strong>{{ getTotalVentaProductos() | number:'1.0-0' }} <small>COP</small></strong>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sin resultados de búsqueda -->
+        <div class="empty-productos" *ngIf="selectedVentaProductos.length > 0 && selectedVentaProductosFiltrados.length === 0">
+          <i class="fas fa-search"></i>
+          <p>No se encontraron productos que coincidan con "{{ busquedaProductosModal }}"</p>
+          <button type="button" class="btn btn-secondary btn-sm mt-2" (click)="limpiarBusquedaProductosModal()">
+            <i class="fas fa-times"></i>
+            Limpiar búsqueda
+          </button>
+        </div>
+
+        <!-- Estado vacío -->
+        <div class="empty-productos" *ngIf="selectedVentaProductos.length === 0">
+          <i class="fas fa-inbox"></i>
+          <p>No hay productos para mostrar</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeProductosModal()">
+          <i class="fas fa-times"></i>
+          Cerrar
+        </button>
+            </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal Detalle de Venta -->
+<div class="modal fade" id="modalDetalleVenta" tabindex="-1" role="dialog" aria-labelledby="modalDetalleVentaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDetalleVentaLabel">
+          <i class="fas fa-receipt"></i>
+          Detalle de Venta
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModalDetalleVenta()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Skeleton Loader -->
+        <div class="venta-detalle-skeleton" *ngIf="isLoadingDetalleVenta">
+          <!-- Summary Cards Skeleton -->
+          <div class="row mb-4">
+            <div class="col-md-4 mb-3" *ngFor="let i of [1,2,3]">
+              <div class="summary-card skeleton-shimmer">
+                <div class="summary-icon skeleton-shimmer" style="width: 56px; height: 56px; border-radius: 0.75rem;"></div>
+                <div class="summary-info" style="flex: 1;">
+                  <div class="skeleton-text-shimmer" style="width: 60%; height: 14px; margin-bottom: 0.5rem;"></div>
+                  <div class="skeleton-text-shimmer" style="width: 80%; height: 24px; margin-bottom: 0.25rem;"></div>
+                  <div class="skeleton-text-shimmer" style="width: 50%; height: 12px;"></div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Info Cards Skeleton -->
+          <div class="row mb-4">
+            <div class="col-md-6 mb-3" *ngFor="let i of [1,2]">
+              <div class="info-card skeleton-shimmer">
+                <div class="info-card-header">
+                  <div class="skeleton-text-shimmer" style="width: 24px; height: 24px; border-radius: 4px; margin-right: 0.75rem;"></div>
+                  <div class="skeleton-text-shimmer" style="width: 150px; height: 18px;"></div>
+                </div>
+                <div class="info-card-body">
+                  <div class="info-item" *ngFor="let j of [1,2,3]">
+                    <div class="skeleton-text-shimmer" style="width: 100px; height: 14px;"></div>
+                    <div class="skeleton-text-shimmer" style="width: 150px; height: 14px; margin-left: auto;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products Table Skeleton -->
+          <div class="card products-card skeleton-shimmer">
+            <div class="card-header">
+              <div class="skeleton-text-shimmer" style="width: 150px; height: 18px;"></div>
+              <div class="skeleton-text-shimmer" style="width: 60px; height: 24px; border-radius: 0.375rem;"></div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-products">
+                  <thead>
+                    <tr>
+                      <th *ngFor="let i of [1,2,3,4,5,6]">
+                        <div class="skeleton-text-shimmer" style="width: 80px; height: 14px; margin: 0 auto;"></div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of [1,2,3,4]">
+                      <td *ngFor="let j of [1,2,3,4,5,6]">
+                        <div class="skeleton-text-shimmer" style="width: 90%; height: 16px; margin: 0 auto;"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <!-- Error State -->
+        <div class="error-container" *ngIf="errorDetalleVenta && !isLoadingDetalleVenta">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+              <strong>Error al cargar la venta</strong>
+              <p>{{ errorDetalleVenta }}</p>
+            </div>
+          </div>
+        </div>
 
+        <!-- Main Content -->
+        <div class="venta-detalle-content" *ngIf="!isLoadingDetalleVenta && !errorDetalleVenta && ventaDetalleSeleccionada && ventaDetalleSeleccionada._id">
+          <!-- Summary Cards -->
+          <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+              <div class="summary-card summary-card-primary">
+                <div class="summary-icon">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="summary-info">
+                  <h6 class="summary-label">Fecha de Venta</h6>
+                  <p class="summary-value">{{ ventaDetalleSeleccionada.fecha | date:'dd/MM/yyyy' }}</p>
+                  <small class="summary-time">{{ ventaDetalleSeleccionada.fecha | date:'HH:mm:ss' }}</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="summary-card summary-card-success">
+                <div class="summary-icon">
+                  <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="summary-info">
+                  <h6 class="summary-label">Total de Venta</h6>
+                  <p class="summary-value">{{ getTotalDetalleVenta() | number:'1.0-0' }} <span class="currency-code">COP</span></p>
+                  <small class="summary-subtitle">{{ detalleVentaSeleccionada.length }} producto(s)</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="summary-card summary-card-info">
+                <div class="summary-icon">
+                  <i class="fas fa-boxes"></i>
+                </div>
+                <div class="summary-info">
+                  <h6 class="summary-label">Total de Unidades</h6>
+                  <p class="summary-value">{{ getTotalCantidadDetalleVenta() }}</p>
+                  <small class="summary-subtitle">Unidades vendidas</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client and Seller Info -->
+          <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+              <div class="info-card">
+                <div class="info-card-header">
+                  <i class="fas fa-user"></i>
+                  <h5>Información del Cliente</h5>
+                </div>
+                <div class="info-card-body">
+                  <div class="info-item">
+                    <span class="info-label">
+                      <i class="fas fa-user-circle"></i>
+                      Nombre:
+                    </span>
+                    <span class="info-value">{{ ventaDetalleSeleccionada.idcliente?.nombres || 'N/A' }}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">
+                      <i class="fas fa-envelope"></i>
+                      Correo:
+                    </span>
+                    <span class="info-value">{{ ventaDetalleSeleccionada.idcliente?.correo || 'N/A' }}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">
+                      <i class="fas fa-id-card"></i>
+                      DNI:
+                    </span>
+                    <span class="info-value">{{ ventaDetalleSeleccionada.idcliente?.dni || 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="info-card">
+                <div class="info-card-header">
+                  <i class="fas fa-user-tie"></i>
+                  <h5>Información del Vendedor</h5>
+                </div>
+                <div class="info-card-body">
+                  <div class="info-item">
+                    <span class="info-label">
+                      <i class="fas fa-user-circle"></i>
+                      Nombre:
+                    </span>
+                    <span class="info-value">{{ ventaDetalleSeleccionada.iduser?.nombres }} {{ ventaDetalleSeleccionada.iduser?.apellidos }}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">
+                      <i class="fas fa-envelope"></i>
+                      Correo:
+                    </span>
+                    <span class="info-value">{{ ventaDetalleSeleccionada.iduser?.email || 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products Table -->
+          <div class="card products-card">
+            <div class="card-header">
+              <h5 class="card-title">
+                <i class="fas fa-shopping-cart"></i>
+                Productos Vendidos
+              </h5>
+              <span class="badge badge-count">{{ detalleVentaSeleccionada.length }} producto(s)</span>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-products">
+                  <thead>
+                    <tr>
+                      <th class="product-col">Producto</th>
+                      <th class="price-col">Precio Compra</th>
+                      <th class="price-col">Precio Venta</th>
+                      <th class="quantity-col">Cantidad</th>
+                      <th class="subtotal-col">Subtotal</th>
+                      <th class="margin-col">Ganancia</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of detalleVentaSeleccionada; let i = index">
+                      <td class="product-cell">
+                        <div class="product-info">
+                          <div class="product-image-wrapper" (click)="verImagenProductoDetalle(item.idproducto)">
+                            <img *ngIf="item.idproducto?.imagenes && item.idproducto.imagenes[0]"
+                                 [src]="item.idproducto.imagenes[0].imagen"
+                                 [alt]="item.idproducto.titulo"
+                                 class="product-image">
+                            <div *ngIf="!item.idproducto?.imagenes || !item.idproducto.imagenes[0]" class="product-no-image">
+                              <i class="fas fa-image"></i>
+                            </div>
+                          </div>
+                          <div class="product-details">
+                            <div class="product-id">ID: {{ item.idproducto?.identificador || 'N/A' }}</div>
+                            <div class="product-title">{{ item.idproducto?.titulo || 'Producto sin nombre' }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="price-cell">
+                        <span class="price-value price-compra">{{ item.idproducto?.precio_compra | number:'1.0-0' }} <small>COP</small></span>
+                      </td>
+                      <td class="price-cell">
+                        <span class="price-value price-venta">{{ item.precio_venta | number:'1.0-0' }} <small>COP</small></span>
+                        <small class="price-suggested" *ngIf="item.idproducto?.precio_venta && item.precio_venta != item.idproducto.precio_venta">
+                          Sugerido: {{ item.idproducto.precio_venta | number:'1.0-0' }}
+                        </small>
+                      </td>
+                      <td class="quantity-cell">
+                        <span class="quantity-badge">{{ item.cantidad }}</span>
+                      </td>
+                      <td class="subtotal-cell">
+                        <span class="subtotal-value">{{ (item.precio_venta * item.cantidad) | number:'1.0-0' }} <small>COP</small></span>
+                      </td>
+                      <td class="margin-cell">
+                        <span class="margin-value" [class.positive]="getMargenGananciaDetalle(item) >= 0" [class.negative]="getMargenGananciaDetalle(item) < 0">
+                          <i class="fas" [class.fa-arrow-up]="getMargenGananciaDetalle(item) >= 0" [class.fa-arrow-down]="getMargenGananciaDetalle(item) < 0"></i>
+                          {{ getMargenGananciaDetalle(item) | number:'1.0-0' }} <small>COP</small>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" class="text-right total-label">
+                        <strong>Total de la Venta:</strong>
+                      </td>
+                      <td class="total-quantity">
+                        <strong>{{ getTotalCantidadDetalleVenta() }}</strong>
+                      </td>
+                      <td class="total-amount" colspan="2">
+                        <strong>{{ getTotalDetalleVenta() | number:'1.0-0' }} <span class="currency-code">COP</span></strong>
+                      </td>
+                    </tr>
+                    <tr class="profit-row">
+                      <td colspan="4" class="text-right profit-label">
+                        <strong>Ganancia Total:</strong>
+                      </td>
+                      <td class="profit-amount" colspan="2">
+                        <strong [class.positive]="getTotalGananciaDetalleVenta() >= 0" [class.negative]="getTotalGananciaDetalleVenta() < 0">
+                          {{ getTotalGananciaDetalleVenta() | number:'1.0-0' }} <span class="currency-code">COP</span>
+                        </strong>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comments Section -->
+          <div class="card comments-card" *ngIf="ventaDetalleSeleccionada.comentarios">
+            <div class="card-header">
+              <h5 class="card-title">
+                <i class="fas fa-comment-alt"></i>
+                Comentarios
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="comments-content">
+                <p>{{ ventaDetalleSeleccionada.comentarios }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalDetalleVenta()">
+          <i class="fas fa-times"></i>
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Imagen Producto Detalle -->
+<div class="modal fade" id="modalImagenProductoDetalle" tabindex="-1" role="dialog" aria-labelledby="modalImagenProductoDetalleLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalImagenProductoDetalleLabel">
+          <i class="fas fa-image"></i>
+          {{ productoImagenSeleccionado?.titulo || 'Imagen del Producto' }}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModalImagenProductoDetalle()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img *ngIf="imagenProductoSeleccionada" [src]="imagenProductoSeleccionada" alt="Imagen del producto" class="img-fluid product-image-large">
+        <div *ngIf="!imagenProductoSeleccionada" class="no-image-large">
+          <i class="fas fa-image"></i>
+          <p>No hay imagen disponible</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

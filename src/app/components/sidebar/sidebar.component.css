@@ -1,180 +1,642 @@
-@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+/* ============================================
+   SIDEBAR MODERNO Y ELEGANTE
+   ============================================ */
 
-@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
-.main-menu>ul.logout {
-    position: absolute;
+app-sidebar {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    z-index: 1000 !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+.main-menu {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    border-right: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    width: 80px;
+    overflow: hidden;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000 !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Ajustar el contenido principal cuando el sidebar está presente */
+:host-context(.wrapper) ~ .main,
+:host-context(.wrapper) + * .main {
+    margin-left: 80px;
+    transition: margin-left 0.3s ease;
+}
+
+.main-menu:hover ~ * .main,
+:host-context(.wrapper:hover) ~ * .main {
+    margin-left: 280px;
+}
+
+/* Cuando el menú está fijado, siempre ajustar el contenido */
+.main-menu.menu-fixed ~ * .main,
+:host-context(.wrapper) .main-menu.menu-fixed ~ * .main,
+:host-context(.wrapper) app-sidebar .menu-fixed ~ * .main {
+    margin-left: 280px !important;
+}
+
+.main-menu:hover,
+.main-menu.menu-fixed {
+    width: 280px;
+    overflow: hidden;
+}
+
+.main-menu.menu-fixed {
+    overflow: hidden;
+}
+
+.main-menu.menu-fixed .sidebar-brand {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.main-menu.menu-fixed .sidebar-user {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.main-menu.menu-fixed .sidebar-link span {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.main-menu.menu-fixed .sidebar-header {
+    justify-content: flex-start;
+}
+
+/* Asegurar que el fondo cubra toda la altura incluso con scroll */
+.main-menu {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    background-attachment: local !important;
+}
+
+.main-menu::after {
+    content: '';
+    position: fixed;
+    top: 0;
     left: 0;
-    bottom: 0;
+    width: 280px;
+    height: 100vh;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.main-menu:hover::after,
+.main-menu.menu-fixed::after {
+    opacity: 1;
+}
+
+.main-menu .sidebar-content,
+.main-menu .sidebar-brand,
+.main-menu .logout {
+    background: transparent !important;
+}
+
+.main-menu:hover .sidebar-brand {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.main-menu:hover .sidebar-user {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.main-menu:hover .sidebar-link span {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Sidebar Brand */
+.sidebar-brand {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease;
+    margin-top: 0;
+    background: transparent !important;
+    flex-shrink: 0;
+    order: 999;
+}
+
+.sidebar-brand a {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.sidebar-brand a:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sidebar-brand a i {
+    font-size: 0.875rem;
+    color: #6366f1;
+}
+
+.sidebar-brand a span {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.main-menu:hover .sidebar-brand a span,
+.main-menu.menu-fixed .sidebar-brand a span {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Botón para fijar el menú */
+.menu-fix-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 0.75rem;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(99, 102, 241, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.main-menu:hover .menu-fix-toggle,
+.main-menu.menu-fixed .menu-fix-toggle {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.menu-fix-toggle:hover {
+    background: rgba(99, 102, 241, 0.4);
+    transform: scale(1.1);
+}
+
+.menu-fix-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.menu-fix-toggle:hover i {
+    transform: rotate(45deg);
+}
+
+/* Sidebar Content */
+.sidebar-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+    height: 100vh;
+    max-height: 100vh;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    overflow: hidden;
+}
+
+.sidebar-content * {
+    background: transparent !important;
+}
+
+.sidebar-nav {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex: 1;
+    background: transparent !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 0.5rem;
+}
+
+.sidebar-nav li {
+    background: transparent !important;
 }
 
 .sidebar-header {
-    padding: 0px;
-    font-size: 14px;
-    width: auto !important;
-    text-align: center;
-    height: 6%;
+    padding: 1rem 1.5rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin-bottom: 0.5rem !important;
     display: flex !important;
-    justify-content: center !important;
     align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
 }
 
+.main-menu:hover .sidebar-header {
+    justify-content: flex-start;
+}
+
+/* Sidebar Items */
+.sidebar-item {
+    position: relative;
+    margin: 0.25rem 0.75rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: transparent !important;
+}
+
+.sidebar-item * {
+    background: transparent !important;
+}
+
+.sidebar-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.875rem 1rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    background: transparent !important;
+}
+
+.sidebar-link,
+.sidebar-link *,
+.sidebar-link i,
+.sidebar-link span,
+.sidebar-link .align-middle {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sidebar-link i.fas,
+.sidebar-link i.fa,
+.sidebar-link i {
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: transparent !important;
+}
+
+.sidebar-link span,
+.sidebar-link .align-middle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: transparent !important;
+}
+
+.sidebar-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-link:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.sidebar-link:hover::before {
+    transform: scaleY(1);
+}
+
+.sidebar-item.active .sidebar-link {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.sidebar-item.active .sidebar-link i {
+    color: #ffffff !important;
+}
+
+.sidebar-item.active .sidebar-link::before {
+    transform: scaleY(1);
+}
+
+.sidebar-link i.fas,
+.sidebar-link i.fa,
+.sidebar-link i.fa-fw,
+.sidebar-link i.fa-balance-scale,
+.sidebar-link i.fa-shapes,
+.sidebar-link i.fa-book,
+.sidebar-link i.fa-hospital-user,
+.sidebar-link i.fa-donate,
+.sidebar-link i.fa-sign-out-alt,
+.sidebar-link i {
+    font-size: 1.25rem !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    text-align: center !important;
+    margin-right: 1rem !important;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: transparent !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome" !important;
+    font-weight: 900 !important;
+}
+
+.sidebar-link:hover i {
+    transform: scale(1.1);
+}
+
+.sidebar-link span,
+.sidebar-link .align-middle {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.9) !important;
+    background: transparent !important;
+}
+
+/* Sidebar User */
+.sidebar-user {
+    padding: 1rem 1rem 0.75rem 1rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease;
+    background: transparent !important;
+    flex-shrink: 0;
+}
+
+.sidebar-user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    margin-bottom: 0.625rem;
+    transition: all 0.3s ease;
+    object-fit: cover;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-menu:hover .sidebar-user img,
+.main-menu.menu-fixed .sidebar-user img {
+    border-color: #6366f1;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.sidebar-user .font-weight-bold {
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.sidebar-user small {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.6875rem;
+    display: block;
+    line-height: 1.3;
+}
+
+/* Logout */
 .logout {
     list-style: none;
-    padding-left: 0px;
-}
-
-.fa-2x {
-    font-size: 2em;
-}
-
-.fa {
-    position: relative;
-    display: table-cell;
-    width: 60px;
-    height: 36px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 20px;
-}
-
-
-.main-menu:hover,
-nav.main-menu.expanded {
-    width: 250px;
-    overflow: visible;
-}
-
-.main-menu:hover>.sidebar-brand,
-.main-menu:hover>.sidebar-content>.sidebar-user {
-    display: block;
-}
-
-.main-menu>.sidebar-brand,
-.main-menu>.sidebar-content>.sidebar-user {
-    display: none;
-}
-
-
-.main-menu {
-    background: #212121;
-    border-right: 1px solid #e5e5e5;
-    /* position: absolute; */
-    top: 0;
-    bottom: 0;
-    height: 100%;
-    left: 0;
-    width: 60px;
-    overflow: hidden;
-    -webkit-transition: width .05s linear;
-    transition: width .05s linear;
-    -webkit-transform: translateZ(0) scale(1, 1);
-    z-index: 1000;
-}
-
-.main-menu>ul {
-    margin: 7px 0;
-}
-
-.main-menu li {
-    position: relative;
-    display: block;
-    width: 250px;
-}
-
-.main-menu i {
-    font-size: 20px;
-    margin-right: 15px !important;
-}
-
-/* .main-menu li>a {
-    position: relative;
-    display: table;
-    border-collapse: collapse;
-    border-spacing: 0;
-    color: #999;
-    font-family: arial;
-    font-size: 14px;
-    text-decoration: none;
-    -webkit-transform: translateZ(0) scale(1, 1);
-    -webkit-transition: all .1s linear;
-    transition: all .1s linear;
-
-} */
-/* 
-.main-menu .nav-icon {
-    position: relative;
-    display: table-cell;
-    width: 60px;
-    height: 36px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 18px;
-} */
-
-/* .main-menu .nav-text {
-    position: relative;
-    display: table-cell;
-    vertical-align: middle;
-    width: 190px;
-    font-family: 'Titillium Web', sans-serif;
-} */
-
-
-
-/* .no-touch .scrollable.hover {
-    overflow-y: hidden;
-}
-
-.no-touch .scrollable.hover:hover {
-    overflow-y: auto;
-    overflow: visible;
-}
-*/
-
-a:hover,
-a:focus {
-    text-decoration: none;
-}
-
-/* nav {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
-
-nav ul,
-nav li {
-    outline: 0;
-    margin: 0;
     padding: 0;
-}  */
-
-.main-menu li:hover>a,
-nav.main-menu li.active>a,
-.dropdown-menu>li>a:hover,
-.dropdown-menu>li>a:focus,
-.dropdown-menu>.active>a,
-.dropdown-menu>.active>a:hover,
-.dropdown-menu>.active>a:focus,
-.no-touch .dashboard-page nav.dashboard-menu ul li:hover a,
-.dashboard-page nav.dashboard-menu ul li.active a {
-    color: #fff;
-    background-color: #5fa2db;
+    margin: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background: transparent !important;
+    flex-shrink: 0;
 }
 
-.area {
-    float: left;
-    background: #e2e2e2;
-    width: 100%;
-    height: 100%;
+.logout .sidebar-item {
+    margin: 0.5rem 0.75rem;
 }
 
-@font-face {
-    font-family: 'Titillium Web';
-    font-style: normal;
-    font-weight: 300;
-    src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
+.logout .sidebar-link {
+    color: rgba(239, 68, 68, 0.9) !important;
 }
+
+.logout .sidebar-link:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+}
+
+.logout .sidebar-link i,
+.logout .sidebar-link i.fas,
+.logout .sidebar-link i.fa {
+    color: rgba(239, 68, 68, 0.9) !important;
+    background: transparent !important;
+}
+
+.logout .sidebar-link:hover i,
+.logout .sidebar-link:hover i.fas,
+.logout .sidebar-link:hover i.fa {
+    color: #ef4444 !important;
+}
+
+.logout .sidebar-link span,
+.logout .sidebar-link .align-middle {
+    color: rgba(239, 68, 68, 0.9) !important;
+}
+
+.logout .sidebar-link:hover span,
+.logout .sidebar-link:hover .align-middle {
+    color: #ef4444 !important;
+}
+
+/* Scrollbar personalizado para sidebar */
+.main-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.main-menu::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5) !important;
+    border-radius: 3px;
+}
+
+.main-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 3px;
+    border: 1px solid rgba(30, 41, 59, 0.3);
+}
+
+.main-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Firefox scrollbar */
+.main-menu {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(15, 23, 42, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-menu {
+        width: 60px;
+        transform: translateX(0);
+    }
+    
+    .main-menu:hover {
+        width: 220px;
+        transform: translateX(0);
+    }
+    
+    .sidebar-link {
+        padding: 0.625rem 0.75rem !important;
+    }
+    
+    .sidebar-link i.fas,
+    .sidebar-link i.fa,
+    .sidebar-link i {
+        font-size: 1rem !important;
+        width: 20px !important;
+        min-width: 20px !important;
+        margin-right: 0.75rem !important;
+    }
+    
+    .sidebar-brand {
+        padding: 1rem 0.5rem;
+    }
+    
+    .sidebar-brand a {
+        font-size: 1rem;
+    }
+    
+    .sidebar-brand svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .sidebar-user {
+        padding: 1rem 0.5rem;
+    }
+    
+    .sidebar-user img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .sidebar-header {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.625rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-menu {
+        width: 50px;
+    }
+    
+    .main-menu:hover {
+        width: 200px;
+    }
+    
+    .sidebar-link {
+        padding: 0.5rem 0.5rem !important;
+    }
+    
+    .sidebar-link i.fas,
+    .sidebar-link i.fa,
+    .sidebar-link i {
+        font-size: 0.875rem !important;
+        width: 18px !important;
+        min-width: 18px !important;
+        margin-right: 0.5rem !important;
+    }
+    
+    .sidebar-brand {
+        padding: 0.75rem 0.25rem;
+    }
+    
+    .sidebar-brand a {
+        font-size: 0.875rem;
+    }
+    
+    .sidebar-brand svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .sidebar-user {
+        padding: 0.75rem 0.25rem;
+    }
+    
+    .sidebar-user img {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.sidebar-item {
+    animation: slideIn 0.3s ease backwards;
+}
+
+.sidebar-item:nth-child(1) { animation-delay: 0.05s; }
+.sidebar-item:nth-child(2) { animation-delay: 0.1s; }
+.sidebar-item:nth-child(3) { animation-delay: 0.15s; }
+.sidebar-item:nth-child(4) { animation-delay: 0.2s; }
+.sidebar-item:nth-child(5) { animation-delay: 0.25s; }
+.sidebar-item:nth-child(6) { animation-delay: 0.3s; }

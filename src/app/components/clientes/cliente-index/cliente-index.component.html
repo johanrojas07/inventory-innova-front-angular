@@ -1,78 +1,181 @@
 <div class="wrapper">
-    <app-sidebar style="background: white !important;"></app-sidebar>
+    <app-sidebar></app-sidebar>
 
     <div class="main">
-        <!-- <nav class="navbar navbar-expand navbar-theme">
-            <a class="sidebar-toggle d-flex mr-2">
-                <i class="hamburger align-self-center"></i>
-            </a>
-        </nav> -->
-        <main class="content">
+        <main class="content mt-1">
             <div class="container-fluid">
-
-                <div class="header">
+                <div class="header mb-1">
                     <h1 class="header-title">
-                        Clientes
+                        <span>Clientes</span>
+                        <button class="btn btn-primary btn-nuevo" (click)="openNuevoClienteModal()">
+                            <i class="fas fa-plus"></i>
+                            <span>Nuevo Cliente</span>
+                        </button>
                     </h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <!-- <li class="breadcrumb-item"><a [routerLink]="['/dashboard']" >Dashboard</a></li> -->
                             <li class="breadcrumb-item"><a>Clientes</a></li>
                         </ol>
                     </nav>
                 </div>
+
                 <div class="row">
-                    
-                    <div class="col-12 col-xl-12">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title">Listado de clientes</h5>
-       
-                                <a [routerLink]="['/cliente/registrar']"  class="btn btn-primary">Nuevo cliente</a>
+                                <h5 class="card-title">
+                                    <i class="fas fa-users"></i>
+                                    Listado de Clientes
+                                </h5>
                             </div>
-                            <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nombres</th>
-                                        <th>DNI</th>
-                                        <th>Correo</th>
-                                        <th>Opciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngFor="let item of clientes | paginate: { itemsPerPage: 15, currentPage: paginator }">                                 
-                                        <td>
-                                            {{item.nombres}}
-                                        </td>
-                                        <td>{{item.dni}}</td>
-                                        <td>{{item.correo}}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn mb-1 btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-cog"></i>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" [routerLink]="['/cliente/editar/',item._id]" >Editar registro</a>
-                                                   
-                                                    <a class="dropdown-item" (click)="eliminar(item._id)">Eliminar registro</a>
-                                             
-                                                </div>
-                                            </div>
-                                        </td>  
-                                        
-                          
-                                </tbody>
-                            </table>
+                            <div class="card-body">
+                                <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+                                
+                                <div class="table-responsive" *ngIf="!isLoading">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th><i class="fas fa-user"></i> Nombres</th>
+                                                <th><i class="fas fa-id-card"></i> DNI</th>
+                                                <th><i class="fas fa-envelope"></i> Correo</th>
+                                                <th class="text-center"><i class="fas fa-cog"></i> Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of clientes | paginate: { itemsPerPage: 15, currentPage: paginator }">
+                                                <td>
+                                                    <div class="client-name">
+                                                        <i class="fas fa-user-circle"></i>
+                                                        <span>{{item.nombres}}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{{item.dni}}</td>
+                                                <td>
+                                                    <a [href]="'mailto:' + item.correo" class="email-link">
+                                                        <i class="fas fa-envelope"></i>
+                                                        {{item.correo}}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group-actions">
+                                                        <button type="button" class="btn btn-sm btn-edit" (click)="openEditarClienteModal(item)" title="Editar">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-delete" (click)="eliminar(item._id)" title="Eliminar">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="!clientes || clientes.length === 0">
+                                                <td colspan="4" class="text-center empty-table">
+                                                    <i class="fas fa-users"></i>
+                                                    <p>No hay clientes registrados</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <pagination-controls (pageChange)="paginator = $event"></pagination-controls>
+                    <pagination-controls (pageChange)="paginator = $event" *ngIf="clientes && clientes.length > 15"></pagination-controls>
                 </div>
-
-
-
-               
             </div>
         </main>
-       
+    </div>
+</div>
+
+<!-- Modal Nuevo Cliente -->
+<div class="modal fade" id="modalNuevoCliente" tabindex="-1" role="dialog" aria-labelledby="modalNuevoClienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNuevoClienteLabel">
+                    <i class="fas fa-user-plus"></i>
+                    Registrar Nuevo Cliente
+                </h5>
+                <button type="button" class="close" (click)="closeNuevoClienteModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #clienteForm="ngForm" (ngSubmit)="onSubmitNuevoCliente(clienteForm)">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nombres del Cliente</label>
+                        <input type="text" class="form-control" #nombres="ngModel" name="nombres" 
+                            [(ngModel)]="clienteNuevo.nombres" placeholder="Nombres completos" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" class="form-control" #correo="ngModel" name="correo" 
+                            [(ngModel)]="clienteNuevo.correo" placeholder="correo@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> DNI del Cliente</label>
+                        <input type="number" class="form-control" #dni="ngModel" name="dni" 
+                            [(ngModel)]="clienteNuevo.dni" placeholder="Número de identificación" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeNuevoClienteModal()">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+                            <i class="fas fa-save" *ngIf="!isSaving"></i>
+                            <i class="fas fa-spinner fa-spin" *ngIf="isSaving"></i>
+                            {{isSaving ? 'Guardando...' : 'Registrar Cliente'}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Cliente -->
+<div class="modal fade" id="modalEditarCliente" tabindex="-1" role="dialog" aria-labelledby="modalEditarClienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarClienteLabel">
+                    <i class="fas fa-user-edit"></i>
+                    Editar Cliente
+                </h5>
+                <button type="button" class="close" (click)="closeEditarClienteModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #clienteForm="ngForm" (ngSubmit)="onSubmitEditarCliente(clienteForm)">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nombres del Cliente</label>
+                        <input type="text" class="form-control" #nombres="ngModel" name="nombres" 
+                            [(ngModel)]="clienteEditando.nombres" placeholder="Nombres completos" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" class="form-control" #correo="ngModel" name="correo" 
+                            [(ngModel)]="clienteEditando.correo" placeholder="correo@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> DNI del Cliente</label>
+                        <input type="number" class="form-control" #dni="ngModel" name="dni" 
+                            [(ngModel)]="clienteEditando.dni" placeholder="Número de identificación" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeEditarClienteModal()">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" [disabled]="isEditing">
+                            <i class="fas fa-save" *ngIf="!isEditing"></i>
+                            <i class="fas fa-spinner fa-spin" *ngIf="isEditing"></i>
+                            {{isEditing ? 'Guardando...' : 'Actualizar Cliente'}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>

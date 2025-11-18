@@ -25,4 +25,9 @@ export class SaldoService {
     return this._http.post(this.url + 'saldo/registrar', data);
   }
 
+  get_historial(): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.get(this.url + 'saldo/historial', { headers: headers });
+  }
+
 }
